@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.dao.ExamnieeInfoDao">
+
+    <select id="findAllExamnieeInfo" resultType="ExamnieeInfo">
+        select * from t_examniee_info
+    </select>
+
+    <select id="findExamnieeInfoByEid" parameterType="String" resultType="ExamnieeInfo">
+        select * from t_examniee_info where eId = #{eId}
+    </select>
+
+    <select id="findExamnieeInfoById" parameterType="String" resultType="ExamnieeInfo">
+        select * from t_examniee_info where examniee_Id = #{examnieeId}
+    </select>
+
+    <select id="findAllExamnieeNumber" resultType="long">
+        select count(*) from t_examniee_info
+    </select>
+
+    <select id="findExamnieeInfoByName" parameterType="String" resultType="ExamnieeInfo">
+        select * from t_examniee_info where examniee_name = #{examnieeName}
+    </select>
+
+    <insert id="addExamnieeInfo" parameterType="com.exam.entity.ExamnieeInfo">
+INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `examniee_sex`, `examniee_photo`, `examniee_subject`) VALUES (#{eId},#{examnieeId},#{examnieeName},#{examnieeSex}, #{examnieePhoto},#{examnieeSubject});
+    </insert>
+
+    <update id="updateExamnieeInfo" parameterType="com.exam.entity.ExamnieeInfo">
+     UPDATE `exam`.`t_examniee_info` SET `eId`=#{eId}, `examniee_Id`=#{examnieeId}, `examniee_name`=#{examnieeName}, `examniee_sex`=#{examnieeSex}, `examniee_photo`=#{examnieePhoto}, `examniee_subject`=#{examnieeSubject} WHERE (`eId`=#{eId});
+    </update>
+
+    <delete id="deleteExamnieeInfoById" parameterType="String">
+        delete from t_examniee_info where examniee_Id = #{examnieeId}
+    </delete>
+</mapper>
