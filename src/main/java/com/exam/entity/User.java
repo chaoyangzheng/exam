@@ -1,5 +1,7 @@
 package com.exam.entity;
 
+import java.util.List;
+
 /**
  * @author chaoyang
  * @date 2019/10/14
@@ -8,7 +10,7 @@ public class User {
     private String userId;
     private String username;
     private String password;
-    private Role role;
+    private List<Role> roles;
 
 
     @Override
@@ -17,16 +19,16 @@ public class User {
                 "userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
+                ", roles=" + roles +
                 '}';
     }
 
-    public Role getRole () {
-        return role;
+    public List<Role> getRoles () {
+        return roles;
     }
 
-    public void setRole (Role role) {
-        this.role = role;
+    public void setRoles (List<Role> roles) {
+        this.roles = roles;
     }
 
     public String getUserId () {

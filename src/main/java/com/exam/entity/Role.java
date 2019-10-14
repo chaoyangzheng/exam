@@ -10,7 +10,7 @@ public class Role {
     private String roleId;
     private String roleName;
     private String roleDesc;
-    private List<Persimion> persimions;
+    private List<Permission> permissions;
 
     @Override
     public String toString () {
@@ -18,16 +18,16 @@ public class Role {
                 "roleId='" + roleId + '\'' +
                 ", roleName='" + roleName + '\'' +
                 ", roleDesc='" + roleDesc + '\'' +
-                ", persimions=" + persimions +
+                ", permissions=" + permissions +
                 '}';
     }
 
-    public List<Persimion> getPersimions () {
-        return persimions;
+    public List<Permission> getPermissions () {
+        return permissions;
     }
 
-    public void setPersimions (List<Persimion> persimions) {
-        this.persimions = persimions;
+    public void setPermissions (List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public String getRoleId () {

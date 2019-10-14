@@ -4,7 +4,7 @@ package com.exam.entity;
  * @author chaoyang
  * @date 2019/10/14
  */
-public class Persimion {
+public class Permission {
     private String permId;
     private String permName;
     private String permDesc;
@@ -15,7 +15,7 @@ public class Persimion {
 
     @Override
     public String toString () {
-        return "Persimion{" +
+        return "Permission{" +
                 "permId='" + permId + '\'' +
                 ", permName='" + permName + '\'' +
                 ", permDesc='" + permDesc + '\'' +
