@@ -8,7 +8,7 @@ public class ExamnieeInfo implements Serializable {
     private String examnieeName;
     private String examnieeSex;
     private String examnieePhoto;
-    private String examnieeSubject;
+    private String examnieeSubjectId;
 
     @Override
     public String toString() {
@@ -18,7 +18,7 @@ public class ExamnieeInfo implements Serializable {
                 ", examnieeName='" + examnieeName + '\'' +
                 ", examnieeSex='" + examnieeSex + '\'' +
                 ", examnieePhoto='" + examnieePhoto + '\'' +
-                ", examnieeSubject='" + examnieeSubject + '\'' +
+                ", examnieeSubjectId='" + examnieeSubjectId + '\'' +
                 '}';
     }
 
@@ -62,11 +62,11 @@ public class ExamnieeInfo implements Serializable {
         this.examnieePhoto = examnieePhoto;
     }
 
-    public String getExamnieeSubject() {
-        return examnieeSubject;
+    public String getExamnieeSubjectId() {
+        return examnieeSubjectId;
     }
 
-    public void setExamnieeSubject(String examnieeSubject) {
-        this.examnieeSubject = examnieeSubject;
+    public void setExamnieeSubjectId(String examnieeSubjectId) {
+        this.examnieeSubjectId = examnieeSubjectId;
     }
 }

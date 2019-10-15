@@ -25,11 +25,11 @@
     </select>
 
     <insert id="addExamnieeInfo" parameterType="com.exam.entity.ExamnieeInfo">
-INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `examniee_sex`, `examniee_photo`, `examniee_subject`) VALUES (#{eId},#{examnieeId},#{examnieeName},#{examnieeSex}, #{examnieePhoto},#{examnieeSubject});
+INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `examniee_sex`, `examniee_photo`, `examniee_subject_Id`) VALUES (#{eId},#{examnieeId},#{examnieeName},#{examnieeSex}, #{examnieePhoto},#{examnieeSubjectId});
     </insert>
 
     <update id="updateExamnieeInfo" parameterType="com.exam.entity.ExamnieeInfo">
-     UPDATE `exam`.`t_examniee_info` SET `eId`=#{eId}, `examniee_Id`=#{examnieeId}, `examniee_name`=#{examnieeName}, `examniee_sex`=#{examnieeSex}, `examniee_photo`=#{examnieePhoto}, `examniee_subject`=#{examnieeSubject} WHERE (`eId`=#{eId});
+     UPDATE `exam`.`t_examniee_info` SET `eId`=#{eId}, `examniee_Id`=#{examnieeId}, `examniee_name`=#{examnieeName}, `examniee_sex`=#{examnieeSex}, `examniee_photo`=#{examnieePhoto}, `examniee_subject_Id`=#{examnieeSubjectId} WHERE (`eId`=#{eId});
     </update>
 
     <delete id="deleteExamnieeInfoById" parameterType="String">

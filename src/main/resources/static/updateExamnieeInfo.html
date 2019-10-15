@@ -17,14 +17,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
-            <input id="examnieeId" type="text" name="examnieeName" lay-verify="title" autocomplete="off" placeholder="请输入考生姓名"
+            <input id="examnieeName" type="text" name="examnieeName" lay-verify="title" autocomplete="off" placeholder="请输入考生姓名"
                    class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">身份证号</label>
         <div class="layui-input-block">
-            <input id="examnieeName" type="text" lay-verify="identity" name="examnieeId" placeholder="请输入考生身份证号" autocomplete="off"
+            <input id="examnieeId" type="text" lay-verify="identity" name="examnieeId" placeholder="请输入考生身份证号" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -32,15 +32,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
         <div class="layui-input-block">
-            <input id="man" type="radio" name="sex" value="男" title="男" checked>
-            <input id="woman" type="radio" name="sex" value="女" title="女">
+            <input id="man" type="radio" name="ExamnieeSex" value="男" title="男" checked>
+            <input id="woman" type="radio" name="ExamnieeSex" value="女" title="女">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">学科</label>
         <div class="layui-input-block">
-            <select name="interest" lay-filter="aihao" id="examnieeSubject">
+            <select name="examnieeSubjectId" lay-filter="aihao" id="examnieeSubjectId">
                 <option value=""></option>
             </select>
         </div>
@@ -57,7 +57,7 @@
             <p id="demoText"></p>
         </div>
         <div hidden="hidden" class="layui-input-block">
-            <input name="uploadUrl" type="hidden" id="uploadUrl"/>
+            <input name="examnieePhoto" type="hidden" id="examnieePhoto"/>
         </div>
     </div>
 
@@ -91,6 +91,20 @@
                 layer.alert(JSON.stringify(data.field), {
                     title: '最终的提交信息'
                 })
+                layui.$.ajax({
+                    type:"post",
+                    url:"examnieeInfo/addOrUpdateExamniee.do",
+                    data:data.field,
+                    success:function (res) {
+                        if (res.code == 0){
+                            alert("操作成功!");
+                            var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                            parent.layer.close(index);
+                        } else if(res.code > 0){
+                            alert("操作失败")
+                        }
+                    }
+                })
                 return false;
             });
             //普通图片上传
@@ -109,9 +123,9 @@
                         return layer.msg('上传失败');
                     }
                     // alert("---")
-                    layui.$('#uploadUrl').val(res.data);
+                    layui.$('#examnieePhoto').val(res.data);
                     // alert(res.data);
-                    var a =  layui.$('#uploadUrl').val();
+                    var a =  layui.$('#examnieePhoto').val();
                     alert(a);
                     //上传成功
                 }
@@ -134,7 +148,7 @@
                     // alert(subjectList);
                     for (var j = 0; j < subjectList.length; j++){
                         // alert(subjectList[j].subjectId + ":" + subjectList[j].subjectName);
-                        layui.$("#examnieeSubject").append("<option value='" + subjectList[j].subjectId + "'>" + subjectList[j].subjectName + "</option>");
+                        layui.$("#examnieeSubjectId").append("<option value='" + subjectList[j].subjectId + "'>" + subjectList[j].subjectName + "</option>");
                         form.render();
                     }
                 }

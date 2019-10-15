@@ -53,7 +53,7 @@ layui.use('table', function(){
       ,{field:'examnieeName', title:'考生姓名', width:80, edit: 'text', sort: true}
       ,{field:'examnieeSex', title:'性别', width:100}
       ,{field:'examnieePhoto', title:'照片'}
-      ,{field:'examnieeSubject', title:'学科', width:80, sort: true}
+      ,{field:'examnieeSubjectId', title:'学科', width:80, sort: true}
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
     ]]
     ,page: true
@@ -113,8 +113,8 @@ layui.use('table', function(){
         success:function (layero,index) {
           var body =layui.layer.getChildFrame('body',index);
           if (data){
-            body.find("#examnieeId").val(data.examnieeId);
-            body.find("#examnieeName").val(data.examnieeName);
+              body.find("#examnieeName").val(data.examnieeName);
+              body.find("#examnieeId").val(data.examnieeId);
             // alert(data.examnieeSex == '男')
             // alert(data.examnieeSex)
             if (data.examnieeSex == '男'){
@@ -122,7 +122,17 @@ layui.use('table', function(){
             }else
               body.find("#woman").attr({checked:true});
             body.find("#examnieePhoto").val(data.examnieePhoto);
-            body.find("#demo1").val(data.examnieeSubject);
+            body.find("#examnieeSubjectId").val(data.examnieeSubjectId);
+            $("#examnieeSubjectId").each(function () {
+                $(this).children("option").each(function () {
+                    if (this.value == data.examnieeSubjectId){
+                        console.log($(this).text());
+                        $(this).attr("selected","selected");
+                    }
+                })
+            })
+
+
             form.render();
           }
           setTimeout(function(){

@@ -3,9 +3,52 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.dao.SubjectDao">
-    <select id="findAll" resultType="com.exam.entity.Subject">
-        select * from t_subject
+
+
+<!--  查看所有的科目，返回list   作者：RongJing     更改时间：2019/10/15 -->
+
+    <select id="findAllSubject" resultType="subject">
+        SELECT
+                t_subject.subject_name,
+                t_subject.subject_id,
+                t_subject.parent_id
+        FROM
+                t_subject
     </select>
+
+
+
+    <!--  添加科目   作者：RongJing     更改时间：2019/10/15 -->
+    <insert id="insertSubject" parameterType="subject">
+        insert into t_subject (
+                t_subject.subject_name,
+                t_subject.parent_id)
+            values (
+                #{subjectName},
+                #{parentId}
+            )
+    </insert>
+
+
+<delete id="deleteSubject" parameterType="string">
+    delete from t_subject where subject_id = #{subjectId}
+</delete>
+
+
+
+    <!--  查看一二级科目   作者：RongJing     更改时间：2019/10/15 -->
+    <select id="findByParentId" parameterType="string">
+        SELECT
+                t_subject.subject_name,
+                t_subject.subject_id,
+                t_subject.parent_id
+            FROM
+                t_subject
+            WHERE
+                t_subject.parent_id = #{parentId}
+    </select>
+
+
 
     <select id="findById" parameterType="Integer" resultType="com.exam.entity.Subject">
         select * from t_subject where subject_id=#{subjectId}
