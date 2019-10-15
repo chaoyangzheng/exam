@@ -122,15 +122,12 @@ layui.use('table', function(){
             }else
               body.find("#woman").attr({checked:true});
             body.find("#examnieePhoto").val(data.examnieePhoto);
-            body.find("#examnieeSubjectId").val(data.examnieeSubjectId);
-            $("#examnieeSubjectId").each(function () {
-                $(this).children("option").each(function () {
-                    if (this.value == data.examnieeSubjectId){
-                        console.log($(this).text());
-                        $(this).attr("selected","selected");
-                    }
-                })
-            })
+            // body.find("#examnieeSubjectId").val(data.examnieeSubjectId);
+            layui.$('#LAY-component-form-setval').on('click', function(){
+              form.val('example', {
+                "interest": data.examnieeSubjectId
+              });
+            });
 
 
             form.render();
