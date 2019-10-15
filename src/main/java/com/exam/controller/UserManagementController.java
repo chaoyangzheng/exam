@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理
@@ -26,22 +27,26 @@ public class UserManagementController {
      */
     @RequestMapping("/findUsersByRoleSubjectLikeName.do")
     public JsonResult findUser(String roleId, String subjectId,String name,String page,String limit){
-        System.out.println("page = " + page);
+        /*System.out.println("page = " + page);
         System.out.println("limit = " + limit);
         System.out.println("roleId = " + roleId);
         System.out.println("subjectId = " + subjectId);
-        System.out.println("name = " + name);
+        System.out.println("name = " + name);*/
         if ("".equals(roleId)) {
             roleId=null;
-        }
-        if ("".equals(subjectId)) {
-            subjectId=null;
         }
         if ("".equals(name)) {
             name=null;
         }
+        if ("".equals(subjectId)) {
+            subjectId=null;
+        }
+        Integer subject_id = null;
+        if (subjectId!=null){
+            subject_id = Integer.valueOf(subjectId);
+        }
 
-        List<User> users = userService.findAllUserByRole(roleId, subjectId,name);
+        List<User> users = userService.findAllUserByRole(roleId, subject_id,name);
 
         return new JsonResult(0,"success",Long.valueOf(users.size()),users);
     }
@@ -50,10 +55,11 @@ public class UserManagementController {
      * @author chaoyang
      * @date 2019/10/14
      */
-    public JsonResult findUserByName(String name){
+    @RequestMapping("/findAllRolesSubjects.do")
+    public JsonResult findAllRolesSubjects(){
 
 
-
-        return null;
+        Map map = userService.findAllRolesSubjects();
+        return new JsonResult(0,"success",Long.valueOf(map.size()),map);
     }
 }
