@@ -18,7 +18,6 @@ public interface SubjectDao {
     public List<Subject> findAllSubject();
 
 
-
     /**
      * 添加科目
      *
@@ -28,8 +27,6 @@ public interface SubjectDao {
     public void insertSubject(Subject subject);
 
 
-
-
     /**
      * 删除科目
      *
@@ -37,8 +34,6 @@ public interface SubjectDao {
      * @date 2019/10/15
      */
     public void deleteSubject(String subjectId);
-
-
 
 
     /**
