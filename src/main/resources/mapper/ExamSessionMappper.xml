@@ -6,10 +6,8 @@
     <select id="selectAll" resultType="ExamSession">
         SELECT
         t_exam_session.id,
-        t_exam_session.exam_name,
         t_exam_session.subject_id,
         t_exam_session.teacher_id,
-        t_exam_session.room_id,
         t_exam_session.student_num,
         t_exam_session.begin_time,
         t_exam_session.end_time,
@@ -21,10 +19,8 @@
     <select id="selectById" parameterType="String" resultType="ExamSession">
         SELECT
         t_exam_session.id,
-        t_exam_session.exam_name,
         t_exam_session.subject_id,
         t_exam_session.teacher_id,
-        t_exam_session.room_id,
         t_exam_session.student_num,
         t_exam_session.begin_time,
         t_exam_session.end_time,
@@ -39,11 +35,9 @@
         UPDATE
         `exam`.`t_exam_session`
         SET
-        `exam_name` = #{examName},
         `subject_id` = #{subjectId},
         `teacher_id` = #{teacherId},
-        `room_id` = #{roomId},
-        `student_num` = #{stedentNum},
+        `student_num` = #{studentNum},
         `begin_time` = #{beginTime},
         `end_time` = #{endTime},
         `during_time` = #{duringTime}
@@ -55,24 +49,30 @@
         INSERT INTO
         `exam`.`t_exam_session`
         (`id`,
-        `exam_name`,
         `subject_id`,
         `teacher_id`,
-        `room_id`,
         `student_num`,
         `begin_time`,
         `end_time`,
         `during_time`)
         VALUES
         (#{id},
-        #{examName},
         #{subjectId},
         #{teacherId},
-        #{roomId},
-        #{stedentNum},
+        #{studentNum},
         #{beginTime},
         #{endTime},
         #{duringTime})
     </insert>
 
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM t_exam_session WHERE `id` = #{id}
+    </delete>
+
+    <delete id="deleteAllById" parameterType="List">
+        DELETE FROM t_exam_session WHERE
+        <foreach collection="list" item="id" open="`id` in (" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

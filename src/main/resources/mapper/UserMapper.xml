@@ -2,7 +2,37 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.exam.dao.UserMapper">
+<mapper namespace="com.exam.dao.UserDao">
+    <resultMap id="userRole" type="com.exam.entity.User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <association property="role" javaType="com.exam.entity.Role">
+            <id property="roleId" column="role_id"/>
+            <result property="roleName" column="role_name"/>
+            <result property="roleDesc" column="role_desc"/>
+        </association>
+    </resultMap>
+
+    <select id="findUsersByRoleLikeName" resultMap="userRole">
+        select tu.user_id,tu.username,tu.PASSWORD,
+        tur.user_role_id,tur.Role_id,
+        tr.role_name,tr.role_desc from t_user tu
+        <if test="roleId==null">
+            left JOIN t_user_role tur
+            on tu.user_id = tur.user_id
+            left JOIN  t_role tr
+            on tur.role_id = tr.role_id
+        </if>
+        <if test="roleId!=null">
+            JOIN t_user_role tur
+            on tu.user_id = tur.user_id
+            JOIN  t_role tr
+            on tur.role_id = tr.role_id
+            and tur.role_id = #{roleId}
+        </if>
+        where tu.username like #{name}
+    </select>
 
 
 </mapper>

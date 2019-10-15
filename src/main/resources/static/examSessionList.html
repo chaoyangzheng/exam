@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>考试场次列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新建</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<script src="layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            , url: 'examSession/examSessionList.do'
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print']
+            , title: '考试场次表'
+            , cols: [[
+                {type: 'numbers', fixed: 'left'}
+                , {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', fixed: 'left', sort: true, hide: true}
+                , {field: 'subjectId', title: '科目ID', sort: true, hide: true}
+                , {field: 'subjectName', title: '科目', sort: true}
+                , {field: 'teacherId', title: '申请人ID', sort: true, hide: true}
+                , {field: 'teacherName', title: '申请人', sort: true}
+                , {field: 'studentNum', title: '考生人数', sort: true}
+                , {field: 'duringTime', title: '考试时长(分钟)', sort: true}
+                , {field: 'beginTime', title: '开始时间', sort: true}
+                , {field: 'endTime', title: '结束时间', sort: true}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo'}
+            ]]
+            , page: true
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '新增考试场次',
+                        area: ['850px', '600px'],
+                        fixed: false, //不固定
+                        maxmin: true,
+                        content: 'addUpdateExamSession.html'
+                    });
+                    break;
+                case 'deleteAll':
+                    var data = checkStatus.data;
+                    layer.confirm('确定删除选中的' + data.length + '场考试？', function (index) {
+                        layer.close(index);
+                        var idList = [];
+                        for (var oneData of data) {
+                            idList.push(oneData.id);
+                        }
+                        layui.$.ajax({
+                            url: 'examSession/deleteAllExamSession.do',
+                            contentType: 'application/json',
+                            type: 'post',
+                            data: JSON.stringify(idList),
+                            success: function (result) {
+                                if (result.code === 0) {
+                                    layer.msg('删除成功', {time: 1000}, function () {
+                                        location.reload();
+                                    });
+                                } else {
+                                    layer.msg('删除失败', {time: 1000});
+                                }
+                            }
+                        });
+                    });
+                    break;
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                layer.confirm('确定删除？', function (index) {
+                    layer.close(index);
+                    layui.$.ajax({
+                        url: 'examSession/deleteExamSession.do',
+                        data: {id: data.id},
+                        success: function (result) {
+                            if (result.code == 0) {
+                                layer.msg('删除成功', {time: 1000}, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.msg('删除失败', {time: 1000});
+                            }
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    type: 2,
+                    title: '修改考试场次',
+                    area: ['850px', '600px'],
+                    fixed: false, //不固定
+                    maxmin: true,
+                    content: 'addUpdateExamSession.html',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.find('#id').val(data.id);
+                        body.find('#teacherId').val(data.teacherId);
+                        body.find('#examName').val(data.examName);
+                        body.find('#subjectId').val(data.subjectId);
+                        body.find('#studentNum').val(data.studentNum);
+                        body.find('#duringTime').val(data.duringTime);
+                        body.find('#beginTime').val(data.beginTime);
+                        body.find('#endTime').val(data.endTime);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
