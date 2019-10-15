@@ -3,7 +3,9 @@ package com.exam.controller;
 
 import com.exam.common.JsonResult;
 import com.exam.entity.ExamSession;
+import com.exam.entity.Subject;
 import com.exam.service.ExamnieeInfoService;
+import com.exam.service.SubjectService;
 import com.exam.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,9 @@ public class ExamnieeInfoController {
     @Autowired
     private ExamnieeInfoService examnieeInfoService;
 
+    @Autowired
+    private SubjectService subjectService;
+
     @RequestMapping("/examnieeInfoList.do")
     public JsonResult examnieeInfoList(Integer page, Integer limit) {
         JsonResult allExamnieeList = examnieeInfoService.findAllExamnieeInfo(page, limit);
@@ -31,10 +36,13 @@ public class ExamnieeInfoController {
         return jsonResult;
     }
 
-    @RequestMapping("/goAdd.do")
+    @RequestMapping("/getSubject.do")
     public JsonResult goUpdate(String examnieeId) {
-        JsonResult jsonResult = examnieeInfoService.deleteExamnieeInfoById(examnieeId);
-        return jsonResult;
+        List<Subject> subjectList = subjectService.findAll();
+        if (subjectList!=null){
+            return new JsonResult(0,"成功",null,subjectList);
+        }
+        return new JsonResult(1,"失败",null,null);
     }
 
     @RequestMapping("/examnieePhotoUpload.do")

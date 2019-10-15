@@ -70,14 +70,21 @@
     <script src="layui/layui.js" charset="utf-8"></script>
     <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
     <script>
-        layui.use(['form', 'layedit', 'laydate'], function () {
+        layui.use(['form', 'layedit', 'laydate','upload','jquery', 'layer'], function () {
             var form = layui.form
                 , layer = layui.layer
                 , layedit = layui.layedit
                 , laydate = layui.laydate;
 
+            var $ = layui.jquery
+                , upload = layui.upload;
             // //创建一个编辑器
             // var editIndex = layedit.build('LAY_demo_editor');
+
+            // alert("---")
+            var $ = layui.$ //重点处
+                ,layer = layui.layer;
+            //后面就跟你平时使用jQuery一样
 
             //监听提交
             form.on('submit(demo1)', function (data) {
@@ -86,12 +93,6 @@
                 })
                 return false;
             });
-        });
-
-        layui.use('upload', function () {
-            var $ = layui.jquery
-                , upload = layui.upload;
-
             //普通图片上传
             var uploadInst = upload.render({
                 elem: '#test1'
@@ -110,8 +111,8 @@
                     // alert("---")
                     layui.$('#uploadUrl').val(res.data);
                     // alert(res.data);
-                    // var a =  layui.$('#uploadUrl').val();
-                    // alert(a);
+                    var a =  layui.$('#uploadUrl').val();
+                    alert(a);
                     //上传成功
                 }
                 , error: function () {
@@ -123,7 +124,78 @@
                     });
                 }
             });
+
+            $.ajax({
+                type:"post",
+                url:"examnieeInfo/getSubject.do",
+                success:function (res) {
+                    // alert(res);
+                    var subjectList = res.data;
+                    // alert(subjectList);
+                    for (var j = 0; j < subjectList.length; j++){
+                        // alert(subjectList[j].subjectId + ":" + subjectList[j].subjectName);
+                        layui.$("#examnieeSubject").append("<option value='" + subjectList[j].subjectId + "'>" + subjectList[j].subjectName + "</option>");
+                        form.render();
+                    }
+                }
+            })
         });
+
+        // layui.use('upload', function () {
+        //     var $ = layui.jquery
+        //         , upload = layui.upload;
+        //
+        //     //普通图片上传
+        //     var uploadInst = upload.render({
+        //         elem: '#test1'
+        //         , url: 'examnieeInfo/examnieePhotoUpload.do'
+        //         , before: function (obj) {
+        //             //预读本地文件示例，不支持ie8
+        //             obj.preview(function (index, file, result) {
+        //                 $('#demo1').attr('src', result); //图片链接（base64）
+        //             });
+        //         }
+        //         , done: function (res) {
+        //             //如果上传失败
+        //             if (res.code > 0) {
+        //                 return layer.msg('上传失败');
+        //             }
+        //             // alert("---")
+        //             layui.$('#uploadUrl').val(res.data);
+        //             // alert(res.data);
+        //             // var a =  layui.$('#uploadUrl').val();
+        //             // alert(a);
+        //             //上传成功
+        //         }
+        //         , error: function () {
+        //             //演示失败状态，并实现重传
+        //             var demoText = $('#demoText');
+        //             demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+        //             demoText.find('.demo-reload').on('click', function () {
+        //                 uploadInst.upload();
+        //             });
+        //         }
+        //     });
+        // });
+        // layui.use(['jquery', 'layer'], function(){
+        //     // alert("---")
+        //     var $ = layui.$ //重点处
+        //         ,layer = layui.layer;
+        //     //后面就跟你平时使用jQuery一样
+        //         $.ajax({
+        //             type:"post",
+        //             url:"examnieeInfo/getSubject.do",
+        //             success:function (res) {
+        //                 alert(res);
+        //                 var subjectList = res.data;
+        //                 alert(subjectList);
+        //                 for(var j=0;j<subjectList.length;j++)
+        //                     alert(subjectList[j].subjectId);
+        //                    layui.$("#examnieeSubject").append("<option value="+subjectList[j].subjectId+">"+subjectList[j].subjectName+"</option>");
+        //                     form.render();
+        //             }
+        //         })
+        // });
     </script>
 </body>
 </html>
