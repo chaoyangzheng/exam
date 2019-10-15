@@ -1,5 +1,7 @@
 package com.exam.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,14 +13,27 @@ import java.util.Date;
  */
 public class ExamSession implements Serializable {
     private String id;//考试场次id，uuid，主键
-    private String examName;//考试名称
     private String subjectId;//科目id，外键
     private String teacherId;//考试创建老师id，外键
-    private String roomId;//考场教室id，外键
     private Integer studentNum;//考生人数上限
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date beginTime;//考试开始日期时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;//考试结束日期时间
     private Integer duringTime;//考试时长，单位分钟
+
+    @Override
+    public String toString() {
+        return "ExamSession{" +
+                "id='" + id + '\'' +
+                ", subjectId='" + subjectId + '\'' +
+                ", teacherId='" + teacherId + '\'' +
+                ", studentNum=" + studentNum +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", duringTime=" + duringTime +
+                '}';
+    }
 
     public String getId() {
         return id;
@@ -26,14 +41,6 @@ public class ExamSession implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getExamName() {
-        return examName;
-    }
-
-    public void setExamName(String examName) {
-        this.examName = examName;
     }
 
     public String getSubjectId() {
@@ -50,14 +57,6 @@ public class ExamSession implements Serializable {
 
     public void setTeacherId(String teacherId) {
         this.teacherId = teacherId;
-    }
-
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
     }
 
     public Integer getStudentNum() {

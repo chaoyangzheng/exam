@@ -76,4 +76,28 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         examSession.setId(id);
         examSessionDao.insertExamSession(examSession);
     }
+
+    /**
+     * 删除考试场次
+     *
+     * @param id 考试场次id
+     * @author SHIGUANGYI
+     * @date 2019/10/14
+     */
+    @Override
+    public void deleteById(String id) {
+        examSessionDao.deleteById(id);
+    }
+
+    /**
+     * 批量删除考试场次
+     *
+     * @param idList 考试场次id的list
+     * @author SHIGUANGYI
+     * @date 2019/10/15
+     */
+    @Override
+    public void deleteAllById(List<String> idList) {
+        examSessionDao.deleteAllById(idList);
+    }
 }

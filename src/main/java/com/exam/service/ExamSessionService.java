@@ -47,4 +47,22 @@ public interface ExamSessionService {
      * @date 2019/10/14
      */
     void insertExamSession(ExamSession examSession);
+
+    /**
+     * 删除考试场次
+     *
+     * @param id 考试场次id
+     * @author SHIGUANGYI
+     * @date 2019/10/14
+     */
+    void deleteById(String id);
+
+    /**
+     * 批量删除考试场次
+     *
+     * @param idList 考试场次id的list
+     * @author SHIGUANGYI
+     * @date 2019/10/15
+     */
+    void deleteAllById(List<String> idList);
 }
