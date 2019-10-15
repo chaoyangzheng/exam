@@ -12,14 +12,9 @@
             <result property="roleName" column="role_name"/>
             <result property="roleDesc" column="role_desc"/>
         </association>
-        <!--<collection property="subject" column="{userId=user_id,subjectId=#{subjectId}}" select="com.exam.dao">
-            <id property="subjectId" column="subject_id"/>
-            <result property="subjectName" column="subject_name"/>
-            <result property="parentId" column="parent_id"/>
-        </collection>-->
     </resultMap>
 
-    <select id="findUsersByRole"  resultMap="userRole">
+    <select id="findUsersByRoleLikeName" resultMap="userRole">
         select tu.user_id,tu.username,tu.PASSWORD,
         tur.user_role_id,tur.Role_id,
         tr.role_name,tr.role_desc from t_user tu
@@ -36,6 +31,7 @@
             on tur.role_id = tr.role_id
             and tur.role_id = #{roleId}
         </if>
+        where tu.username like #{name}
     </select>
 
 
