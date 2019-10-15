@@ -38,12 +38,7 @@ INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `ex
 
     <select id="findExamnieeInfoByExamSessionId" parameterType="String" resultType="ExamnieeInfo">
         SELECT
-        t_examniee_info.eId,
-        t_examniee_info.examniee_Id,
-        t_examniee_info.examniee_name,
-        t_examniee_info.examniee_sex,
-        t_examniee_info.examniee_photo,
-        t_examniee_info.examniee_subject
+        *
         FROM
         t_examniee_info
         INNER JOIN t_session_papers_student ON t_session_papers_student.student_id = t_examniee_info.eId

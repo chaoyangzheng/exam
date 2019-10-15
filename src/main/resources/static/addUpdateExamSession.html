@@ -18,33 +18,14 @@
 <form class="layui-form" action="" lay-filter="example">
     <input type="hidden" id="id" name="id" autocomplete="off" class="layui-input">
     <input type="hidden" id="teacherId" name="teacherId" autocomplete="off" class="layui-input">
+    <input type="hidden" id="subjectId" autocomplete="off" class="layui-input">
 
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">考试科目</label>
             <div class="layui-input-inline">
-                <select name="subjectId" id="subjectId" lay-verify="required" lay-search="">
+                <select name="subjectId" id="subject" lay-verify="required" lay-search="">
                     <option value="">直接选择或搜索选择</option>
-                    <option value="1">layer</option>
-                    <option value="2">form</option>
-                    <option value="3">layim</option>
-                    <option value="4">element</option>
-                    <option value="5">laytpl</option>
-                    <option value="6">upload</option>
-                    <option value="7">laydate</option>
-                    <option value="8">laypage</option>
-                    <option value="9">flow</option>
-                    <option value="10">util</option>
-                    <option value="11">code</option>
-                    <option value="12">tree</option>
-                    <option value="13">layedit</option>
-                    <option value="14">nav</option>
-                    <option value="15">tab</option>
-                    <option value="16">table</option>
-                    <option value="17">select</option>
-                    <option value="18">checkbox</option>
-                    <option value="19">switch</option>
-                    <option value="20">radio</option>
                 </select>
             </div>
         </div>
@@ -102,8 +83,13 @@
                 if (result.code === 0) {
                     var subjectList = result.data;
                     for (var subject of subjectList) {
-                        layui.$('#subjectId').append('<option value="' + subject.subjectId + '">radio</option>')
+                        if (layui.$('#subjectId').val() == subject.subjectId) {
+                            layui.$('#subject').append('<option value="' + subject.subjectId + '" selected>' + subject.subjectName + '</option>');
+                        } else {
+                            layui.$('#subject').append('<option value="' + subject.subjectId + '">' + subject.subjectName + '</option>');
+                        }
                     }
+                    form.render('select');
                 } else {
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                     layer.msg('查询学科列表失败', {time: 1000}, function () {
