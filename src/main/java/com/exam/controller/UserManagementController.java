@@ -25,7 +25,9 @@ public class UserManagementController {
      * @date 2019/10/14
      */
     @RequestMapping("/findUsersByRoleSubjectLikeName.do")
-    public JsonResult findUser(String roleId, String subjectId,String name){
+    public JsonResult findUser(String roleId, String subjectId,String name,String page,String limit){
+        System.out.println("page = " + page);
+        System.out.println("limit = " + limit);
         System.out.println("roleId = " + roleId);
         System.out.println("subjectId = " + subjectId);
         System.out.println("name = " + name);
