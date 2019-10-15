@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>请填写个人信息</legend>
+</fieldset>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input id="examnieeId" type="text" name="examnieeName" lay-verify="title" autocomplete="off" placeholder="请输入考生姓名"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">身份证号</label>
+        <div class="layui-input-block">
+            <input id="examnieeName" type="text" lay-verify="identity" name="examnieeId" placeholder="请输入考生身份证号" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input id="man" type="radio" name="sex" value="男" title="男" checked>
+            <input id="woman" type="radio" name="sex" value="女" title="女">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">学科</label>
+        <div class="layui-input-block">
+            <select name="interest" lay-filter="aihao" id="examnieeSubject">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+        <legend>上传头像</legend>
+    </fieldset>
+
+    <div class="layui-upload">
+        <button type="button" class="layui-btn" id="test1">上传图片</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="demo1">
+            <p id="demoText"></p>
+        </div>
+        <div hidden="hidden" class="layui-input-block">
+            <input name="uploadUrl" type="hidden" id="uploadUrl"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+        </div>
+    </div>
+</form>
+    <script src="layui/layui.js" charset="utf-8"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+    <script>
+        layui.use(['form', 'layedit', 'laydate','upload','jquery', 'layer'], function () {
+            var form = layui.form
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+
+            var $ = layui.jquery
+                , upload = layui.upload;
+            // //创建一个编辑器
+            // var editIndex = layedit.build('LAY_demo_editor');
+
+            // alert("---")
+            var $ = layui.$ //重点处
+                ,layer = layui.layer;
+            //后面就跟你平时使用jQuery一样
+
+            //监听提交
+            form.on('submit(demo1)', function (data) {
+                layer.alert(JSON.stringify(data.field), {
+                    title: '最终的提交信息'
+                })
+                return false;
+            });
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#test1'
+                , url: 'examnieeInfo/examnieePhotoUpload.do'
+                , before: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#demo1').attr('src', result); //图片链接（base64）
+                    });
+                }
+                , done: function (res) {
+                    //如果上传失败
+                    if (res.code > 0) {
+                        return layer.msg('上传失败');
+                    }
+                    // alert("---")
+                    layui.$('#uploadUrl').val(res.data);
+                    // alert(res.data);
+                    var a =  layui.$('#uploadUrl').val();
+                    alert(a);
+                    //上传成功
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+            });
+
+            $.ajax({
+                type:"post",
+                url:"examnieeInfo/getSubject.do",
+                success:function (res) {
+                    // alert(res);
+                    var subjectList = res.data;
+                    // alert(subjectList);
+                    for (var j = 0; j < subjectList.length; j++){
+                        // alert(subjectList[j].subjectId + ":" + subjectList[j].subjectName);
+                        layui.$("#examnieeSubject").append("<option value='" + subjectList[j].subjectId + "'>" + subjectList[j].subjectName + "</option>");
+                        form.render();
+                    }
+                }
+            })
+        });
+
+        // layui.use('upload', function () {
+        //     var $ = layui.jquery
+        //         , upload = layui.upload;
+        //
+        //     //普通图片上传
+        //     var uploadInst = upload.render({
+        //         elem: '#test1'
+        //         , url: 'examnieeInfo/examnieePhotoUpload.do'
+        //         , before: function (obj) {
+        //             //预读本地文件示例，不支持ie8
+        //             obj.preview(function (index, file, result) {
+        //                 $('#demo1').attr('src', result); //图片链接（base64）
+        //             });
+        //         }
+        //         , done: function (res) {
+        //             //如果上传失败
+        //             if (res.code > 0) {
+        //                 return layer.msg('上传失败');
+        //             }
+        //             // alert("---")
+        //             layui.$('#uploadUrl').val(res.data);
+        //             // alert(res.data);
+        //             // var a =  layui.$('#uploadUrl').val();
+        //             // alert(a);
+        //             //上传成功
+        //         }
+        //         , error: function () {
+        //             //演示失败状态，并实现重传
+        //             var demoText = $('#demoText');
+        //             demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+        //             demoText.find('.demo-reload').on('click', function () {
+        //                 uploadInst.upload();
+        //             });
+        //         }
+        //     });
+        // });
+        // layui.use(['jquery', 'layer'], function(){
+        //     // alert("---")
+        //     var $ = layui.$ //重点处
+        //         ,layer = layui.layer;
+        //     //后面就跟你平时使用jQuery一样
+        //         $.ajax({
+        //             type:"post",
+        //             url:"examnieeInfo/getSubject.do",
+        //             success:function (res) {
+        //                 alert(res);
+        //                 var subjectList = res.data;
+        //                 alert(subjectList);
+        //                 for(var j=0;j<subjectList.length;j++)
+        //                     alert(subjectList[j].subjectId);
+        //                    layui.$("#examnieeSubject").append("<option value="+subjectList[j].subjectId+">"+subjectList[j].subjectName+"</option>");
+        //                     form.render();
+        //             }
+        //         })
+        // });
+    </script>
+</body>
+</html>

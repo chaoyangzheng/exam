@@ -22,6 +22,7 @@ public class Role {
                 '}';
     }
 
+
     public List<Permission> getPermissions () {
         return permissions;
     }
