@@ -6,4 +6,8 @@
     <select id="findAll" resultType="com.exam.entity.Subject">
         select * from t_subject
     </select>
+
+    <select id="findById" parameterType="Integer" resultType="com.exam.entity.Subject">
+        select * from t_subject where subject_id=#{subjectId}
+    </select>
 </mapper>

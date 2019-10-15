@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author SHIGUANGYI
@@ -72,8 +71,6 @@ public class ExamSessionServiceImpl implements ExamSessionService {
      */
     @Override
     public void insertExamSession(ExamSession examSession) {
-        String id = UUID.randomUUID().toString().replace("-", "");
-        examSession.setId(id);
         examSessionDao.insertExamSession(examSession);
     }
 

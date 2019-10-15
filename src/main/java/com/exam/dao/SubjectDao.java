@@ -8,4 +8,6 @@ public interface SubjectDao {
 
     /*zxs*/
      public List<Subject> findAll();
+
+    Subject findById(Integer subjectId);
 }

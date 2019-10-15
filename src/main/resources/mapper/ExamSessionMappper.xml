@@ -7,7 +7,7 @@
     <resultMap id="ExamSessionMap" type="ExamSession" autoMapping="true">
         <result property="subjectId" column="subject_id"/>
         <result property="teacherId" column="teacher_id"/>
-        <association property="subject" javaType="Subject" autoMapping="true"/>
+        <association property="subject" javaType="Subject" select="com.exam.dao.SubjectDao.findById" column="subject_id"/>
         <association property="teacher" javaType="User" select="com.exam.dao.UserDao.findUserByUserId" column="teacher_id"/>
     </resultMap>
     <select id="selectAll" resultMap="ExamSessionMap">
@@ -63,7 +63,7 @@
         `end_time`,
         `during_time`)
         VALUES
-        (#{id},
+        (REPLACE(UUID(),'-',''),
         #{subjectId},
         #{teacherId},
         #{studentNum},
