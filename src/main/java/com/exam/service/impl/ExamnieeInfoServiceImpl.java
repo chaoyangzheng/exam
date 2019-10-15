@@ -4,6 +4,7 @@ import com.exam.common.JsonResult;
 import com.exam.dao.ExamnieeInfoDao;
 import com.exam.entity.ExamnieeInfo;
 import com.exam.service.ExamnieeInfoService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,10 @@ public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
     private ExamnieeInfoDao examnieeInfoDao;
 
     @Override
-    public JsonResult findAllExamnieeInfo() {
-        List<ExamnieeInfo> allExamnieeInfo = examnieeInfoDao.findAllExamnieeInfo();
+    public JsonResult findAllExamnieeInfo(Integer pageNum, Integer pageSize) {
+        List<ExamnieeInfo> allExamnieeInfo = null;
+        PageHelper.startPage(pageNum, pageSize);
+        allExamnieeInfo = examnieeInfoDao.findAllExamnieeInfo();
         if (allExamnieeInfo!=null){
             Long count = examnieeInfoDao.findAllExamnieeNumber();
             return new JsonResult(0,"正常",count,allExamnieeInfo);

@@ -32,4 +32,6 @@ public interface ExamnieeInfoDao {
 
     //按名字查学生
     public ExamnieeInfo findExamnieeInfoByName(String examnieeName);
+
+
 }
