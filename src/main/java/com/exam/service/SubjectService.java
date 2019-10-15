@@ -50,5 +50,7 @@ public interface SubjectService {
      */
     public Subject findByParentId(String parentId);
 
+    /*zxs*/
+    public List<Subject> findAll();
 
 }

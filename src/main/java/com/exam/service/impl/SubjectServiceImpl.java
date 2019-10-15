@@ -75,4 +75,10 @@ public class SubjectServiceImpl implements SubjectService {
 
         return subjectDao.findByParentId(parentId);
     }
+
+    @Override
+    public List<Subject> findAll() {
+        List<Subject> subjectList = subjectDao.findAll();
+        return subjectList;
+    }
 }

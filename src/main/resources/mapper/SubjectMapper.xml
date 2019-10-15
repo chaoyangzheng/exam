@@ -48,6 +48,9 @@
                 t_subject.parent_id = #{parentId}
     </select>
 
+   <select id="findAll" resultType="com.exam.entity.Subject">
+       select * from t_subject
+   </select>
 
 
     <select id="findById" parameterType="Integer" resultType="com.exam.entity.Subject">
