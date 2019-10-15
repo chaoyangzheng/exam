@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.dao.ScoreDao">
+    <resultMap id="scoreInfo" type="com.exam.entity.Score">
+        <id property="scoreId" column="score_id" />
+        <result property="studentId" column="student_id" />
+        <result property="papersId" column="papers_id" />
+        <result property="score" column="score" />
+        <association property="papers" javaType="com.exam.entity.Papers">
+            <id property="papersTableId" column="papers_table_id" />
+            <result property="papersId" column="papers_id" />
+            <result property="subjectId" column="subject_id" />
+            <result property="questionsId" column="questions_id" />
+            <result property="studentId" column="student_id" />
+            <result property="studentAnswer" column="student_answer" />
+            <result property="questionScore" column="question_score" />
+        </association>
+        <association property="subject" javaType="com.exam.entity.Subject">
+            <id property="subjectId" column="subject_id" />
+            <result property="subjectName" column="subject_name" />
+            <result property="parentId" column="parent_id" />
+        </association>
+        <association property="examnieeInfo" javaType="com.exam.entity.ExamnieeInfo">
+            <id property="eId" column="eId" />
+            <result property="examnieeId" column="examniee_id" />
+            <result property="examnieeName" column="examniee_name" />
+            <result property="examnieeSex" column="examniee_sex" />
+            <result property="examnieePhoto" column="examniee_photo" />
+            <result property="examnieeSubject" column="examniee_subject" />
+        </association>
+    </resultMap>
+
+    <select id="findAllScore" resultMap="scoreInfo">
+        SELECT
+        t_score.score_id,
+        t_score.student_id,
+        t_examniee_info.examniee_name,
+        t_score.papers_id,
+        t_papers.subject_id,
+        t_subject.subject_name,
+        t_score.score
+        FROM
+        t_score,
+        t_examniee_info,
+        t_papers,
+        t_subject
+        WHERE
+        t_score.student_id = t_examniee_info.examniee_Id
+        and
+        t_score.papers_id = t_papers.papers_id
+        and
+        t_papers.subject_id = t_subject.subject_id
+    </select>
+</mapper>
