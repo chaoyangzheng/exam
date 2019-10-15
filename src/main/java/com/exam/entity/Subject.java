@@ -1,22 +1,31 @@
 package com.exam.entity;
 
 /**
- * @author chaoyang
- * @date 2019/10/14
+ * @author RongJing
+ * @date 2019/10/15
  */
 public class Subject {
+
+
+    //科目id
     private Integer subjectId;
+
+    //科目名
     private String subjectName;
+
+    //根据此判断一二级科目，一级：语数英，二级四六级。为空时是一级
     private Integer parentId;
 
-    @Override
-    public String toString () {
-        return "Subject{" +
-                "subjectId=" + subjectId +
-                ", subjectName='" + subjectName + '\'' +
-                ", parentId=" + parentId +
-                '}';
+
+    public Subject() {
     }
+
+    public Subject(Integer subjectId, String subjectName, Integer parentId) {
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+        this.parentId = parentId;
+    }
+
 
     public Integer getSubjectId () {
         return subjectId;
@@ -41,4 +50,15 @@ public class Subject {
     public void setParentId (Integer parentId) {
         this.parentId = parentId;
     }
+
+
+    @Override
+    public String toString () {
+        return "Subject{" +
+                "subjectId=" + subjectId +
+                ", subjectName='" + subjectName + '\'' +
+                ", parentId=" + parentId +
+                '}';
+    }
+
 }
