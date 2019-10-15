@@ -11,4 +11,13 @@ public interface UserDao {
      */
     public List<User> findUsersByRoleLikeName(@Param("name") String name,@Param("roleId") String roleId, @Param("subjectId") String subjectId);
 
+    /**
+     * 根据用户id查询用户
+     *
+     * @param userId 用户id
+     * @return 用户
+     * @author SHIGUANGYI
+     * @date 2019/10/15
+     */
+    User findUserByUserId(String userId);
 }

@@ -3,7 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.dao.ExamSessionDao">
-    <select id="selectAll" resultType="ExamSession">
+
+    <resultMap id="ExamSessionMap" type="ExamSession" autoMapping="true">
+        <result property="subjectId" column="subject_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <association property="subject" javaType="Subject" autoMapping="true"/>
+        <association property="teacher" javaType="User" select="com.exam.dao.UserDao.findUserByUserId" column="teacher_id"/>
+    </resultMap>
+    <select id="selectAll" resultMap="ExamSessionMap">
         SELECT
         t_exam_session.id,
         t_exam_session.subject_id,
@@ -16,7 +23,7 @@
         t_exam_session
     </select>
 
-    <select id="selectById" parameterType="String" resultType="ExamSession">
+    <select id="selectById" parameterType="String" resultMap="ExamSessionMap">
         SELECT
         t_exam_session.id,
         t_exam_session.subject_id,

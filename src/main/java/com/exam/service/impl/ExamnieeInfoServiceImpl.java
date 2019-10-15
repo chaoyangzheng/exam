@@ -80,4 +80,20 @@ public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
             return new JsonResult(0, "成功", null, examniee);
         }return new JsonResult(1,"失败",null,"查询失败");
     }
+
+    /**
+     * 查询报考该考试场次的学生
+     *
+     * @param pageNum       当前页码
+     * @param pageSize      每页条数
+     * @param examSessionId 考试场次id
+     * @return 考生list
+     * @author SHIGUANGYI
+     * @date 2019/10/15
+     */
+    @Override
+    public List<ExamnieeInfo> findExamnieeInfoByExamSessionId(Integer pageNum, Integer pageSize, String examSessionId) {
+        PageHelper.startPage(pageNum, pageSize);
+        return null;
+    }
 }

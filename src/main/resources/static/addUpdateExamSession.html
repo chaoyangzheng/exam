@@ -52,22 +52,21 @@
             <label class="layui-form-label">考生人数</label>
             <div class="layui-input-inline">
                 <input type="text" name="studentNum" id="studentNum" lay-verify="required|studentNum"
-                       lay-reqtext="请设置考生人数"
-                       autocomplete="off" placeholder="请设置考生人数" class="layui-input">
+                       lay-reqtext="请设置考生人数" autocomplete="off" placeholder="请设置考生人数" class="layui-input">
             </div>
         </div>
-
     </div>
 
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">考试时长</label>
-            <div class="layui-input-inline">
-                <input type="text" name="duringTime" id="duringTime" lay-verify="required|duringTime"
-                       lay-reqtext="请设置考试时长(分钟)"
-                       autocomplete="off" placeholder="请设置考试时长(分钟)" class="layui-input">
-            </div>
+        <label class="layui-form-label">考试时长</label>
+        <div class="layui-input-inline">
+            <input type="text" name="duringTime" id="duringTime" lay-verify="required|duringTime"
+                   lay-reqtext="请设置考试时长" autocomplete="off" placeholder="请设置考试时长" class="layui-input">
         </div>
+        <div class="layui-form-mid layui-word-aux">分钟</div>
+    </div>
+
+    <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">起止时间</label>
             <div class="layui-input-inline">
