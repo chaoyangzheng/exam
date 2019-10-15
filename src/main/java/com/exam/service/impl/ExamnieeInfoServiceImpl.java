@@ -4,11 +4,14 @@ import com.exam.common.JsonResult;
 import com.exam.dao.ExamnieeInfoDao;
 import com.exam.entity.ExamnieeInfo;
 import com.exam.service.ExamnieeInfoService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
 @Service
 public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
     @Autowired(required = false)
@@ -16,11 +19,12 @@ public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
 
     @Override
     public JsonResult findAllExamnieeInfo(Integer pageNum, Integer pageSize) {
-        List<ExamnieeInfo> allExamnieeInfo = null;
+        Page<ExamnieeInfo> allExamnieeInfo = null;
         PageHelper.startPage(pageNum, pageSize);
-        allExamnieeInfo = examnieeInfoDao.findAllExamnieeInfo();
+        allExamnieeInfo = (Page<ExamnieeInfo>) examnieeInfoDao.findAllExamnieeInfo();
+        Long count = allExamnieeInfo.getTotal();
         if (allExamnieeInfo!=null){
-            Long count = examnieeInfoDao.findAllExamnieeNumber();
+//            Long count = examnieeInfoDao.findAllExamnieeNumber();
             return new JsonResult(0,"正常",count,allExamnieeInfo);
         }
         return new JsonResult(1,"失败",0L,null);
@@ -39,6 +43,8 @@ public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
 
     @Override
     public JsonResult addExamnieeInfo(ExamnieeInfo examnieeInfo) {
+        String s =  UUID.randomUUID().toString();
+        examnieeInfo.seteId(s);
         int i = examnieeInfoDao.addExamnieeInfo(examnieeInfo);
         if (i>0){
 //            Long count = examnieeInfoDao.findAllExamnieeNumber();
