@@ -4,7 +4,6 @@ import com.exam.entity.ExamnieeInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-@Mapper
 public interface ExamnieeInfoDao {
     /*zxs
     * */
@@ -32,4 +31,6 @@ public interface ExamnieeInfoDao {
 
     //按名字查学生
     public ExamnieeInfo findExamnieeInfoByName(String examnieeName);
+
+
 }

@@ -6,7 +6,7 @@ import com.exam.entity.ExamnieeInfo;
 import java.util.List;
 
 public interface ExamnieeInfoService {
-    public JsonResult findAllExamnieeInfo();
+    public JsonResult findAllExamnieeInfo(Integer pageNum, Integer pageSize);
 
     public JsonResult deleteExamnieeInfoById(String examnieeId);
 
