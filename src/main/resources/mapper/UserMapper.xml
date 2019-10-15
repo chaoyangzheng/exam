@@ -34,5 +34,15 @@
         where tu.username like #{name}
     </select>
 
+    <select id="findUserByUserId" parameterType="String" resultType="User">
+        SELECT
+        t_user.user_id,
+        t_user.username,
+        t_user.`password`
+        FROM
+        t_user
+        WHERE
+        t_user.user_id = #{userId}
+    </select>
 
 </mapper>
