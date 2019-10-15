@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
+ * 考试场次管理
+ *
  * @author SHIGUANGYI
  * @date 2019/10/14
  */
@@ -104,6 +106,22 @@ public class ExamSessionController {
     @RequestMapping("/deleteAllExamSession.do")
     public JsonResult deleteAllExamSession(@RequestBody List<String> idList) {
         examSessionService.deleteAllById(idList);
+        return new JsonResult(0, "删除成功", null, null);
+    }
+
+    /**
+     * 查询报考该考试场次的学生
+     *
+     * @param page  当前页码
+     * @param limit 每页条数
+     * @param id    考试场次id
+     * @return code=0,msg="删除成功",count=null，data=null
+     * @author SHIGUANGYI
+     * @date 2019/10/15
+     */
+    @RequestMapping("/selectStudentsOfExamSession.do")
+    public JsonResult selectStudentsOfExamSession(Integer page, Integer limit, String id) {
+//        examSessionService.deleteAllById(idList);
         return new JsonResult(0, "删除成功", null, null);
     }
 }

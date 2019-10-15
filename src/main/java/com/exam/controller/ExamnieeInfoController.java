@@ -3,6 +3,7 @@ package com.exam.controller;
 
 import com.exam.common.JsonResult;
 import com.exam.entity.ExamSession;
+import com.exam.entity.ExamnieeInfo;
 import com.exam.entity.Subject;
 import com.exam.service.ExamnieeInfoService;
 import com.exam.service.SubjectService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/examnieeInfo")
@@ -52,4 +54,17 @@ public class ExamnieeInfoController {
         return  new JsonResult(0,"成功",null,s);
 }
 
+    @RequestMapping("/addOrUpdateExamniee.do")
+    public JsonResult addOrUpdateExamniee(ExamnieeInfo examnieeInfo) {
+        System.out.println(examnieeInfo);
+        if (examnieeInfo.geteId() == null || examnieeInfo.geteId().equals("")){
+            System.out.println("add");
+            JsonResult jsonResult = examnieeInfoService.addExamnieeInfo(examnieeInfo);
+            return jsonResult;
+        }else if (examnieeInfo.geteId() != null || !examnieeInfo.geteId().equals("")) {
+            System.out.println("update");
+            JsonResult jsonResult = examnieeInfoService.updateExamnieeInfo(examnieeInfo);
+            return jsonResult;
+        }return new JsonResult(1,"失败",null,"操作失败");
+    }
 }
