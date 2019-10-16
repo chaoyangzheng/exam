@@ -20,7 +20,7 @@ public class Questions implements Serializable {
     private Integer questionsSubjectId;
 
     //试题类别
-    private Integer questionsTypeId;
+    private Integer questionsType;
 
     //试题题干
     private String questionsInfo;

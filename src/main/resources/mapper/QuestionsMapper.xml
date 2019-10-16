@@ -3,6 +3,28 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.dao.QuestionsDao">
+    <select id="findRandomQuestionsByExamSessionIdAndQuestionsTypeId" resultType="Questions">
+        SELECT
+            t_questions.*
+        FROM
+            t_questions
+            INNER JOIN t_exam_session ON t_exam_session.subject_id = t_questions.questions_subject_id
+        WHERE
+            t_exam_session.id = #{examSessionId}
+            AND t_questions.questions_type_id = #{questionsTypeId}
+        ORDER BY
+            RAND( )
+            LIMIT #{questionsNum}
+    </select>
+
+    <select id="findQuestionsByQuestionsId" parameterType="String" resultType="Questions">
+        SELECT
+            *
+        FROM
+            t_questions
+        WHERE
+            questions_id = #{questionsId}
+    </select>
 
 <!--  添加，修改，删除题库中的试题    author:RongJing     date:2019/10/15 -->
  <insert id="insertQuestions" parameterType="Questions">
