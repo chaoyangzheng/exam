@@ -1,7 +1,6 @@
 package com.exam.dao;
 
 import com.exam.entity.ExamnieeInfo;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 public interface ExamnieeInfoDao {
@@ -32,5 +31,13 @@ public interface ExamnieeInfoDao {
     //按名字查学生
     public ExamnieeInfo findExamnieeInfoByName(String examnieeName);
 
-
+    /**
+     * 查询报考该考试场次的学生
+     *
+     * @param examSessionId 考试场次id
+     * @return 考生list
+     * @author SHIGUANGYI
+     * @date 2019/10/15
+     */
+    List<ExamnieeInfo> findExamnieeInfoByExamSessionId(String examSessionId);
 }
