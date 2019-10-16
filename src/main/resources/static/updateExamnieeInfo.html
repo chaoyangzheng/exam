@@ -96,9 +96,9 @@
 
             //监听提交
             form.on('submit(demo1)', function (data) {
-                layer.alert(JSON.stringify(data.field), {
-                    title: '最终的提交信息'
-                })
+                // layer.alert(JSON.stringify(data.field), {
+                //     title: '最终的提交信息'
+                // })
                 layui.$.ajax({
                     type:"post",
                     url:"examnieeInfo/addOrUpdateExamniee.do",
@@ -110,7 +110,7 @@
                             parent.layer.close(index);
                             window.parent.location.reload();
                         } else if(res.code > 0){
-                            alert("操作失败")
+                            alert(res.msg);
                         }
                     }
                 })

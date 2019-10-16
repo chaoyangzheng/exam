@@ -19,6 +19,7 @@
     <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
     <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
     <button type="button" class="layui-btn layui-btn-sm" onclick="addExamniee()">添加考生记录</button>
+    <button type="button" class="layui-btn layui-btn-sm" onclick="selectExamniee()">查询考生记录</button>
     <button class="layui-btn layui-btn-sm" lay-event="doDelAll">批量删除</button>
   </div>
 </script>
@@ -50,11 +51,12 @@ layui.use('table', function(){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'eId', title:'ID', width:80, fixed: 'left', unresize: true, sort: true,hide:true}
-      ,{field:'examnieeId', title:'身份证号', width:120, edit: 'text',sort:true}
+      ,{field:'examnieeId', title:'身份证号', width:220, edit: 'text',sort:true}
       ,{field:'examnieeName', title:'考生姓名', width:80, edit: 'text', sort: true}
       ,{field:'examnieeSex', title:'性别', width:100}
       ,{field:'examnieePhoto', title:'照片',sort:true,templet:'<div><img src="{{d.examnieePhoto}}"></div>'}
-      ,{field:'examnieeSubjectId', title:'学科', width:80, sort: true}
+      ,{field:'examnieeSubjectId', title:'学科号', width:80, sort: true}
+      ,{field:'subject', title:'学科名', width:80, sort: true,templet:'<div>{{d.subject.subjectName}}</div>'}
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
     ]]
     ,page: true
@@ -93,14 +95,14 @@ layui.use('table', function(){
         layer.msg(checkStatus.isAll ? '全选': '未全选');
       break;
       case 'doDelAll':
-        alert("---");
+        // alert("---");
         var ids = "";
-        for (var i = 0;i<checkStatus.data.length;i++){
-          alert(JSON.stringify(checkStatus.data[i].eId));
-        }
+        // for (var i = 0;i<checkStatus.data.length;i++){
+        //   alert(JSON.stringify(checkStatus.data[i].eId));
+        // }
         layui.$.ajax({
           type:"post",
-          url:"examnieeInfo//examnieeInfoDelAll.do",
+          url:"examnieeInfo/examnieeInfoDelAll.do",
           data:JSON.stringify(checkStatus.data),
           contentType:"application/json",
           success:function (res) {
@@ -110,7 +112,7 @@ layui.use('table', function(){
               parent.layer.close(index);
               window.parent.location.reload();
             } else if (res.code!=0) {
-              alert("操作失败,请重试");
+              alert(res.msg);
               var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
               parent.layer.close(index);
             }
@@ -120,7 +122,7 @@ layui.use('table', function(){
       
       //自定义头工具栏右侧图标 - 提示
       case 'LAYTABLE_TIPS':
-        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+        layer.alert('下次等级考试时间在19/12/6日开始，请在11月前提交考生报名信息');
       break;
     };
   });
@@ -190,6 +192,21 @@ function addExamniee(){
     content: 'updateExamnieeInfo.html'
   });
 }
+function selectExamniee(){
+  layer.open({
+    title:"按条件查询考生信息",
+    type: 2,
+    area: ['1200px', '550px'],
+    fixed: false, //不固定
+    maxmin: true,
+    content: 'selectExamnieeInfo.html'
+  });
+}
+// function GetValue(obj){
+//   console.log(obj);
+//   alert("哈哈哈");
+// }
+
 </script>
 
 </body>

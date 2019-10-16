@@ -9,6 +9,7 @@ public class ExamnieeInfo implements Serializable {
     private String examnieeSex;
     private String examnieePhoto;
     private String examnieeSubjectId;
+    private Subject subject;
 
     @Override
     public String toString() {
@@ -19,7 +20,16 @@ public class ExamnieeInfo implements Serializable {
                 ", examnieeSex='" + examnieeSex + '\'' +
                 ", examnieePhoto='" + examnieePhoto + '\'' +
                 ", examnieeSubjectId='" + examnieeSubjectId + '\'' +
+                ", subject=" + subject +
                 '}';
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public String geteId() {
