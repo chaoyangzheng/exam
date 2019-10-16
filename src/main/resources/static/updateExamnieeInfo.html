@@ -14,6 +14,13 @@
     <legend>请填写个人信息</legend>
 </fieldset>
 <form class="layui-form" action="" lay-filter="example">
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input id="eId" type="hidden" name="eId" lay-verify="title" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
@@ -39,6 +46,7 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">学科</label>
+        <input  id="subjectId" type="hidden">
         <div class="layui-input-block">
             <select name="examnieeSubjectId" lay-filter="aihao" id="examnieeSubjectId">
                 <option value=""></option>
@@ -100,6 +108,7 @@
                             alert("操作成功!");
                             var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                             parent.layer.close(index);
+                            window.parent.location.reload();
                         } else if(res.code > 0){
                             alert("操作失败")
                         }
@@ -146,13 +155,22 @@
                     // alert(res);
                     var subjectList = res.data;
                     // alert(subjectList);
-                    for (var j = 0; j < subjectList.length; j++){
+                    var a = null;
+                     a =  layui.$("#subjectId").val();
+                    // alert(a);
+                    for (var j = 0; j < subjectList.length; j++) {
                         // alert(subjectList[j].subjectId + ":" + subjectList[j].subjectName);
-                        layui.$("#examnieeSubjectId").append("<option value='" + subjectList[j].subjectId + "'>" + subjectList[j].subjectName + "</option>");
-                        form.render();
+                        if (a == subjectList[j].subjectId) {
+                            // alert(subjectList[j].subjectId);
+                            layui.$("#examnieeSubjectId").append("<option value='" + subjectList[j].subjectId + "' selected>" + subjectList[j].subjectName + "</option>");
+                        } else {
+                            layui.$("#examnieeSubjectId").append("<option value='" + subjectList[j].subjectId + "'>" + subjectList[j].subjectName + "</option>");
+                        }
                     }
+                    form.render();
                 }
             })
+
         });
 
         // layui.use('upload', function () {

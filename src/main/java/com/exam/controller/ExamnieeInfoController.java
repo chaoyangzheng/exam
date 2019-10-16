@@ -10,6 +10,7 @@ import com.exam.service.SubjectService;
 import com.exam.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,16 @@ public class ExamnieeInfoController {
     public JsonResult examnieeInfoDel(String examnieeId) {
         JsonResult jsonResult = examnieeInfoService.deleteExamnieeInfoById(examnieeId);
         return jsonResult;
+    }
+
+    @RequestMapping("/examnieeInfoDelAll.do")
+    public JsonResult examnieeInfoDelAll(@RequestBody List<ExamnieeInfo> examnieeInfoList) {
+
+        for (ExamnieeInfo e:examnieeInfoList
+             ) {
+            System.out.println(e);
+        }
+        return null;
     }
 
     @RequestMapping("/getSubject.do")
