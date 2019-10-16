@@ -21,7 +21,6 @@ public interface SubjectDao {
 
     /**
      * 添加科目
-     *
      * @author RongJing
      * @date 2019/10/15
      */

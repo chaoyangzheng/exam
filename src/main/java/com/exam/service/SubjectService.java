@@ -51,4 +51,6 @@ public interface SubjectService {
     public Subject findByParentId(String parentId);
 
 
+
+    public List<Subject> findAll();
 }

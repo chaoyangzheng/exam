@@ -26,7 +26,7 @@ public class UserManagementController {
      * @date 2019/10/14
      */
     @RequestMapping("/findUsersByRoleSubjectLikeName.do")
-    public JsonResult findUser(String roleId, String subjectId,String name,String page,String limit){
+    public JsonResult findUser(String roleId, String subjectId,String name,Integer page,Integer limit){
         /*System.out.println("page = " + page);
         System.out.println("limit = " + limit);
         System.out.println("roleId = " + roleId);
@@ -46,7 +46,7 @@ public class UserManagementController {
             subject_id = Integer.valueOf(subjectId);
         }
 
-        List<User> users = userService.findAllUserByRole(roleId, subject_id,name);
+        List<User> users = userService.findAllUserByRole(roleId, subject_id,name,page,limit);
 
         return new JsonResult(0,"success",Long.valueOf(users.size()),users);
     }
@@ -61,5 +61,29 @@ public class UserManagementController {
 
         Map map = userService.findAllRolesSubjects();
         return new JsonResult(0,"success",Long.valueOf(map.size()),map);
+    }
+    // 修改角色 如果角色为教师的话还应该增加科目
+    public JsonResult updateUserPerm(String userId,String roleId,String subject,String type){
+        System.out.println("subject = " + subject);
+        System.out.println("userId = " + userId);
+        System.out.println("roleId = " + roleId);
+        System.out.println("type = " + type);
+        //当type的值为“add时，表示添加，为update时为修改
+        if ("add".equals(type)) {
+            return new JsonResult(null,null,null,null);
+        }
+
+        return new JsonResult(null,null,null,null);
+    }
+    //冻结/解冻
+    public JsonResult updateUserState(String userId,String roleId,String type){
+        System.out.println("userId = " + userId);
+        System.out.println("roleId = " + roleId);
+        System.out.println("type = " + type);
+        //type值为block时为冻结该用户，unblock时解冻
+        if ("block".equals(type)) {
+            return new JsonResult(null,null,null,null);
+        }
+        return new JsonResult(null,null,null,null);
     }
 }

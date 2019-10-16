@@ -14,13 +14,11 @@ import java.util.List;
 @Service
 public class SubjectServiceImpl implements SubjectService {
 
-
     @Autowired(required = false)
     private  SubjectDao subjectDao;
 
     /**
      * 查询所有科目
-     *
      * @return 所有科目的list
      * @author RongJing
      * @date 2019/10/15
@@ -31,11 +29,8 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.findAllSubject();
     }
 
-
-
     /**
      * 添加科目
-     *
      * @author RongJing
      * @date 2019/10/15
      */
@@ -47,13 +42,8 @@ public class SubjectServiceImpl implements SubjectService {
 
     }
 
-
-
-
-
     /**
      * 删除科目
-     *
      * @author RongJing
      * @date 2019/10/15
      */
@@ -63,10 +53,8 @@ public class SubjectServiceImpl implements SubjectService {
         subjectDao.deleteSubject(subjectId);
     }
 
-
     /**
      * 查找一，二级标题
-     *
      * @author RongJing
      * @date 2019/10/15
      */
@@ -74,5 +62,10 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject findByParentId(String parentId) {
 
         return subjectDao.findByParentId(parentId);
+    }
+
+    @Override
+    public List<Subject> findAll () {
+        return null;
     }
 }

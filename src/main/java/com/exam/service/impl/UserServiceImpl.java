@@ -7,6 +7,7 @@ import com.exam.entity.Role;
 import com.exam.entity.Subject;
 import com.exam.entity.User;
 import com.exam.service.UserService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired(required = false)
     private RoleDao roleDao;
     @Override
-    public List<User> findAllUserByRole (String roleId, Integer subjectId,String name) {
+    public List<User> findAllUserByRole (String roleId, Integer subjectId,String name,Integer page,Integer limit) {
         //使用动态sql，判断role的值，为角色，查看某个角色，为null，查看所有
         //先从user_role中通过roleId获取userId的集合，在从user表中查询
         //返回的是用户的简单信息，点击某一个用户查看详细信息
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
             name = "";
         }
         name = "%"+name+"%";
+
+        //分页工具，传的参数为当前页，每页显示个数
+        PageHelper.startPage(page,limit);
         List<User> users = userDao.findUsersByRoleLikeName(name,roleId, subjectId);
         return users;
     }
