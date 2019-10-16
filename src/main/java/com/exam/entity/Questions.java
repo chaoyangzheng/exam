@@ -20,7 +20,7 @@ public class Questions implements Serializable {
     private Integer questionsSubjectId;
 
     //试题类别
-    private Integer questionsType;
+    private Integer questionsTypeId;
 
     //试题题干
     private String questionsInfo;
@@ -42,7 +42,7 @@ public class Questions implements Serializable {
     public Questions(String questionsId, Integer questionsSubjectId, Integer questionsType, String questionsInfo, String questionsAnswer, Date uploadTime, String uploadTeacherId) {
         this.questionsId = questionsId;
         this.questionsSubjectId = questionsSubjectId;
-        this.questionsType = questionsType;
+        this.questionsTypeId = questionsType;
         this.questionsInfo = questionsInfo;
         this.questionsAnswer = questionsAnswer;
         this.uploadTime = uploadTime;
@@ -65,12 +65,12 @@ public class Questions implements Serializable {
         this.questionsSubjectId = questionsSubjectId;
     }
 
-    public Integer getQuestionsType() {
-        return questionsType;
+    public Integer getQuestionsTypeId() {
+        return questionsTypeId;
     }
 
-    public void setQuestionsType(Integer questionsType) {
-        this.questionsType = questionsType;
+    public void setQuestionsTypeId(Integer questionsTypeId) {
+        this.questionsTypeId = questionsTypeId;
     }
 
     public String getQuestionsInfo() {

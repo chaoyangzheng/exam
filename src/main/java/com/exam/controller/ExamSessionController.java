@@ -3,8 +3,10 @@ package com.exam.controller;
 import com.exam.common.JsonResult;
 import com.exam.entity.ExamSession;
 import com.exam.entity.ExamnieeInfo;
+import com.exam.entity.Papers;
 import com.exam.service.ExamSessionService;
 import com.exam.service.ExamnieeInfoService;
+import com.exam.service.PapersService;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,8 @@ public class ExamSessionController {
     private ExamSessionService examSessionService;
     @Autowired
     private ExamnieeInfoService examnieeInfoService;
+    @Autowired
+    private PapersService papersService;
 
     /**
      * 分页查询所有考试场次
@@ -128,5 +132,20 @@ public class ExamSessionController {
         List<ExamnieeInfo> examnieeInfoList = examnieeInfoService.findExamnieeInfoByExamSessionId(page, limit, id);
         Long count = ((Page) examnieeInfoList).getTotal();
         return new JsonResult(0, "查询成功", count, examnieeInfoList);
+    }
+
+    /**
+     * 根据考试场次和考生查询试卷
+     *
+     * @param examSessionId 考试场次id
+     * @param studentId     考生id
+     * @return code=0,msg="删除成功",count=null，data=试卷
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+    @RequestMapping("/selectPaper.do")
+    public JsonResult selectPaper(String examSessionId, String studentId) {
+        List<Papers> papersList = papersService.selectPaper(examSessionId, studentId);
+        return new JsonResult(0, "查询成功", null, papersList);
     }
 }
