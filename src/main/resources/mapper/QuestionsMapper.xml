@@ -6,16 +6,18 @@
 
 <!--  添加，修改，删除题库中的试题    author:RongJing     date:2019/10/15 -->
  <insert id="insertQuestions" parameterType="Questions">
-            INSERT INTO t_questions(questions_id, questions_subject_id,questions_type,questions_info,questions_answer,upload_time,upload_teacher_id)
-            VALUES(#{questionsId}, #{questionsSubjectId},#{questionsType},#{questionsInfo},#{questionsAnswer},#{uploadTime},#{uploadTeacherId})
+            INSERT INTO t_questions(questions_id, questions_subject_id,questions_type_id,questions_info,questions_answer,upload_time,upload_teacher_id)
+            VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},#{uploadTime},#{uploadTeacherId})
  </insert>
 
 <update id="updateQuestions" parameterType="Questions">
            UPDATE
-                t_questions
+                t_questions ,
+                t_questions_type
            SET
                 questions_subject_id = #{questionsSubjectId},
                 questions_type_id = #{questionsTypeId},
+                t_questions_type.questions_type_name = #{questionsTypeName},
                 questions_info = #{questionsInfo},
                 questions_answer = #{questionsAnswer},
                 upload_time = #{uploadTime},

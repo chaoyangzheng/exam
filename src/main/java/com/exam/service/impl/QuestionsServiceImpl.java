@@ -19,22 +19,23 @@ public class QuestionsServiceImpl implements QuestionsService {
 
     @Override
     public void insertQuestions(Questions questions) {
-
+        questionsDao.insertQuestions(questions);
     }
 
     @Override
     public void updateQuestions(Questions questions) {
-
+        questionsDao.updateQuestions(questions);
     }
 
     @Override
     public void deleteQuestions(String questionsId) {
-
+        questionsDao.deleteQuestions(questionsId);
     }
 
     @Override
     public List<Questions> findAllQuestions() {
-        return null;
+        List<Questions> questions_list = questionsDao.findAllQuestions();
+        return questions_list;
     }
 
     @Override
