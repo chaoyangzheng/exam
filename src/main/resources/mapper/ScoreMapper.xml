@@ -32,25 +32,60 @@
         </association>
     </resultMap>
 
+    <!-- 查询所有考生的成绩信息 author：zhangyuanzhe 2019/10/15 -->
     <select id="findAllScore" resultMap="scoreInfo">
         SELECT
         t_score.score_id,
         t_score.student_id,
-        t_examniee_info.examniee_name,
         t_score.papers_id,
-        t_papers.subject_id,
+        t_score.score,
+        t_examniee_info.examniee_name,
         t_subject.subject_name,
-        t_score.score
+        t_subject.subject_id AS subject_id_0
         FROM
         t_score,
         t_examniee_info,
-        t_papers,
         t_subject
         WHERE
         t_score.student_id = t_examniee_info.examniee_Id
         and
-        t_score.papers_id = t_papers.papers_id
-        and
-        t_papers.subject_id = t_subject.subject_id
+        t_examniee_info.examniee_subject_Id = t_subject.subject_id
     </select>
+
+
+    <!-- 查询所有考生成绩的总记录数 author：zhangyuanzhe 2019/10/15 -->
+    <select id="findAllCount" resultType="long">
+        SELECT
+        count( score_id )
+        FROM
+        t_score
+    </select>
+
+    <!-- 查询所有未被批改的简答题（SAQ） author：zhangyuanzhe 2019/10/16 -->
+    <select id="findAllNoCorrectionSAQ" resultType="shortAnswerQuestions">
+        SELECT
+        t_papers.papers_id,
+        t_papers.questions_id,
+        t_papers.student_answer,
+        t_questions.questions_info,
+        t_questions.questions_answer
+        FROM
+        t_papers,
+        t_questions
+        WHERE
+        t_papers.question_score IS NULL
+        AND t_papers.questions_id = t_questions.questions_id
+    </select>
+
+    <!-- 保存打好分的简答题分数（SAQ） author：zhangyuanzhe 2019/10/16 -->
+    <update id="updateScore" parameterType="papers">
+        UPDATE t_papers
+        SET question_score = #{questionScore}
+        WHERE
+	    papers_id = #{papersId}
+	    AND questions_id = #{questionsId}
+    </update>
+
+
+
 </mapper>
