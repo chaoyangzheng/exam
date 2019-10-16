@@ -1,11 +1,13 @@
 package com.exam.dao;
 
 import com.exam.entity.ExamnieeInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 public interface ExamnieeInfoDao {
     /*zxs
-    * */
+     * */
 
     //查询所有考生信息
     public List<ExamnieeInfo> findAllExamnieeInfo();
@@ -52,4 +54,15 @@ public interface ExamnieeInfoDao {
      * @date 2019/10/15
      */
     List<ExamnieeInfo> findExamnieeInfoByExamSessionId(String examSessionId);
+
+    /**
+     * 根据考试场次id和考生id查询学生
+     *
+     * @param examSessionId 考试场次id
+     * @param eId           考生id
+     * @return 考生
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+    ExamnieeInfo findExamnieeInfoByExamSessionIdAndStudentId(@Param("examSessionId") String examSessionId, @Param("eId") String eId);
 }

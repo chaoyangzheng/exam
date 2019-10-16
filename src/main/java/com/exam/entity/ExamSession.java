@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class ExamSession implements Serializable {
     private String id;//考试场次id，uuid，主键
-    private String subjectId;//科目id，外键
+    private Integer subjectId;//科目id，外键
     private String teacherId;//考试申请老师id，外键
     private Integer studentNum;//考生人数上限
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -29,7 +29,7 @@ public class ExamSession implements Serializable {
     public String toString() {
         return "ExamSession{" +
                 "id='" + id + '\'' +
-                ", subjectId='" + subjectId + '\'' +
+                ", subjectId=" + subjectId +
                 ", teacherId='" + teacherId + '\'' +
                 ", studentNum=" + studentNum +
                 ", beginTime=" + beginTime +
@@ -48,11 +48,11 @@ public class ExamSession implements Serializable {
         this.id = id;
     }
 
-    public String getSubjectId() {
+    public Integer getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(String subjectId) {
+    public void setSubjectId(Integer subjectId) {
         this.subjectId = subjectId;
     }
 
