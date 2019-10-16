@@ -135,11 +135,28 @@ public class ExamSessionController {
     }
 
     /**
+     * 检测考生是否能进行本场考试
+     * 学生是否已报名本场考试
+     * 当前时间考试是否正在进行
+     *
+     * @param examSessionId 考试场次id
+     * @param studentId     考生id
+     * @return code=0,msg="可以考试",count=null，data=null
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+    @RequestMapping("/checkStudentCanExam.do")
+    public JsonResult checkStudentCanExam(String examSessionId, String studentId) {
+        examSessionService.checkStudentCanExam(examSessionId, studentId);
+        return new JsonResult(0, "可以考试", null, null);
+    }
+
+    /**
      * 根据考试场次和考生查询试卷
      *
      * @param examSessionId 考试场次id
      * @param studentId     考生id
-     * @return code=0,msg="删除成功",count=null，data=试卷
+     * @return code=0,msg="查询成功",count=null，data=试卷
      * @author SHIGUANGYI
      * @date 2019/10/16
      */

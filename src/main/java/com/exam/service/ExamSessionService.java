@@ -65,4 +65,17 @@ public interface ExamSessionService {
      * @date 2019/10/15
      */
     void deleteAllById(List<String> idList);
+
+    /**
+     * 检测考生是否能进行本场考试
+     * 学生是否已报名本场考试
+     * 当前时间考试是否正在进行
+     *
+     * @param examSessionId 考试场次id
+     * @param studentId     考生id
+     * @return true=能进行本场考试
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+     Boolean checkStudentCanExam(String examSessionId, String studentId);
 }

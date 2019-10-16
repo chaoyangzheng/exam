@@ -38,11 +38,10 @@ public class Questions implements Serializable {
     public Questions() {
     }
 
-
-    public Questions(String questionsId, Integer questionsSubjectId, Integer questionsType, String questionsInfo, String questionsAnswer, Date uploadTime, String uploadTeacherId) {
+    public Questions(String questionsId, Integer questionsSubjectId, Integer questionsTypeId, String questionsInfo, String questionsAnswer, Date uploadTime, String uploadTeacherId) {
         this.questionsId = questionsId;
         this.questionsSubjectId = questionsSubjectId;
-        this.questionsTypeId = questionsType;
+        this.questionsTypeId = questionsTypeId;
         this.questionsInfo = questionsInfo;
         this.questionsAnswer = questionsAnswer;
         this.uploadTime = uploadTime;
