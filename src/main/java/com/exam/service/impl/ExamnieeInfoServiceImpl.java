@@ -100,6 +100,7 @@ public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
     @Override
     public List<ExamnieeInfo> findExamnieeInfoByExamSessionId(Integer pageNum, Integer pageSize, String examSessionId) {
         PageHelper.startPage(pageNum, pageSize);
-        return null;
+        List<ExamnieeInfo> examnieeInfoList = examnieeInfoDao.findExamnieeInfoByExamSessionId(examSessionId);
+        return examnieeInfoList;
     }
 }

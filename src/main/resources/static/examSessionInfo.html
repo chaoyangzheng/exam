@@ -15,6 +15,8 @@
     <legend>考试场次</legend>
 </fieldset>
 
+<input type="hidden" id="id" name="id" autocomplete="off" class="layui-input" disabled>
+
 <div class="layui-form-item">
     <div class="layui-inline">
         <label class="layui-form-label">考试科目</label>
@@ -59,6 +61,10 @@
     </div>
 </div>
 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>考生列表</legend>
+</fieldset>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script src="layui/layui.js" charset="utf-8"></script>
@@ -67,26 +73,19 @@
     layui.use('table', function () {
         var table = layui.table;
 
+        var id = layui.$('#id').val();
         table.render({
             elem: '#test'
-            , height: 'full-20'
-            , url: 'examSession/examSessionList.do'
-            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-            , defaultToolbar: ['exports', 'print']
+            , url: 'examSession/selectStudentsOfExamSession.do'
+            , where: {id: id}
             , title: '考试场次表'
             , cols: [[
                 {type: 'numbers', fixed: 'left'}
-                , {type: 'checkbox', fixed: 'left'}
-                , {field: 'id', title: 'ID', fixed: 'left', sort: true, hide: true}
-                , {field: 'subjectId', title: '科目ID', sort: true, hide: true}
-                , {field: 'subjectName', title: '科目', sort: true, templet: '<div>{{d.subject.subjectName}}</div>'}
-                , {field: 'teacherId', title: '申请老师ID', sort: true, hide: true}
-                , {field: 'teacherName', title: '申请老师', sort: true, templet: '<div>{{d.teacher.username}}</div>'}
-                , {field: 'studentNum', title: '考生人数', sort: true}
-                , {field: 'duringTime', title: '考试时长(分钟)', sort: true}
-                , {field: 'beginTime', title: '开始时间', sort: true}
-                , {field: 'endTime', title: '结束时间', sort: true}
-                , {fixed: 'right', title: '操作', toolbar: '#barDemo'}
+                , {field: 'examnieeId', title: '身份证号', sort: true}
+                , {field: 'examnieeName', title: '考生姓名', sort: true}
+                , {field: 'examnieeSex', title: '考生性别', sort: true}
+                , {field: 'examnieePhoto', title: '考生', sort: true, templet:'<div><img src="{{d.examnieePhoto}}"></div>'}
+                , {field: 'examnieeSubjectId', title: '考生学科', sort: true}
             ]]
             , page: true
         });

@@ -65,7 +65,8 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> findAll () {
-        return null;
+    public List<Subject> findAll() {
+        List<Subject> subjectList = subjectDao.findAll();
+        return subjectList;
     }
 }
