@@ -35,4 +35,14 @@ INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `ex
     <delete id="deleteExamnieeInfoById" parameterType="String">
         delete from t_examniee_info where examniee_Id = #{examnieeId}
     </delete>
+
+    <select id="findExamnieeInfoByExamSessionId" parameterType="String" resultType="ExamnieeInfo">
+        SELECT
+        *
+        FROM
+        t_examniee_info
+        INNER JOIN t_session_papers_student ON t_session_papers_student.student_id = t_examniee_info.eId
+        WHERE
+        t_session_papers_student.exam_session_id = #{examSessionId}
+    </select>
 </mapper>

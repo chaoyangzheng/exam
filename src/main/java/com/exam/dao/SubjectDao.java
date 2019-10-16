@@ -52,6 +52,8 @@ public interface SubjectDao {
     /*zxs*/
      public List<Subject> findAll();
 
+    Subject findById(Integer subjectId);
+
      /**
       * 查询所有一级科目
       * @author chaoyang

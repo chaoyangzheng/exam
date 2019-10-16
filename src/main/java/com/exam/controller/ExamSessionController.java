@@ -2,7 +2,9 @@ package com.exam.controller;
 
 import com.exam.common.JsonResult;
 import com.exam.entity.ExamSession;
+import com.exam.entity.ExamnieeInfo;
 import com.exam.service.ExamSessionService;
+import com.exam.service.ExamnieeInfoService;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +24,8 @@ import java.util.List;
 public class ExamSessionController {
     @Autowired
     private ExamSessionService examSessionService;
+    @Autowired
+    private ExamnieeInfoService examnieeInfoService;
 
     /**
      * 分页查询所有考试场次
@@ -115,13 +119,14 @@ public class ExamSessionController {
      * @param page  当前页码
      * @param limit 每页条数
      * @param id    考试场次id
-     * @return code=0,msg="删除成功",count=null，data=null
+     * @return code=0,msg="删除成功",count=该考试场次学生总数，data=当前页学生列表
      * @author SHIGUANGYI
      * @date 2019/10/15
      */
     @RequestMapping("/selectStudentsOfExamSession.do")
     public JsonResult selectStudentsOfExamSession(Integer page, Integer limit, String id) {
-//        examSessionService.deleteAllById(idList);
-        return new JsonResult(0, "删除成功", null, null);
+        List<ExamnieeInfo> examnieeInfoList = examnieeInfoService.findExamnieeInfoByExamSessionId(page, limit, id);
+        Long count = ((Page) examnieeInfoList).getTotal();
+        return new JsonResult(0, "查询成功", count, examnieeInfoList);
     }
 }
