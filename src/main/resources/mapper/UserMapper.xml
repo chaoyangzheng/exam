@@ -45,4 +45,12 @@
         t_user.user_id = #{userId}
     </select>
 
+
+    <select id="userLogin" parameterType="com.exam.entity.User" resultType="com.exam.entity.User">
+        select * from t_user where id_card = #{idCard} and password = #{password}
+    </select>
+
+    <insert id="userRegister" parameterType="com.exam.entity.User">
+        INSERT INTO `exam`.`t_user` (`user_id`, `username`, `password`, `id_card`) VALUES (#{userId}, #{username}, #{password}, #{idCard});
+    </insert>
 </mapper>

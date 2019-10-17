@@ -5,6 +5,7 @@ import com.exam.common.JsonResult;
 import com.exam.entity.ExamSession;
 import com.exam.entity.ExamnieeInfo;
 import com.exam.entity.Subject;
+import com.exam.entity.User;
 import com.exam.service.ExamnieeInfoService;
 import com.exam.service.SubjectService;
 import com.exam.utils.UploadUtil;
@@ -150,5 +151,17 @@ public class ExamnieeInfoController {
                 return jsonResult2;
         }
        return null;
+    }
+
+    @RequestMapping("/userRegister.do")
+    public JsonResult userRegister(User user) {
+
+        return new JsonResult(0,"哈哈",null,"");
+    }
+
+    @RequestMapping("/userLogin.do")
+    public JsonResult userLogin(User user) {
+
+        return new JsonResult(0,"哈哈",null,"");
     }
 }
