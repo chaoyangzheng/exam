@@ -80,15 +80,27 @@ public class ExamnieeInfoController {
             System.out.println("add");
             JsonResult info = examnieeInfoService.findExamnieeInfoById(examnieeInfo.getExamnieeId());
             List<ExamnieeInfo> infos =  (List<ExamnieeInfo>)info.getData();
-            ExamnieeInfo info1 = infos.get(0);
+            if (infos.isEmpty()){
+                JsonResult jsonResult = examnieeInfoService.addExamnieeInfo(examnieeInfo);
+                return jsonResult;
+            }
+            ExamnieeInfo info1 = null;
+            try {
+                info1 = infos.get(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new JsonResult(1,"数据异常",null,"");
+            }
             if (!(info1.getExamnieeName().equals(examnieeInfo.getExamnieeName())&&info1.getExamnieeSex().equals(examnieeInfo.getExamnieeSex()))){
-                return new JsonResult(1,"添加失败",null,"");
+                return new JsonResult(1,"添加失败，该考生已报名或考生信息不符",null,"");
             }else if (examnieeInfo.getExamnieeName().equals(info1.getExamnieeName())&&examnieeInfo.getExamnieeId().equals(info1.getExamnieeId())
                     &&examnieeInfo.getExamnieeSex().equals(info1.getExamnieeSex())&&examnieeInfo.getExamnieeSubjectId().equals(info1.getExamnieeSubjectId())){
-                return new JsonResult(1,"失败",null,"");
+                return new JsonResult(1,"添加失败，该场次考生已经报名",null,"");
+            }else {
+                JsonResult jsonResult = examnieeInfoService.addExamnieeInfo(examnieeInfo);
+                return new JsonResult(0,"成功",null,"");
             }
-            JsonResult jsonResult = examnieeInfoService.addExamnieeInfo(examnieeInfo);
-            return jsonResult;
+
         }else if (examnieeInfo.geteId() != null || !examnieeInfo.geteId().equals("")) {
             System.out.println("update");
             JsonResult a = examnieeInfoService.findExamnieeInfoById(examnieeInfo.getExamnieeId());
@@ -107,6 +119,9 @@ public class ExamnieeInfoController {
                     System.out.println(c1+":进来了男");
                     if (examnieeInfo.getExamnieeSex().equals("男")){
                         System.out.println("--------");
+                        if (c.getExamnieeSubjectId().equals(examnieeInfo.getExamnieeSubjectId())){
+                            return new JsonResult(1,"该考生已经有此学科的考试，请勿重复添加",null,"");
+                        }
                         JsonResult jsonResult = examnieeInfoService.updateExamnieeInfo(examnieeInfo);
                         return new JsonResult(0,"成功",null,"");
                     }else {
@@ -124,7 +139,7 @@ public class ExamnieeInfoController {
                     return new JsonResult(1,"数据异常",null,"");
                 }
             }else {
-                return new JsonResult(1,"修改失败，请重新核实信息",null,"");
+                return new JsonResult(1,"修改失败，请重新核实信息,请勿修改身份证号和密码，如需修改请联系管理员",null,"");
             }
         }return new JsonResult(1,"异常操作",null,"操作失败");
     }
