@@ -1,8 +1,15 @@
 package com.exam.utils;
 
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -43,4 +50,42 @@ public class UploadUtil {
 
         return imgUploadURL;
     }
+
+
+public String executeUpload1(String uploadDir,MultipartFile file,String fileName) throws Exception{
+        //文件后缀名
+    String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+
+    //上传文件名
+    String filename = fileName + suffix;
+
+    //服务器端保存的
+    File serverFile = new File(uploadDir + filename);
+
+    //将上传的文件写入到服务器端文件内
+    file.transferTo(serverFile);
+
+    return  filename;
+
+}
+
+
+    public <T>List<T> importExecl(String filePath,Integer titleRows,Integer headerRows, Class<T> pojoClass){
+        if(StringUtils.isBlank(filePath)){
+            return null;
+        }
+        ImportParams params =new ImportParam();
+        params.setTitleRows(titleRows);
+        params.setHeadRows(headerRows);
+        List<T> list = null;
+        try {
+            list = ExeclImportUtil.importExecl(new File(filePath),pojoClass,params);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    return list;
+
+    }
+
+
 }

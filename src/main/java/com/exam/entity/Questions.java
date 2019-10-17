@@ -1,5 +1,7 @@
 package com.exam.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,22 +12,27 @@ import java.util.Date;
  * @author rongjing
  * @date 2019/10/14
  */
+@ExcelTarget("Layer")
 public class Questions implements Serializable {
 
 
     //题id
+
     private String questionsId;
 
     //试题科目
+
     private Integer questionsSubjectId;
 
     //试题类别
-    private Integer questionsType;
+    private Integer questionsTypeId;
 
     //试题题干
+    @Excel(name = "题目",isImportField = "true_st")
     private String questionsInfo;
 
     //试题答案
+
     private String questionsAnswer;
 
     //试题上传时间
@@ -34,11 +41,17 @@ public class Questions implements Serializable {
     //出题人
     private String uploadTeacherId;
 
+    private Subject subject;
+    private  QuestionType questionType;
+    private  User user;
+
+
+
 
     public Questions() {
     }
 
-    public Questions(String questionsId, Integer questionsSubjectId, Integer questionsTypeId, String questionsInfo, String questionsAnswer, Date uploadTime, String uploadTeacherId) {
+    public Questions(String questionsId, Integer questionsSubjectId, Integer questionsTypeId, String questionsInfo, String questionsAnswer, Date uploadTime, String uploadTeacherId, Subject subject, QuestionType questionType, User user) {
         this.questionsId = questionsId;
         this.questionsSubjectId = questionsSubjectId;
         this.questionsTypeId = questionsTypeId;
@@ -46,7 +59,11 @@ public class Questions implements Serializable {
         this.questionsAnswer = questionsAnswer;
         this.uploadTime = uploadTime;
         this.uploadTeacherId = uploadTeacherId;
+        this.subject = subject;
+        this.questionType = questionType;
+        this.user = user;
     }
+
 
     public String getQuestionsId() {
         return questionsId;
@@ -104,16 +121,27 @@ public class Questions implements Serializable {
         this.uploadTeacherId = uploadTeacherId;
     }
 
-    @Override
-    public String toString() {
-        return "Questions{" +
-                "questionsId='" + questionsId + '\'' +
-                ", questionsSubjectId=" + questionsSubjectId +
-                ", questionsTypeId=" + questionsTypeId +
-                ", questionsInfo='" + questionsInfo + '\'' +
-                ", questionsAnswer='" + questionsAnswer + '\'' +
-                ", uploadTime=" + uploadTime +
-                ", uploadTeacherId='" + uploadTeacherId + '\'' +
-                '}';
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -26,20 +26,20 @@ public interface QuestionsService {
      * @author RongJing
      * @date 2019/10/15
      */
-    public List<Questions> findAllQuestions();
+    public List<Questions> findAllQuestions(Integer pageNum,Integer pageSize);
 
     /**
      * 按照科目，上传老师，上传时间，题的类型查看题库
      * @author RongJing
      * @date 2019/10/15
      */
-    public List<Questions> findBySubjectId(Integer questionsSubjectId);
+    public List<Questions> findBySubjectId(Integer questionsSubjectId,Integer pageNum,Integer pageSize);
 
-    public List<Questions> findByUploadTeacherId(String uploadTeacherId);
+    public List<Questions> findByUploadTeacherId(String uploadTeacherId,Integer pageNum,Integer pageSize);
 
-    public List<Questions> findByUploadTime(String uploadTime);
+    public List<Questions> findByUploadTime(String uploadTime,Integer pageNum,Integer pageSize);
 
-    public List<Questions> findByQuestionsTypeId(Integer questionsTypeId);
+    public List<Questions> findByQuestionsTypeId(Integer questionsTypeId,Integer pageNum,Integer pageSize);
 
 
 
