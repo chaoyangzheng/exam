@@ -70,6 +70,38 @@ public class ScoreServiceImpl implements ScoreService {
 
 
     /**
+     * 删除某个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    @Override
+    public void deleteScoreByPaperId(String paperId) {
+        if (paperId == null){
+            throw new RuntimeException("没有选择删除项");
+        }
+        scoreDao.deleteScoreByPaperId(paperId);
+    }
+
+
+    /**
+     * 删除多个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    @Override
+    public void deleteAllScoreByPaperId(List<String> paperId) {
+        if (paperId == null){
+            throw new RuntimeException("没有选择删除项");
+        }
+        scoreDao.deleteAllScoreByPaperId(paperId);
+    }
+
+
+    /**
      * 查询所有未被批改的简答题（SAQ）
      *
      * @author zhangyuanzhe

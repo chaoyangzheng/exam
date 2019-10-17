@@ -6,8 +6,8 @@ import com.exam.entity.Score;
 import com.exam.entity.ShortAnswerQuestions;
 import com.exam.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author zhangyuanzhe
  * @date 2019/10/15
  */
-@Controller
+@RestController
 @RequestMapping("/scoreInfo")
 public class ScoreController {
 
@@ -34,17 +34,47 @@ public class ScoreController {
      * @date 2019/10/15
      */
     @RequestMapping("/scoreList.do")
-    public JsonResult findAllScore(Integer currentPage, Integer pageSize) {
+    public JsonResult findAllScore(Integer page, Integer limit) {
 
-        List<Score> allScore = scoreService.findAllScore(currentPage, pageSize);
+        List<Score> allScore = scoreService.findAllScore(page, limit);
         Long allCount = scoreService.findAllCount();
-
         if (allScore != null && allCount != null) {
             return new JsonResult(0, "成功", allCount, allScore);
         } else {
             return new JsonResult(1, "失败", null, null);
         }
     }
+
+
+
+    /**
+     * 删除某个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    @RequestMapping("/deleteScore.do")
+    public JsonResult deleteScoreByPaperId(String paperId){
+        scoreService.deleteScoreByPaperId(paperId);
+        return new JsonResult(0,"删除成功",null,null);
+    }
+
+
+
+    /**
+     * 删除多个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    @RequestMapping("/deleteAllScore.do")
+    public JsonResult deleteAllScoreByPaperId(List<String> paperId){
+        scoreService.deleteAllScoreByPaperId(paperId);
+        return new JsonResult(0,"删除成功",null,null);
+    }
+
 
 
     /**
@@ -65,15 +95,17 @@ public class ScoreController {
     }
 
 
+
+
+
     /**
      * 保存打好分的简答题（SAQ）
      *
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
-    @RequestMapping("/updateSAQScore")
-    public void updateScore(String papersId, String questionsId, Double questionScore) {
-
+    @RequestMapping("/updateSAQScore.do")
+    public JsonResult updateScore(String papersId, String questionsId, Double questionScore) {
         if (papersId != null && questionsId != null && questionScore != null) {
             Papers papers = new Papers();
             papers.setPapersId(papersId);
@@ -83,6 +115,7 @@ public class ScoreController {
         } else {
             throw new RuntimeException("分数传递失败");
         }
+        return new JsonResult(0, "成功", null, null);
     }
 
 

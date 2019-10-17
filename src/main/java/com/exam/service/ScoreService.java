@@ -32,6 +32,29 @@ public interface ScoreService {
 
 
     /**
+     * 删除某个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public void deleteScoreByPaperId(String paperId);
+
+
+
+    /**
+     * 删除多个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public void deleteAllScoreByPaperId(List<String> paperId);
+
+
+
+
+    /**
      * 查询所有未被批改的简答题（SAQ）
      *
      * @return list<ShortAnswerQuestions>

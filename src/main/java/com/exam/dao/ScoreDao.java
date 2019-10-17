@@ -33,13 +33,24 @@ public interface ScoreDao {
 
 
     /**
-     * 删除某个学生或多个学生的成绩
+     * 删除某个学生的成绩
      *
+     * @param paperId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
-    // public Long deleteScoreByStudentId();
+    public void deleteScoreByPaperId(String paperId);
 
+
+
+    /**
+     * 删除多个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public void deleteAllScoreByPaperId(List<String> paperId);
 
 
     /**
@@ -59,7 +70,6 @@ public interface ScoreDao {
      * @date 2019/10/16
      */
     public void updateScore(Papers papers);
-
 
 
 }
