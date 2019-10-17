@@ -24,4 +24,12 @@
         t_session_papers_student.exam_session_id = #{examSessionId}
         AND t_session_papers_student.student_id = #{studentId}
     </select>
+
+    <insert id="insertPapers" parameterType="List">
+        INSERT INTO `exam`.`t_papers`(`papers_table_id`, `papers_id`, `student_id`, `subject_id`, `questions_id`, `student_answer`, `question_score`)
+        VALUES
+        <foreach collection="list" item="papers" separator=",">
+            (#{papers.papersTableId}, #{papers.papersId}, #{papers.studentId}, #{papers.subjectId}, #{papers.questionsId}, #{papers.studentAnswer}, #{papers.questionScore})
+        </foreach>
+    </insert>
 </mapper>
