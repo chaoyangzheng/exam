@@ -20,4 +20,10 @@ public interface UserDao {
      * @date 2019/10/15
      */
     User findUserByUserId(String userId);
+
+    /*zxs*/
+    User userLogin(User user);
+
+    int userRegister(User user);
+    /*end:zxs*/
 }

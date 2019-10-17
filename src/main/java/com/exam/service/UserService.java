@@ -18,4 +18,10 @@ public interface UserService {
      * @return java.util.Map
      */
     public Map findAllRolesSubjects();
+
+    /*zxs*/
+     public User userLogin(User user);
+
+     public int userRegister(User user);
+    /*end*/
 }
