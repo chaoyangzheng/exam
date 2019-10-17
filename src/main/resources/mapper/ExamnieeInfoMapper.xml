@@ -12,8 +12,40 @@
         select * from t_examniee_info where eId = #{eId}
     </select>
 
-    <select id="findExamnieeInfoById" parameterType="String" resultType="ExamnieeInfo">
-        select * from t_examniee_info where examniee_Id = #{examnieeId}
+    <select id="findExamnieeInfoBySubjectName" parameterType="String" resultMap="subjectForExamniee">
+            SELECT
+            t_examniee_info.eId,
+            t_examniee_info.examniee_Id,
+            t_examniee_info.examniee_name,
+            t_examniee_info.examniee_sex,
+            t_examniee_info.examniee_photo,
+            t_examniee_info.examniee_subject_Id,
+            t_subject.subject_id,
+            t_subject.subject_name,
+            t_subject.parent_id
+            FROM
+            t_examniee_info
+            RIGHT JOIN t_subject ON t_examniee_info.examniee_subject_Id = t_subject.subject_id
+            WHERE
+            t_subject.subject_name = #{examnieeName}
+    </select>
+
+    <select id="findExamnieeInfoById" parameterType="String" resultMap="subjectForExamniee">
+                SELECT
+        t_examniee_info.eId,
+        t_examniee_info.examniee_Id,
+        t_examniee_info.examniee_name,
+        t_examniee_info.examniee_sex,
+        t_examniee_info.examniee_photo,
+        t_examniee_info.examniee_subject_Id,
+        t_subject.subject_id,
+        t_subject.subject_name,
+        t_subject.parent_id
+        FROM
+        t_examniee_info
+        LEFT JOIN t_subject ON t_examniee_info.examniee_subject_Id = t_subject.subject_id
+        WHERE
+        t_examniee_info.examniee_id = #{examnieeId}
     </select>
 
     <select id="findAllExamnieeNumber" resultType="long">
@@ -24,17 +56,66 @@
         select * from t_examniee_info where examniee_name = #{examnieeName}
     </select>
 
+    <select id="findExamnieeInfoByNames" parameterType="String" resultMap="subjectForExamniee">
+                        SELECT
+                t_examniee_info.eId,
+                t_examniee_info.examniee_Id,
+                t_examniee_info.examniee_name,
+                t_examniee_info.examniee_sex,
+                t_examniee_info.examniee_photo,
+                t_examniee_info.examniee_subject_Id,
+                t_subject.subject_id,
+                t_subject.subject_name,
+                t_subject.parent_id
+                FROM
+                t_examniee_info
+                LEFT JOIN t_subject ON t_examniee_info.examniee_subject_Id = t_subject.subject_id
+                WHERE
+                t_examniee_info.examniee_name LIKE '%${examnieeName}%'
+    </select>
+
     <insert id="addExamnieeInfo" parameterType="com.exam.entity.ExamnieeInfo">
 INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `examniee_sex`, `examniee_photo`, `examniee_subject_Id`) VALUES (#{eId},#{examnieeId},#{examnieeName},#{examnieeSex}, #{examnieePhoto},#{examnieeSubjectId});
     </insert>
 
     <update id="updateExamnieeInfo" parameterType="com.exam.entity.ExamnieeInfo">
-     UPDATE `exam`.`t_examniee_info` SET `eId`=#{eId}, `examniee_Id`=#{examnieeId}, `examniee_name`=#{examnieeName}, `examniee_sex`=#{examnieeSex}, `examniee_photo`=#{examnieePhoto}, `examniee_subject_Id`=#{examnieeSubjectId} WHERE (`eId`=#{eId});
+     UPDATE `exam`.`t_examniee_info` SET `eId`=#{eId}, `examniee_name`=#{examnieeName}, `examniee_sex`=#{examnieeSex}, `examniee_photo`=#{examnieePhoto}, `examniee_subject_Id`=#{examnieeSubjectId} WHERE (`eId`=#{eId});
     </update>
 
     <delete id="deleteExamnieeInfoById" parameterType="String">
         delete from t_examniee_info where examniee_Id = #{examnieeId}
     </delete>
+
+    <delete id="deleteExamnieeInfoByIds">
+        delete from t_examniee_info where eId in
+        <foreach collection="list" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <select id="findAllExamnieeInfoAndSubjectName" resultMap="subjectForExamniee">
+                    SELECT
+            t_examniee_info.eId,
+            t_examniee_info.examniee_Id,
+            t_examniee_info.examniee_name,
+            t_examniee_info.examniee_sex,
+            t_examniee_info.examniee_photo,
+            t_examniee_info.examniee_subject_Id,
+            t_subject.subject_id,
+            t_subject.subject_name,
+            t_subject.parent_id
+            FROM
+            t_examniee_info
+            LEFT JOIN t_subject ON t_examniee_info.examniee_subject_Id = t_subject.subject_id
+    </select>
+
+    <resultMap id="subjectForExamniee" type="com.exam.entity.ExamnieeInfo" autoMapping="true">
+        <association property="subject" javaType="Subject">
+            <id property="subjectId" column="subject_id"></id>
+            <result property="subjectName" column="subject_name"></result>
+            <result property="parentId" column="parent_id"></result>
+        </association>
+    </resultMap>
 
     <select id="findExamnieeInfoByExamSessionId" parameterType="String" resultType="ExamnieeInfo">
         SELECT
@@ -44,5 +125,16 @@ INSERT INTO `exam`.`t_examniee_info` (`eId`, `examniee_Id`, `examniee_name`, `ex
         INNER JOIN t_session_papers_student ON t_session_papers_student.student_id = t_examniee_info.eId
         WHERE
         t_session_papers_student.exam_session_id = #{examSessionId}
+    </select>
+
+    <select id="findExamnieeInfoByExamSessionIdAndStudentId" resultType="ExamnieeInfo">
+        SELECT
+        t_examniee_info.*
+        FROM
+        t_examniee_info
+        INNER JOIN t_session_papers_student ON t_session_papers_student.student_id = t_examniee_info.eId
+        WHERE
+        t_session_papers_student.exam_session_id = #{examSessionId}
+        AND t_session_papers_student.student_id = #{eId}
     </select>
 </mapper>

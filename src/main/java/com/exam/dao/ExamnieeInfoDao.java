@@ -1,11 +1,13 @@
 package com.exam.dao;
 
 import com.exam.entity.ExamnieeInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 public interface ExamnieeInfoDao {
     /*zxs
-    * */
+     * */
 
     //查询所有考生信息
     public List<ExamnieeInfo> findAllExamnieeInfo();
@@ -26,10 +28,22 @@ public interface ExamnieeInfoDao {
     public ExamnieeInfo findExamnieeInfoByEid(String eId);
 
     //按身份证查学生
-    public ExamnieeInfo findExamnieeInfoById(String examnieeId);
+    public List<ExamnieeInfo> findExamnieeInfoById(String examnieeId);
 
     //按名字查学生
     public ExamnieeInfo findExamnieeInfoByName(String examnieeName);
+
+    //按名字查学生的集合
+    public List<ExamnieeInfo> findExamnieeInfoByNames(String examnieeName);
+
+    //按学科查询学声的集合
+    public List<ExamnieeInfo> findExamnieeInfoBySubjectName(String subjectName);
+
+    //删除一个集合的学生
+    public int deleteExamnieeInfoByIds(List<String> ids);
+
+    //连表查询学科名的考生集合
+    public List<ExamnieeInfo> findAllExamnieeInfoAndSubjectName();
 
     /**
      * 查询报考该考试场次的学生
@@ -40,4 +54,15 @@ public interface ExamnieeInfoDao {
      * @date 2019/10/15
      */
     List<ExamnieeInfo> findExamnieeInfoByExamSessionId(String examSessionId);
+
+    /**
+     * 根据考试场次id和考生id查询学生
+     *
+     * @param examSessionId 考试场次id
+     * @param eId           考生id
+     * @return 考生
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+    ExamnieeInfo findExamnieeInfoByExamSessionIdAndStudentId(@Param("examSessionId") String examSessionId, @Param("eId") String eId);
 }
