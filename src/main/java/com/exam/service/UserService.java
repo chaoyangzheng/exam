@@ -9,7 +9,7 @@ public interface UserService {
     /**
      * 管理员查看所有用户，根据角色查看用户实现名称模糊查询
      */
-    public List<User> findAllUserByRole(String roleId,Integer subjectId,String name);
+    public List<User> findAllUserByRole(String roleId, Integer subjectId,String name,Integer page,Integer limit);
 
     /**
      * 查询所有的学科和
