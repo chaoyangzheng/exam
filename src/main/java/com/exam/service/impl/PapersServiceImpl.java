@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class PapersServiceImpl implements PapersService {
@@ -33,18 +31,17 @@ public class PapersServiceImpl implements PapersService {
      *
      * @param examSessionId 考试场次id
      * @param studentId     考生id
-     * @return 试卷
+     * @return startTime:学生开始考试的时间;papersList:试卷
      * @author SHIGUANGYI
      * @date 2019/10/16
      */
     @Override
-    public List<Papers> selectPaper(String examSessionId, String studentId) {
+    public Map<String, Object> selectPaper(String examSessionId, String studentId) {
         //生成试卷在redis中的key
         String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
 
         //从redis中查询试卷
-        List<Papers> papersList = (List<Papers>) redisTemplate.opsForValue().get(redisKey);
-
+        List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
         if (null == papersList || 0 == papersList.size()) {
             //如果redis没有对应试卷说明可能已经交卷或还未生成
             //从mysql查询是否已有对应试卷，即是否已交卷
@@ -76,12 +73,29 @@ public class PapersServiceImpl implements PapersService {
                     papersList.add(papers);
                 }
 
-                //获取考试时间，用于设置试卷缓存时长
-                ExamSession examSession = examSessionDao.selectById(examSessionId);
-                Integer duringTime = examSession.getDuringTime();
+                //获取当前系统时间，作为考试开始时间，作为倒计时自动交卷依据
+                Long startTime = System.currentTimeMillis();
 
                 //新试卷存入redis
-                redisTemplate.opsForValue().set(redisKey, papersList);
+                redisTemplate.opsForHash().put(redisKey, "startTime", startTime);
+                redisTemplate.opsForHash().put(redisKey, "papersList", papersList);
+
+                //后台倒计时自动交卷
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        ExamSession examSession = examSessionDao.selectById(examSessionId);
+                        Long duringTime = (long) examSession.getDuringTime() * 60 * 1000;
+                        try {
+                            Thread.sleep(duringTime);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        autoScore(examSessionId, studentId);
+                        submitPaperCache(examSessionId, studentId);
+                    }
+                };
+                new Thread(runnable).start();
             } else {
                 //如果mysql中有对应试卷说明已交卷
                 throw new RuntimeException("已交卷，不能重复考试");
@@ -97,7 +111,12 @@ public class PapersServiceImpl implements PapersService {
             papersList.set(i, papers);
         }
 
-        return papersList;
+        Long startTime = (Long) redisTemplate.opsForHash().get(redisKey, "startTime");
+        HashMap<String, Object> papersMap = new HashMap<>();
+        papersMap.put("startTime", startTime);
+        papersMap.put("papersList", papersList);
+
+        return papersMap;
     }
 
     /**
@@ -117,7 +136,8 @@ public class PapersServiceImpl implements PapersService {
         String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
 
         //从redis中查询试卷
-        List<Papers> papersList = (List<Papers>) redisTemplate.opsForValue().get(redisKey);
+        List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
+
 
         if (null == papersList || 0 == papersList.size()) {
             throw new RuntimeException("缓存中不存在该试卷");
@@ -129,7 +149,7 @@ public class PapersServiceImpl implements PapersService {
         papers.setStudentAnswer(answer);
         papersList.set(papersIndex, papers);
 
-        redisTemplate.opsForValue().set(redisKey, papersList);
+        redisTemplate.opsForHash().put(redisKey, "papersList", papersList);
         return true;
     }
 
@@ -148,7 +168,8 @@ public class PapersServiceImpl implements PapersService {
         String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
 
         //从redis中查询试卷
-        List<Papers> papersList = (List<Papers>) redisTemplate.opsForValue().get(redisKey);
+        List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
+
 
         if (null == papersList || 0 == papersList.size()) {
             throw new RuntimeException("缓存中不存在该试卷");
@@ -181,7 +202,7 @@ public class PapersServiceImpl implements PapersService {
         String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
 
         //从redis中查询试卷
-        List<Papers> papersList = (List<Papers>) redisTemplate.opsForValue().get(redisKey);
+        List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
 
         if (null == papersList || 0 == papersList.size()) {
             throw new RuntimeException("缓存中不存在该试卷");
@@ -209,7 +230,7 @@ public class PapersServiceImpl implements PapersService {
             papersList.set(i, papers);
         }
 
-        redisTemplate.opsForValue().set(redisKey, papersList);
+        redisTemplate.opsForHash().put(redisKey, "papersList", papersList);
         return true;
     }
 }

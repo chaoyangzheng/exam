@@ -12,7 +12,7 @@
 <body>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>考试</legend>
+    <legend id="remainingTime">考试倒计时：</legend>
 </fieldset>
 
 <script src="layui/layui.js" charset="utf-8"></script>
@@ -22,11 +22,90 @@
         var form = layui.form
             , layer = layui.layer;
 
+        var intervalIndex = 0;
 
         layui.$.ajax({
             url: 'examSession/selectPaper.do' + location.search,
             success: function (result) {
                 if (result.code === 0) {
+                    //动态生成倒计时
+                    //获取考试时长(min)
+                    var remainingTime = result.data.remainingTime;
+
+                    var $remainingTime = layui.$('#remainingTime');
+
+                    var second = remainingTime % 60;
+                    var minute = parseInt(remainingTime / 60) % 60;
+                    var hour = parseInt(parseInt(remainingTime / 60) / 60);
+
+
+                    if (hour < 10) {
+                        hour = '0' + hour;
+                    } else {
+                        hour = '' + hour;
+                    }
+                    if (minute < 10) {
+                        minute = '0' + minute;
+                    } else {
+                        minute = '' + minute;
+                    }
+                    if (second < 10) {
+                        second = '0' + second;
+                    } else {
+                        second = '' + second;
+                    }
+
+                    $remainingTime.html('考试倒计时:' + hour + ':' + minute + ':' + second);
+
+                    intervalIndex = setInterval(function () {
+                        var times = $remainingTime.html().split(':');
+                        hour = parseInt(times[1]);
+                        minute = parseInt(times[2]);
+                        second = parseInt(times[3]);
+
+                        if (second <= 0) {
+                            if (minute <= 0) {
+                                if (hour <= 0) {
+                                    //自动交卷
+                                    layui.$('form:visible button:last').click();
+                                } else {
+                                    hour -= 1;
+                                    minute = 59;
+                                    second = 59;
+                                }
+                            } else {
+                                minute -= 1;
+                                second = 59;
+                            }
+                        } else {
+                            second -= 1;
+                        }
+
+                        if (hour < 10) {
+                            hour = '0' + hour;
+                        } else {
+                            hour = '' + hour;
+                        }
+                        if (minute < 10) {
+                            minute = '0' + minute;
+                        } else {
+                            minute = '' + minute;
+                        }
+                        if (second < 10) {
+                            second = '0' + second;
+                        } else {
+                            second = '' + second;
+                        }
+
+                        $remainingTime.html('考试倒计时:' + hour + ':' + minute + ':' + second);
+
+                        if (hour == 0 && minute == 0 && second == 30) {
+                            layer.alert('距离考试结束还有30秒', {title: '温馨提示'});
+                        }
+                    }, 1000);
+
+                    //动态生成试题form表单
+                    //从地址栏拆出考试场次id和学生id
                     var urlParams = location.search;
                     urlParams = urlParams.replace('?', '');
                     urlParams = urlParams.split('&');
@@ -35,7 +114,8 @@
                     var studentId = urlParams[1];
                     studentId = studentId.substring(studentId.indexOf('=') + 1);
 
-                    var papersList = result.data;
+                    //获取题目信息
+                    var papersList = result.data.papersList;
                     for (var i in papersList) {
                         var questions = papersList[i].questions;
                         var questionsTypeId = questions.questionsTypeId;
@@ -302,23 +382,52 @@
         });
         //监听交卷按钮提交
         form.on('submit(submit)', function (data) {
-            layer.confirm('确定要交卷？', {
-                btn: ['确定', '取消']
-            }, function (index) {
+            var times = layui.$('#remainingTime').html().split(':');
+            var hour = parseInt(times[1]);
+            var minute = parseInt(times[2]);
+            var second = parseInt(times[3]);
+
+            if (hour <= 0 && minute <= 0 && second <= 0) {
+                //倒计时为0说明是自动交卷
+                clearInterval(intervalIndex);
+                layer.alert('考试结束，自动交卷', {title: '温馨提示'});
+                var $form = layui.$(data.form);
+                $form.attr('hidden', true);
                 layui.$.ajax({
                     url: 'examSession/submitPaper.do',
                     type: 'post',
                     data: data.field,
                     success: function (result) {
                         if (result.code === 0) {
-                            layer.close(index);
                             close();
                         } else {
                             layer.msg('操作失败', {time: 1000});
                         }
                     }
-                })
-            });
+                });
+            } else {
+                //手动交卷
+                layer.confirm('确定要交卷？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    layui.$.ajax({
+                        url: 'examSession/submitPaper.do',
+                        type: 'post',
+                        data: data.field,
+                        success: function (result) {
+                            if (result.code === 0) {
+                                layer.close(index);
+                                var $form = layui.$(data.form);
+                                $form.attr('hidden', true);
+                                clearInterval(intervalIndex);
+                                close();
+                            } else {
+                                layer.msg('操作失败', {time: 1000});
+                            }
+                        }
+                    });
+                });
+            }
 
             return false;
         });
