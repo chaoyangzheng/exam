@@ -1,8 +1,6 @@
 package com.exam.service;
 
-import com.exam.entity.Papers;
-
-import java.util.List;
+import java.util.Map;
 
 public interface PapersService {
     /**
@@ -10,11 +8,11 @@ public interface PapersService {
      *
      * @param examSessionId 考试场次id
      * @param studentId     考生id
-     * @return 试卷
+     * @return startTime:学生开始考试的时间;papersList:试卷
      * @author SHIGUANGYI
      * @date 2019/10/16
      */
-    List<Papers> selectPaper(String examSessionId, String studentId);
+    Map<String, Object> selectPaper(String examSessionId, String studentId);
 
     /**
      * 更新试卷缓存
