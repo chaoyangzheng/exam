@@ -29,23 +29,23 @@ public class ScoreServiceImpl implements ScoreService {
      * @date 2019/10/15
      */
     @Override
-    public List<Score> findAllScore(Integer currentPage,Integer pageSize) {
+    public List<Score> findAllScore(Integer currentPage, Integer pageSize, String selectScore, String msg) {
 
         //判断当前页是否为空，或者小于1
         //当前页默认为第一页
-        if (currentPage == null || currentPage < 1){
+        if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
 
         //判断每页显示个数是否为空，或小于1
         // 默认显示个数默认值为10
-        if(null == pageSize || pageSize <1){
+        if (null == pageSize || pageSize < 1) {
             pageSize = 10;
         }
 
         //分页工具，传的参数为当前页，每页显示个数
-        PageHelper.startPage(currentPage,pageSize);
-        List<Score> allScore = scoreDao.findAllScore();
+        PageHelper.startPage(currentPage, pageSize);
+        List<Score> allScore = scoreDao.findAllScore(selectScore, msg);
 
         return allScore;
     }
@@ -61,43 +61,42 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public Long findAllCount() {
         Long allCount = scoreDao.findAllCount();
-        if (allCount == null){
+        if (allCount == null) {
             throw new RuntimeException("没有考生分数记录");
         }
         return allCount;
     }
 
 
-
     /**
      * 删除某个学生的成绩
      *
-     * @param paperId 试卷 ID
+     * @param papersId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
     @Override
-    public void deleteScoreByPaperId(String paperId) {
-        if (paperId == null){
+    public void deleteScoreByPapersId(String papersId) {
+        if (papersId == null) {
             throw new RuntimeException("没有选择删除项");
         }
-        scoreDao.deleteScoreByPaperId(paperId);
+        scoreDao.deleteScoreByPapersId(papersId);
     }
 
 
     /**
      * 删除多个学生的成绩
      *
-     * @param paperId 试卷 ID
+     * @param papersId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
     @Override
-    public void deleteAllScoreByPaperId(List<String> paperId) {
-        if (paperId == null){
+    public void deleteAllScoreByPapersId(List<String> papersId) {
+        if (papersId == null) {
             throw new RuntimeException("没有选择删除项");
         }
-        scoreDao.deleteAllScoreByPaperId(paperId);
+        scoreDao.deleteAllScoreByPapersId(papersId);
     }
 
 
@@ -110,12 +109,11 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public List<ShortAnswerQuestions> findAllNoCorrectionSAQ() {
         List<ShortAnswerQuestions> allNoCorrectionSAQ = scoreDao.findAllNoCorrectionSAQ();
-        if (allNoCorrectionSAQ != null){
+        if (allNoCorrectionSAQ != null) {
             return allNoCorrectionSAQ;
         }
         throw new RuntimeException("所有简答题都已改完");
     }
-
 
 
     /**
@@ -126,7 +124,7 @@ public class ScoreServiceImpl implements ScoreService {
      */
     @Override
     public void updateScore(Papers papers) {
-        if (papers == null){
+        if (papers == null) {
             throw new RuntimeException("分数未提交成功");
         }
         scoreDao.updateScore(papers);
