@@ -8,12 +8,10 @@ import com.exam.entity.Subject;
 import com.exam.entity.User;
 import com.exam.service.ExamnieeInfoService;
 import com.exam.service.SubjectService;
+import com.exam.service.UserService;
 import com.exam.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -28,6 +26,9 @@ public class ExamnieeInfoController {
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/examnieeInfoList.do")
     public JsonResult examnieeInfoList(Integer page, Integer limit) {
@@ -169,14 +170,26 @@ public class ExamnieeInfoController {
     }
 
     @RequestMapping("/userRegister.do")
-    public JsonResult userRegister(User user) {
-
-        return new JsonResult(0,"哈哈",null,"");
+    public JsonResult userRegister(@RequestBody User user) {
+//        System.out.println("注册:"+user);
+        if (user!=null){
+            User user1 = userService.userRegister(user);
+            if (user1!=null){
+                return new JsonResult(0,"注册成功",null,user1);
+            }else if (user1 == null){
+                return new JsonResult(0,"注册失败",null,"");
+            }
+        }
+        return new JsonResult(0,"注册失败",null,"");
     }
 
     @RequestMapping("/userLogin.do")
-    public JsonResult userLogin(User user) {
-
-        return new JsonResult(0,"哈哈",null,"");
+    public JsonResult userLogin(@RequestBody User user) {
+//        System.out.println("登录:"+user);
+        if (user!=null){
+            JsonResult jsonResult = userLogin(user);
+            return jsonResult;
+        }
+        return new JsonResult(0,"登录失败",null,"");
     }
 }

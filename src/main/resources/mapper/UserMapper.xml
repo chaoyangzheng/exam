@@ -53,4 +53,12 @@
     <insert id="userRegister" parameterType="com.exam.entity.User">
         INSERT INTO `exam`.`t_user` (`user_id`, `username`, `password`, `id_card`) VALUES (#{userId}, #{username}, #{password}, #{idCard});
     </insert>
+
+    <insert id="addUserAndRole" parameterType="String">
+        INSERT INTO `exam`.`t_user_role` (`user_role_id`, `user_id`, `role_id`) VALUES (REPLACE(UUID(),'-',''), #{userId}, '2');
+    </insert>
+
+    <select id="findByName" parameterType="String" resultType="com.exam.entity.User">
+        select * from t_user where username = #{username}
+    </select>
 </mapper>
