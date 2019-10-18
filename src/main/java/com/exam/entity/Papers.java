@@ -30,6 +30,14 @@ public class Papers {
     //考生该题得分
     private Double questionScore;
 
+    /**
+     * 题目
+     *
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+    private Questions questions;
+
 
     public Papers() {
     }
@@ -98,5 +106,13 @@ public class Papers {
 
     public void setQuestionScore(Double questionScore) {
         this.questionScore = questionScore;
+    }
+
+    public Questions getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Questions questions) {
+        this.questions = questions;
     }
 }

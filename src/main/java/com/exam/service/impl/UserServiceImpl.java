@@ -117,4 +117,15 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /*zxs*/
+    @Override
+    public User userLogin(User user) {
+        return null;
+    }
+
+    @Override
+    public int userRegister(User user) {
+        return 0;
+    }
+    /*end*/
 }

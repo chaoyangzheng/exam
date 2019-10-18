@@ -1,7 +1,9 @@
 package com.exam.service.impl;
 
 import com.exam.dao.ExamSessionDao;
+import com.exam.dao.ExamnieeInfoDao;
 import com.exam.entity.ExamSession;
+import com.exam.entity.ExamnieeInfo;
 import com.exam.service.ExamSessionService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.List;
 public class ExamSessionServiceImpl implements ExamSessionService {
     @Autowired
     private ExamSessionDao examSessionDao;
+    @Autowired
+    private ExamnieeInfoDao examnieeInfoDao;
 
     /**
      * 分页查询所有考试场次
@@ -96,5 +100,38 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     @Override
     public void deleteAllById(List<String> idList) {
         examSessionDao.deleteAllById(idList);
+    }
+
+    /**
+     * 检测考生是否能进行本场考试
+     * 学生是否已报名本场考试
+     * 当前时间考试是否正在进行
+     *
+     * @param examSessionId 考试场次id
+     * @param studentId     考生id
+     * @return true=能进行本场考试
+     * @author SHIGUANGYI
+     * @date 2019/10/16
+     */
+    @Override
+    public Boolean checkStudentCanExam(String examSessionId, String studentId) {
+        ExamSession examSession = examSessionDao.selectById(examSessionId);
+        if (null == examSession) {
+            throw new RuntimeException("考试场次不存在");
+        }
+        ExamnieeInfo examnieeInfo = examnieeInfoDao.findExamnieeInfoByExamSessionIdAndStudentId(examSessionId, studentId);
+        if (null == examnieeInfo) {
+            throw new RuntimeException("未报名本场考试");
+        }
+        Long currentTime = System.currentTimeMillis();
+        Long beginTime = examSession.getBeginTime().getTime();
+        if (currentTime < beginTime) {
+            throw new RuntimeException("考试未开始");
+        }
+        Long endTime = examSession.getEndTime().getTime();
+        if (currentTime > endTime) {
+            throw new RuntimeException("考试已结束");
+        }
+        return true;
     }
 }

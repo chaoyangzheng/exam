@@ -40,7 +40,7 @@ public class UploadUtil {
         }
 
         String imgUploadURL = "http://15637237221.wicp.vip/show/" + imgName;
-
+//          String imgUploadURL = serverPath + imgName;
         return imgUploadURL;
     }
 }

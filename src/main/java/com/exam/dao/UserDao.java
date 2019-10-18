@@ -16,6 +16,7 @@ public interface UserDao {
 
     /**
      * 根据用户id查询用户
+     *
      * @param userId 用户id
      * @return 用户
      * @author SHIGUANGYI
@@ -58,4 +59,10 @@ public interface UserDao {
      */
     @Delete("delete from t_user_role  where user_id=#{userId} and role_id = #{roleId}")
     Integer deleteUserRole(@Param("userId")String userId,@Param("roleId")String roleId);
+
+    /*zxs*/
+    User userLogin(User user);
+
+    int userRegister(User user);
+    /*end:zxs*/
 }

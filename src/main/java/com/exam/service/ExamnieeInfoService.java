@@ -20,6 +20,14 @@ public interface ExamnieeInfoService {
 
     public JsonResult findExamnieeInfoByName(String examnieeName);
 
+    public JsonResult deleteExamnieeInfoByIds(List<String> ids);
+
+    public JsonResult findAllExamnieeInfoAndSubjectName(Integer pageNum, Integer pageSize);
+
+    public JsonResult findExamnieeInfoByNames(String examnieeName);
+
+    public JsonResult findExamnieeInfoBySubjectName(String subjectName);
+
     /**
      * 查询报考该考试场次的学生
      *

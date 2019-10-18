@@ -9,10 +9,10 @@ public interface UserService {
     /**
      * 管理员查看所有用户，根据角色查看用户实现名称模糊查询
      */
-    public List<User> findAllUserByRole(String roleId,Integer subjectId,String name,Integer page,Integer limit);
+    public List<User> findAllUserByRole(String roleId,Integer subjectId,String name);
 
     /**
-     * 查询所有的学科和角色
+     * 查询所有的学科和
      * @author chaoyang
      * @date 2019/10/15
      * @return java.util.Map
@@ -39,4 +39,10 @@ public interface UserService {
 
 
 
+
+    /*zxs*/
+     public User userLogin(User user);
+
+     public int userRegister(User user);
+    /*end*/
 }

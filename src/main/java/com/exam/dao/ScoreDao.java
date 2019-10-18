@@ -1,6 +1,8 @@
 package com.exam.dao;
 
+import com.exam.entity.Papers;
 import com.exam.entity.Score;
+import com.exam.entity.ShortAnswerQuestions;
 
 import java.util.List;
 
@@ -19,6 +21,55 @@ public interface ScoreDao {
      */
     public List<Score> findAllScore();
 
+    /**
+     * 查询所有考生成绩信息的总记录数
+     *
+     * @return 总记录数
+     * @author zhangyuanzhe
+     * @date 2019/10/15
+     */
+    public Long findAllCount();
+
+
+
+    /**
+     * 删除某个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public void deleteScoreByPaperId(String paperId);
+
+
+
+    /**
+     * 删除多个学生的成绩
+     *
+     * @param paperId 试卷 ID
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public void deleteAllScoreByPaperId(List<String> paperId);
+
+
+    /**
+     * 查询所有未被批改的简答题（SAQ）
+     *
+     * @return list<ShortAnswerQuestions>
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public List<ShortAnswerQuestions> findAllNoCorrectionSAQ();
+
+
+    /**
+     * 保存打好分的简答题分数（SAQ）
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/16
+     */
+    public void updateScore(Papers papers);
 
 
 }

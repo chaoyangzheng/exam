@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.dao.PapersDao">
+    <resultMap id="PapersMap" type="Papers" autoMapping="true">
+        <result property="questionsId" column="questions_id"/>
+        <association property="questions" select="com.exam.dao.QuestionsDao.findQuestionsByQuestionsId"
+                     column="questions_id"/>
+    </resultMap>
+    <select id="findPapersByExamSessionIdAndStudentId" resultMap="PapersMap">
+        SELECT
+        t_papers.papers_table_id,
+        t_papers.papers_id,
+        t_papers.subject_id,
+        t_papers.questions_id,
+        t_papers.student_id,
+        t_papers.student_answer,
+        t_papers.question_score
+        FROM
+        t_papers
+        INNER JOIN t_session_papers_student ON t_session_papers_student.papers_id = t_papers.papers_id
+        WHERE
+        t_session_papers_student.exam_session_id = #{examSessionId}
+        AND t_session_papers_student.student_id = #{studentId}
+    </select>
+
+    <insert id="insertPapers" parameterType="List">
+        INSERT INTO `exam`.`t_papers`(`papers_table_id`, `papers_id`, `student_id`, `subject_id`, `questions_id`, `student_answer`, `question_score`)
+        VALUES
+        <foreach collection="list" item="papers" separator=",">
+            (#{papers.papersTableId}, #{papers.papersId}, #{papers.studentId}, #{papers.subjectId}, #{papers.questionsId}, #{papers.studentAnswer}, #{papers.questionScore})
+        </foreach>
+    </insert>
+</mapper>
