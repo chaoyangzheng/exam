@@ -22,23 +22,9 @@ public class ExamSession implements Serializable {
     private Date endTime;//考试结束日期时间
     private Integer duringTime;//考试时长，单位分钟
 
+    private String studentId;//额外参数，仅学生查看自己已报名考试时使用
     private Subject subject;//科目
     private User teacher;//考试申请老师
-
-    @Override
-    public String toString() {
-        return "ExamSession{" +
-                "id='" + id + '\'' +
-                ", subjectId=" + subjectId +
-                ", teacherId='" + teacherId + '\'' +
-                ", studentNum=" + studentNum +
-                ", beginTime=" + beginTime +
-                ", endTime=" + endTime +
-                ", duringTime=" + duringTime +
-                ", subject=" + subject +
-                ", teacher=" + teacher +
-                '}';
-    }
 
     public String getId() {
         return id;
@@ -94,6 +80,14 @@ public class ExamSession implements Serializable {
 
     public void setDuringTime(Integer duringTime) {
         this.duringTime = duringTime;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public Subject getSubject() {

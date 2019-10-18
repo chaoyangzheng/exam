@@ -92,4 +92,24 @@
         `exam_session_id` = #{examSessionId}
         AND `student_id` = #{studentId}
     </update>
+
+    <select id="selectAllOfStudent" resultMap="ExamSessionMap">
+        SELECT
+        t_exam_session.id,
+        t_exam_session.subject_id,
+        t_exam_session.teacher_id,
+        t_exam_session.student_num,
+        t_exam_session.begin_time,
+        t_exam_session.end_time,
+        t_exam_session.during_time,
+        t_session_papers_student.student_id
+        FROM
+        t_exam_session
+        INNER JOIN t_session_papers_student ON t_session_papers_student.exam_session_id = t_exam_session.id
+        INNER JOIN t_examniee_info ON t_examniee_info.eId = t_session_papers_student.student_id
+        INNER JOIN t_user ON t_user.id_card = t_examniee_info.examniee_Id
+        WHERE
+        t_user.user_id = #{userId}
+        AND t_exam_session.begin_time > NOW()
+    </select>
 </mapper>
