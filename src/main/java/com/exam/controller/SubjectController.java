@@ -40,21 +40,20 @@ public class SubjectController {
 
 
     @PostMapping("/findSon.do")
-    public JsonResult findSon(Integer parentId){
+    public JsonResult findSon(@RequestBody Subject subject){
 
-        if(parentId == null || "".equals(parentId)){
-            return new JsonResult(1,"请先选择科目",null,null);
-        }else{
-            List<Subject> allSecond = subjectService.findAllSecond(parentId);
-            return  new JsonResult(0,"查询成功",null,allSecond);
-        }
+
+        List<Subject> allSecond = subjectService.findAllSecond(subject.getSubjectId());
+
+
+        /*List<Subject> allSecond = subjectService.findAllSecond(subjectId);
+            return  new JsonResult(0,"查询成功",null,allSecond);*/
+        return new JsonResult(0,"",null,allSecond);
     }
-
 
 
     @PostMapping("/judgeSubject.do")
     public JsonResult findByUser(@RequestBody User user){
-
 
         List<Subject> byUser = subjectService.findByUser(user);
 
@@ -63,6 +62,13 @@ public class SubjectController {
         for(int i = 0;i < byUser.size();i ++){
 
             Integer parent = byUser.get(i).getParentId();
+
+            Integer judgeSubject = byUser.get(i).getSubjectId();
+
+            if(judgeSubject == null){
+                return new JsonResult(1,"您没有该权限",null,null);
+            }
+
             if(parent == null){
                  subject = byUser.get(i).getSubjectName();
             }else if(parent != null){

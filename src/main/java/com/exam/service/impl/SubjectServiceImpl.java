@@ -98,10 +98,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> findAllSecond(Integer parentId) {
+    public List<Subject> findAllSecond(Integer subjectId) {
 
-        return subjectDao.findAllSecond(parentId);
+        return subjectDao.findAllSecond(subjectId);
     }
+
 
     @Override
     public List<Subject> findByUser(User user) {

@@ -63,7 +63,7 @@ public interface SubjectService {
 
 
 
-    public List<Subject> findAllSecond(Integer parentId);
+    public List<Subject> findAllSecond(Integer subjectId);
 
 
 

@@ -67,8 +67,8 @@ public interface SubjectDao {
      * @date 2019/10/17
      * @return java.util.List<com.exam.entity.Subject>
      */
-    @Select("select subject_id,subject_name,parent_id from t_subject where subject_id = #{parentId}")
-    public List<Subject> findAllSecond(Integer parentId);
+    @Select("select subject_id,subject_name,parent_id from t_subject where parent_id = #{subjectId}")
+    public List<Subject> findAllSecond(Integer subjectId);
 
 
 
