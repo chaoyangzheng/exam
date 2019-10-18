@@ -30,7 +30,7 @@
 
         table.render({
             elem: '#test'
-            , url: 'examSession/examSessionListOfStudent.do' + location.search
+            , url: 'examSession/examSessionListOfStudent.do'
             , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             , defaultToolbar: ['exports', 'print']
             , title: '已报名考试场次'
@@ -62,7 +62,7 @@
                             },
                             success: function (result) {
                                 if (result.code == 0) {
-                                    open('examing.html?examSessionId=' + data.id + '&studentId=' + data.studentId,'_blank')
+                                    open('examing.html?examSessionId=' + data.id + '&studentId=' + data.studentId, '_blank')
                                     // location.href = 'examing.html?examSessionId=' + data.id + '&studentId=' + data.studentId;
                                 } else {
                                     layer.msg('不能考试', {time: 1000});

@@ -268,14 +268,13 @@ public class ExamSessionController {
      *
      * @param page   当前页码
      * @param limit  每页条数
-     * @param userId 用户id
      * @return code=0,msg="查询成功",count=总考试场次数，data=当前页所有考试场次的list
      * @author SHIGUANGYI
      * @date 2019/10/17
      */
     @RequestMapping("/examSessionListOfStudent.do")
-    public JsonResult examSessionListOfStudent(Integer page, Integer limit, String userId) {
-        List<ExamSession> examSessionList = examSessionService.selectAllOfStudent(page, limit,userId);
+    public JsonResult examSessionListOfStudent(Integer page, Integer limit) {
+        List<ExamSession> examSessionList = examSessionService.selectAllOfStudent(page, limit,"1");
         Long count = ((Page) examSessionList).getTotal();
         return new JsonResult(0, "查询成功", count, examSessionList);
     }
