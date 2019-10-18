@@ -7,8 +7,10 @@
     <resultMap id="ExamSessionMap" type="ExamSession" autoMapping="true">
         <result property="subjectId" column="subject_id"/>
         <result property="teacherId" column="teacher_id"/>
-        <association property="subject" javaType="Subject" select="com.exam.dao.SubjectDao.findById" column="subject_id"/>
-        <association property="teacher" javaType="User" select="com.exam.dao.UserDao.findUserByUserId" column="teacher_id"/>
+        <association property="subject" javaType="Subject" select="com.exam.dao.SubjectDao.findById"
+                     column="subject_id"/>
+        <association property="teacher" javaType="User" select="com.exam.dao.UserDao.findUserByUserId"
+                     column="teacher_id"/>
     </resultMap>
     <select id="selectAll" resultMap="ExamSessionMap">
         SELECT
@@ -82,4 +84,12 @@
             #{id}
         </foreach>
     </delete>
+
+    <update id="updatePapersIdInSessionPapersStudent">
+        UPDATE `exam`.`t_session_papers_student`
+        SET `papers_id` = #{papersId}
+        WHERE
+        `exam_session_id` = #{examSessionId}
+        AND `student_id` = #{studentId}
+    </update>
 </mapper>

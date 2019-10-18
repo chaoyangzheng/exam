@@ -17,5 +17,12 @@ public interface PapersDao {
      */
     List<Papers> findPapersByExamSessionIdAndStudentId(@Param("examSessionId") String examSessionId, @Param("studentId") String studentId);
 
-
+    /**
+     * 将试卷存入mysql
+     *
+     * @param papersList 试卷
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    void insertPapers(List<Papers> papersList);
 }

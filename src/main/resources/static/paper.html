@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>简答题批改</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <!--这里要改成自己的资源路径-->
+    <style>
+        body {
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<table class="layui-hide" id="scoreTable" lay-filter="test"></table>
+
+<script type="text/html" id="barDemo">
+    <div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="submitScour">提交</a>
+    </div>
+</script>
+
+</body>
+<script src="layui/layui.js"></script>
+<!--这里要改成自己的资源路径-->
+<script>
+    layui.use('table', function () {
+        var table = layui.table; //表格
+
+        //向世界问个好
+        layer.msg('简答题批改');
+
+        //执行一个 table 实例
+        table.render({
+            elem: '#scoreTable',
+            height: 600,
+            url: 'scoreInfo/teacherUpdate.do', //数据接口
+            title: '成绩表',
+            cols: [ //表头
+                [{
+                    field: 'papersId',
+                    title: '试卷号',
+                    width: 75,
+                    align: 'center'
+                },
+                    {
+                        field: 'questionsId',
+                        title: '题号',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
+                        field: 'questionsInfo',
+                        title: '题干',
+                        align: 'center'
+                    },
+                    {
+                        field: 'studentAnswer',
+                        title: '考生答案',
+                        align: 'center',
+                    },
+                    {
+                        field: 'questionsAnswer',
+                        title: '标准答案',
+                        align: 'center'
+                    },
+                    {
+                        field: 'score',
+                        title: '点击输入分数（10分）',
+                        width: 175,
+                        align: 'center',
+                        edit: 'text'
+                    },
+                    {
+                        fixed: 'right',
+                        title: '操作',
+                        align: 'center',
+                        width: 75,
+                        scrollbar: false,
+                        toolbar: '#barDemo'
+                    }
+                ]
+            ]
+        });
+
+        //监听 行 工具栏事件
+        table.on('tool(test)', function (obj) {
+            var layEvent = obj.event;
+            var data = obj.data;
+            var scoreSAQ = data.score;
+            if (layEvent === 'submitScour') {
+                if (scoreSAQ == "") {
+                    alert("请输入分数");
+                    return;
+                } else if (isNaN(scoreSAQ)) {
+                    alert("输入不为数字，请重新输入");
+                    return;
+                } else if (scoreSAQ < 0) {
+                    alert("输入数字小于0，请重新输入");
+                    return;
+                } else if (scoreSAQ > 10) {
+                    alert("输入数字大于10，请重新输入");
+                    return;
+                }
+                layer.confirm("是否要提交此分数？", function (index) {
+                    layer.close(index);
+                    layui.$.ajax({
+                        type: 'post',
+                        url: 'scoreInfo/updateSAQScore.do',
+                        data: {
+                            papersId: data.papersId,
+                            questionsId: data.questionsId,
+                            questionScore: scoreSAQ
+                        },
+                        dataType: 'json',
+                        async: false,
+                        success: function (data) {
+                            // alert(msg);
+                            if (data.code == 0) {
+                                alert(data.msg);
+                                location.reload();
+                            }
+                        }
+                    })
+                })
+            }
+        });
+    });
+</script>
+
+</html>
