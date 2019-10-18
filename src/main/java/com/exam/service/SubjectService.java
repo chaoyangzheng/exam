@@ -53,6 +53,4 @@ public interface SubjectService {
     /*zxs*/
     public List<Subject> findAll();
 
-
-    public List<Subject> findAll();
 }

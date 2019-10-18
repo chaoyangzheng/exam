@@ -12,10 +12,31 @@ public interface UserService {
     public List<User> findAllUserByRole(String roleId,Integer subjectId,String name,Integer page,Integer limit);
 
     /**
-     * 查询所有的学科和
+     * 查询所有的学科和角色
      * @author chaoyang
      * @date 2019/10/15
      * @return java.util.Map
      */
     public Map findAllRolesSubjects();
+
+    /**
+     * 查找用户信息
+     * @author chaoyang
+     * @date 2019/10/16
+     * @param  * @param userId
+     * @return com.exam.entity.User
+     */
+    User findUserByUserId (String userId);
+
+    //修改用户权限 学科  增加  删除
+    Integer addUserRoleSubject(String userId,String roleId,Integer subjectId);
+
+    void updateUserRoleSubject(String userId,String roleId,Integer subjectId,String oldRoleId);
+
+    User deleteUserRole(String userId,String roleId);
+
+    User deleteUserSubject(String userId,Integer subjectId);
+
+
+
 }

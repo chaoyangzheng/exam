@@ -1,6 +1,9 @@
 package com.exam.dao;
 
 import com.exam.entity.Subject;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -61,4 +64,17 @@ public interface SubjectDao {
       */
      @Select("select subject_id,subject_name from t_subject where parent_id is null")
      public List<Subject> findAllFirst();
+
+     /**
+      * 删除用户对应的教师学科
+      * @author chaoyang
+      * @date 2019/10/16
+      * @param  * @param userId
+      * @return java.lang.Integer
+      */
+     @Delete("delete from t_user_subject where user_id = #{userId} ")
+     public Integer deleteUserSubject(@Param("userId") String userId);
+
+     @Insert("insert into t_user_subject (user_subject_id,user_id,subject_id) values(#{userSubjectId},#{userId},#{subjectId})")
+     public Integer addUserUserSubject(@Param("userId") String userId,@Param("subjectId") Integer subjectId,@Param("userSubjectId") String userSubjectId);
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -49,6 +50,71 @@ public class UserServiceImpl implements UserService {
         map.put("roles",roles);
         map.put("subjects",subjects);
         return map;
+    }
+
+    @Override
+    public User findUserByUserId (String userId) {
+        User user = userDao.findUserByUserId(userId);
+        return user;
+    }
+
+    @Override
+    public Integer addUserRoleSubject (String userId, String roleId, Integer subjectId) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        Integer integer = userDao.addUserRole(userId, roleId, uuid);
+        if (subjectId!=null){
+            Integer integer1 = subjectDao.addUserUserSubject(userId, subjectId, uuid);
+            if (integer==integer1){
+                return integer;
+            }
+            throw new RuntimeException("数据异常");
+        }
+        return integer;
+    }
+
+    @Override
+    public void updateUserRoleSubject (String userId, String roleId, Integer subjectId, String oldRoleId) {
+        if (roleId!=null&&oldRoleId!=null){
+            if (oldRoleId==roleId){
+                if ("2".equals(roleId)&&subjectId!=null){
+                    //更新学科
+                    throw new RuntimeException("请删除用户角色，再添加为教师");
+                }else {
+                    throw new RuntimeException("更改前后相同");
+                }
+            }else if ("2".equals(roleId)){
+                //更新角色，添加学科
+                userDao.updateUserRole(roleId, userId, oldRoleId);
+                String uuid = UUID.randomUUID().toString().replace("-", "");
+                subjectDao.addUserUserSubject(userId, subjectId, uuid);
+
+            }else{
+                //更新角色
+                userDao.updateUserRole(roleId, userId, oldRoleId);
+                if ("2".equals(oldRoleId)){
+                    //删除学科
+                    Integer sub = subjectDao.deleteUserSubject(userId);
+                }
+            }
+        }else {
+            throw new RuntimeException("请传输正确数据");
+        }
+    }
+
+    @Override
+    public User deleteUserRole (String userId, String roleId) {
+        System.out.println(userId+"?"+roleId);
+        if ("2".equals(roleId)) {
+            //删除科目
+            Integer integer = subjectDao.deleteUserSubject(userId);
+        }
+        Integer integer = userDao.deleteUserRole(userId, roleId);
+        return new User();
+    }
+
+    @Override
+    public User deleteUserSubject (String userId, Integer subjectId) {
+        return null;
     }
 
 }
