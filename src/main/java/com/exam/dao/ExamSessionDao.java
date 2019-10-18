@@ -1,6 +1,7 @@
 package com.exam.dao;
 
 import com.exam.entity.ExamSession;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -63,4 +64,15 @@ public interface ExamSessionDao {
      * @date 2019/10/15
      */
     void deleteAllById(List<String> idList);
+
+    /**
+     * 更新session_papers_student表中的papersId
+     *
+     * @param examSessionId 考试场次id
+     * @param studentId 学生id
+     * @param papersId 试卷id
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    void updatePapersIdInSessionPapersStudent(@Param("examSessionId") String examSessionId, @Param("studentId") String studentId, @Param("papersId") String papersId);
 }
