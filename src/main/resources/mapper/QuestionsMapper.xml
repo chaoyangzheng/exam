@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.dao.QuestionsDao">
-    <select id="findRandomQuestionsByExamSessionIdAndQuestionsTypeId" resultType="Questions">
+    <select id="findRandomQuestionsByExamSessionIdAndQuestionsTypeId" resultType="com.exam.entity.Questions">
         SELECT
             t_questions.*
         FROM
@@ -17,7 +17,7 @@
             LIMIT #{questionsNum}
     </select>
 
-    <select id="findQuestionsByQuestionsId" parameterType="String" resultType="Questions">
+    <select id="findQuestionsByQuestionsId" parameterType="String" resultType="com.exam.entity.Questions">
         SELECT
             *
         FROM
@@ -27,12 +27,12 @@
     </select>
 
 <!--  添加，修改，删除题库中的试题    author:RongJing     date:2019/10/15 -->
- <insert id="insertQuestions" parameterType="Questions">
+ <insert id="insertQuestions" parameterType="com.exam.entity.Questions">
             INSERT INTO t_questions(questions_id, questions_subject_id,questions_type_id,questions_info,questions_answer,upload_time,upload_teacher_id)
             VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},#{uploadTime},#{uploadTeacherId})
  </insert>
 
-<update id="updateQuestions" parameterType="Questions">
+<update id="updateQuestions" parameterType="com.exam.entity.Questions">
            UPDATE
                 t_questions ,
                 t_questions_type
@@ -53,7 +53,7 @@
     </delete>
 
 <!--查看题库，所有题    author:RongJing     date:2019/10/15-->
-    <select id="findAllQuestions" resultType="Questions">
+    <select id="findAllQuestions" resultType="com.exam.entity.Questions">
         SELECT
                 t_questions.questions_id,
                 t_subject.subject_name,
@@ -156,4 +156,15 @@
         AND
             t_questions.questions_type_id = #{questionsTypeId}
 </select>
+
+
+
+    <select id="findAllQuestionsType" resultType="com.exam.entity.QuestionType">
+        select * from t_questions_type
+    </select>
+
+
+
+
+
 </mapper>

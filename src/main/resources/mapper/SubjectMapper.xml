@@ -7,7 +7,7 @@
 
 <!--  查看所有的科目，返回list   作者：RongJing     更改时间：2019/10/15 -->
 
-    <select id="findAllSubject" resultType="subject">
+    <select id="findAllSubject" resultType="com.exam.entity.Subject">
         SELECT
                 t_subject.subject_name,
                 t_subject.subject_id,
@@ -19,7 +19,7 @@
 
 
     <!--  添加科目   作者：RongJing     更改时间：2019/10/15 -->
-    <insert id="insertSubject" parameterType="subject">
+    <insert id="insertSubject" parameterType="com.exam.entity.Subject">
         insert into t_subject (
                 t_subject.subject_name,
                 t_subject.parent_id)
@@ -36,8 +36,8 @@
 
 
 
-    <!--  查看一二级科目   作者：RongJing     更改时间：2019/10/15 -->
-    <select id="findByParentId" parameterType="string">
+    <!-- 根据二级目录找到一级目录   作者：RongJing     更改时间：2019/10/15 -->
+    <select id="findByParentId" parameterType="integer">
         SELECT
                 t_subject.subject_name,
                 t_subject.subject_id,
@@ -45,7 +45,7 @@
             FROM
                 t_subject
             WHERE
-                t_subject.parent_id = #{parentId}
+                t_subject.subject_id = #{parentId}
     </select>
 
    <select id="findAll" resultType="com.exam.entity.Subject">
@@ -56,4 +56,26 @@
     <select id="findById" parameterType="Integer" resultType="com.exam.entity.Subject">
         select * from t_subject where subject_id=#{subjectId}
     </select>
+
+
+
+    
+    
+    <select id="findByUser" parameterType="com.exam.entity.User" resultType="com.exam.entity.Subject">
+        SELECT
+                t_user_subject.subject_id,
+                t_subject.subject_name,
+                t_subject.parent_id
+        FROM
+                t_user_subject ,
+                t_user ,
+                t_subject
+        WHERE
+                t_user.user_id = t_user_subject.user_id
+            AND
+                t_user.user_id = #{userId}
+            and
+                t_user_subject.user_subject_id = t_subject.subject_id
+    </select>
+    
 </mapper>

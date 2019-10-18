@@ -1,5 +1,6 @@
 package com.exam.service;
 
+import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 
 import java.util.List;
@@ -41,6 +42,6 @@ public interface QuestionsService {
 
     public List<Questions> findByQuestionsTypeId(Integer questionsTypeId,Integer pageNum,Integer pageSize);
 
-
+    public List<QuestionType> findAllQuestionsType();
 
 }

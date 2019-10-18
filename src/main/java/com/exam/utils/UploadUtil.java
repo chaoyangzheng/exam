@@ -70,22 +70,22 @@ public String executeUpload1(String uploadDir,MultipartFile file,String fileName
 }
 
 
-    public <T>List<T> importExecl(String filePath,Integer titleRows,Integer headerRows, Class<T> pojoClass){
-        if(StringUtils.isBlank(filePath)){
-            return null;
-        }
-        ImportParams params =new ImportParam();
-        params.setTitleRows(titleRows);
-        params.setHeadRows(headerRows);
-        List<T> list = null;
-        try {
-            list = ExeclImportUtil.importExecl(new File(filePath),pojoClass,params);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    return list;
-
-    }
+//    public <T>List<T> importExecl(String filePath,Integer titleRows,Integer headerRows, Class<T> pojoClass){
+//        if(StringUtils.isBlank(filePath)){
+//            return null;
+//        }
+//        ImportParams params =new ImportParam();
+//        params.setTitleRows(titleRows);
+//        params.setHeadRows(headerRows);
+//        List<T> list = null;
+//        try {
+//            list = ExeclImportUtil.importExecl(new File(filePath),pojoClass,params);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    return list;
+//
+//    }
 
 
 }

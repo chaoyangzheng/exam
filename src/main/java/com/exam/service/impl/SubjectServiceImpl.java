@@ -2,6 +2,7 @@ package com.exam.service.impl;
 
 import com.exam.dao.SubjectDao;
 import com.exam.entity.Subject;
+import com.exam.entity.User;
 import com.exam.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,11 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<Subject> findAllSubject() {
 
-        return subjectDao.findAllSubject();
-    }
+        List<Subject> allSubject = subjectDao.findAllSubject();
 
+        return allSubject;
+
+    }
 
 
     /**
@@ -44,11 +47,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         subjectDao.insertSubject(subject);
 
-
     }
-
-
-
 
 
     /**
@@ -65,14 +64,17 @@ public class SubjectServiceImpl implements SubjectService {
 
 
     /**
-     * 查找一，二级标题
+     * 查找二级标题
      *
      * @author RongJing
      * @date 2019/10/15
      */
     @Override
-    public Subject findByParentId(String parentId) {
+    public Subject findByParentId(Integer parentId) {
 
+        if(parentId == null){
+            subjectDao.findAllFirst();
+        }
         return subjectDao.findByParentId(parentId);
     }
 
@@ -81,4 +83,32 @@ public class SubjectServiceImpl implements SubjectService {
         List<Subject> subjectList = subjectDao.findAll();
         return subjectList;
     }
+
+    @Override
+    public Subject findBySubjectId(Integer subjectId) {
+
+        return subjectDao.findById(subjectId);
+    }
+
+    @Override
+    public List<Subject> findAllFirst() {
+
+        return subjectDao.findAllFirst();
+
+    }
+
+    @Override
+    public List<Subject> findAllSecond(Integer parentId) {
+
+        return subjectDao.findAllSecond(parentId);
+    }
+
+    @Override
+    public List<Subject> findByUser(User user) {
+        List<Subject> subjectByUser = subjectDao.findByUser(user);
+        return subjectByUser;
+
+    }
+
+
 }

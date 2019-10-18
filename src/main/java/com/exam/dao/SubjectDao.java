@@ -1,6 +1,8 @@
 package com.exam.dao;
 
 import com.exam.entity.Subject;
+
+import com.exam.entity.User;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public interface SubjectDao {
      * @author RongJing
      * @date 2019/10/15
      */
-    public Subject findByParentId(String parentId);
+    public Subject findByParentId(Integer parentId);
 
     /*zxs*/
      public List<Subject> findAll();
@@ -57,4 +59,20 @@ public interface SubjectDao {
       */
      @Select("select subject_id,subject_name from t_subject where parent_id is null")
      public List<Subject> findAllFirst();
+
+
+    /**
+     * 查询所有二级科目
+     * @author RongJing
+     * @date 2019/10/17
+     * @return java.util.List<com.exam.entity.Subject>
+     */
+    @Select("select subject_id,subject_name,parent_id from t_subject where subject_id = #{parentId}")
+    public List<Subject> findAllSecond(Integer parentId);
+
+
+
+    public List<Subject> findByUser(User user);
+
+
 }

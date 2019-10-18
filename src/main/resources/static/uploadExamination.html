@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<!-- 导入样式文件 -->
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css" />
+
+	<!-- 导入layui的js文件 -->
+	<script src="layui/layui.js" type="text/javascript" charset="UTF-8"></script>
+
+</head>
+<body>
+<form class="layui-form" action="">
+
+	<fieldset class="layui-elem-field layui-field-title">
+		<legend id="titleSubject"></legend>
+		<label class="layui-form-label" id="qqq"></label>
+	</fieldset>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">试题科目</label>
+		<div class="layui-input-block">
+			<select name="subject" lay-verify="required">
+				<option value=""></option>
+				<option value="0">语文</option>
+				<option value="1">数学</option>
+				<option value="2">英语</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="layui-form-item" id="selected" required lay-verify="required">
+		<label class="layui-form-label">试题类型</label>
+		<div class="layui-input-block">
+			<select lay-filter="choice" id="1">
+				<option value=""></option>
+
+			</select>
+		</div>
+	</div>
+
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">试题题目</label>
+		<div class="layui-input-block">
+			<input type="text" name="title" required lay-verify="required" placeholder="请输入上传的试题题目" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+
+
+	<div class="layui-form-item" style="display:none;" id="ChoiceInfo">
+		<label class="layui-form-label">选项内容</label>
+		<div class="layui-input-block">
+			<input type="text" name="titleA" required lay-verify="required" placeholder="请输入A选项内容" autocomplete="off" class="layui-input">
+			<hr />
+		</div>
+		<div class="layui-input-block">
+			<input type="text" name="titleB" required lay-verify="required" placeholder="请输入B选项内容" autocomplete="off" class="layui-input">
+			<hr />
+		</div>
+		<div class="layui-input-block">
+			<input type="text" name="titleC" required lay-verify="required" placeholder="请输入C选项内容" autocomplete="off" class="layui-input">
+			<hr />
+		</div>
+		<div class="layui-input-block">
+			<input type="text" name="titleD" required lay-verify="required" placeholder="请输入D选项内容" autocomplete="off" class="layui-input">
+			<hr />
+		</div>
+	</div>
+
+
+	<div class="layui-form-item" id="oneChoice" style="display:none;">
+	<label class="layui-form-label">单项选择题</label>
+	<div class="layui-input-block">
+		<input type="radio" name="oneChoices" value="A" title="A">
+		<input type="radio" name="oneChoices" value="B" title="B">
+		<input type="radio" name="oneChoices" value="C" title="C">
+		<input type="radio" name="oneChoices" value="D" title="D">
+	</div>
+	</div>
+
+	<div class="layui-form-item" id="Choices" style="display:none;">
+		<label class="layui-form-label">多项选择题</label>
+		<div class="layui-input-block">
+			<input type="radio" name="ChoiceA" value="A" title="A">
+			<input type="radio" name="ChoiceB" value="B" title="B">
+			<input type="radio" name="ChoiceC" value="C" title="C">
+			<input type="radio" name="ChoiceD" value="D" title="D">
+		</div>
+	</div>
+
+	<div class="layui-form-item" id="judge" style="display:none;">
+		<label class="layui-form-label">判断题</label>
+		<div class="layui-input-block">
+			<input type="radio" name="judge" value="0" title="正确">
+			<input type="radio" name="judge" value="1" title="错误">
+		</div>
+	</div>
+
+
+	<div class="layui-form-item layui-form-text" id="jd" style="display:none;">
+		<label class="layui-form-label">简答题</label>
+		<div class="layui-input-block">
+			<textarea name="desc" placeholder="请输入答案范文" class="layui-textarea"></textarea>
+		</div>
+	</div>
+
+
+
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</div>
+</form>
+
+<script>
+	//Demo
+	layui.use(['form', 'layer', 'jquery'], function() {
+		var $ = layui.jquery,
+				layer = layui.layer,
+				form = layui.form;
+		layer.msg('已进入在线导入试题操作');
+
+
+		$.ajax({
+			url: "questions/findAllType.do",
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			success: function(data) {
+				for (var i = 0; i < data.data.length; i++) {
+					var id = data.data[i].questionsTypeId;
+					var name = data.data[i].questionsTypeName;
+					var str = "<option value=" + id + ">" + name + "</option>";
+					layui.$("#1").append("<option value='" + id + "'>" + name + "</option>");
+					form.render();
+
+				}
+
+			},
+			error: function() {
+
+			}
+		});
+
+
+		$.ajax({
+			url: "subject/judgeSubject.do",
+			dataType: 'json', //服务器返回json格式数据
+			contentType:"application/json",
+			data:'{"userId":"3"}',
+			type: 'post', //HTTP请求类型
+			success: function(data) {
+				$('#titleSubject').html("请上传" + data.data + "试题");
+			},
+			error: function() {
+
+			}
+		});
+
+
+
+
+		//监听提交
+		form.on('submit(formDemo)', function(data) {
+			layer.msg(JSON.stringify(data.field));
+			layer.$.ajax({
+				url:"questions/insertOne.do",
+				contentType:"application/json",
+				data:JSON.stringify(data.field),
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				success:function(data){
+					if(data.code == 0 ){
+						alert(data.msg);
+					}
+				},
+				error:function(xhr,type,errorThrown){
+				}
+			});
+			return false;
+		});
+
+
+		form.on('select(choice)', function(data) {
+			console.log(data);
+			console.log(data.elem); //得到select原始DOM对象
+			console.log(data.value); //得到被选中的值
+			console.log(data.othis); //得到美化后的DOM对象
+
+
+			var value = data.value;
+			if (value == "") {
+				$("#ChoiceInfo").hide();
+				$("#oneChoice").hide();
+				$("#Choices").hide();
+				$("#judge").hide();
+				$("#jd").hide();
+			} else if (value == "0") {
+				$("#ChoiceInfo").show();
+				$("#oneChoice").show();
+				$("#Choices").hide();
+				$("#judge").hide();
+				$("#jd").hide();
+			} else if (value == "1") {
+				$("#ChoiceInfo").show();
+				$("#oneChoice").hide();
+				$("#judge").hide();
+				$("#jd").hide();
+				$("#Choices").show();
+			} else if (value == "2") {
+				$("#ChoiceInfo").hide();
+				$("#oneChoice").hide();
+				$("#Choices").hide();
+				$("#jd").hide();
+				$("#judge").show();
+			} else if (value == "3") {
+				$("#ChoiceInfo").hide();
+				$("#oneChoice").hide();
+				$("#Choices").hide();
+				$("#judge").hide();
+				$("#jd").show();
+			}
+
+
+		});
+	});
+</script>
+
+
+
+</body>
+</html>

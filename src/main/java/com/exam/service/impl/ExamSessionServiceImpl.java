@@ -17,9 +17,9 @@ import java.util.List;
  */
 @Service
 public class ExamSessionServiceImpl implements ExamSessionService {
-    @Autowired
+    @Autowired(required = false)
     private ExamSessionDao examSessionDao;
-    @Autowired
+    @Autowired(required = false)
     private ExamnieeInfoDao examnieeInfoDao;
 
     /**

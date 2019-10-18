@@ -1,6 +1,7 @@
 package com.exam.service.impl;
 
 import com.exam.dao.QuestionsDao;
+import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 import com.exam.service.QuestionsService;
 import com.github.pagehelper.PageHelper;
@@ -11,7 +12,8 @@ import java.util.List;
 
 
 
-@Service("layerService")
+//@Service("layerService")
+@Service
 public class QuestionsServiceImpl implements QuestionsService {
 
     @Autowired(required = false)
@@ -43,21 +45,32 @@ public class QuestionsServiceImpl implements QuestionsService {
 
     @Override
     public List<Questions> findBySubjectId(Integer questionsSubjectId,Integer pageNum,Integer pageSize) {
-        return null;
+
+        List<Questions> subjectId = questionsDao.findBySubjectId(questionsSubjectId);
+        return subjectId;
     }
 
     @Override
     public List<Questions> findByUploadTeacherId(String uploadTeacherId,Integer pageNum,Integer pageSize) {
-        return null;
+        return questionsDao.findByUploadTeacherId(uploadTeacherId);
     }
 
     @Override
     public List<Questions> findByUploadTime(String uploadTime,Integer pageNum,Integer pageSize) {
-        return null;
+
+        return questionsDao.findByUploadTime(uploadTime);
     }
 
     @Override
     public List<Questions> findByQuestionsTypeId(Integer questionsTypeId,Integer pageNum,Integer pageSize) {
-        return null;
+        return questionsDao.findByQuestionsTypeId(questionsTypeId);
     }
+
+    @Override
+    public List<QuestionType> findAllQuestionsType() {
+
+        return questionsDao.findAllQuestionsType();
+    }
+
+
 }

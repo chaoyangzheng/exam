@@ -1,5 +1,6 @@
 package com.exam.dao;
 
+import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,6 +38,9 @@ public interface QuestionsDao {
      */
     public void insertQuestions(Questions questions);
 
+
+
+
     public void updateQuestions(Questions questions);
 
     public void deleteQuestions(String questionsId);
@@ -60,6 +64,9 @@ public interface QuestionsDao {
     public List<Questions> findByUploadTime(String uploadTime);
 
     public List<Questions> findByQuestionsTypeId(Integer questionsTypeId);
+
+
+    public List<QuestionType> findAllQuestionsType();
 
 
 
