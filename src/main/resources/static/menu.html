@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">在线考试系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul id="menuList" class="layui-nav layui-nav-tree" lay-filter="test">
+                <!-- <li class="layui-nav-item layui-nav-itemed">
+                  <a class="" href="javascript:;">所有商品</a>
+                  <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">列表一</a></dd>
+                    <dd><a href="">超链接</a></dd>
+                  </dl>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 0px;">
+            <iframe src="" style="width:100%;height:500px;"></iframe>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(['layedit', 'laydate', 'upload', 'jquery', 'layer','element'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        var $ = layui.jquery
+            , upload = layui.upload;
+        // //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        // alert("---")
+        var $ = layui.$ //重点处
+            , layer = layui.layer;
+
+        $.ajax({
+            type: "post",
+            url: "examnieeInfo/findPerms.do" + location.search,
+            // dataType:"json",
+            success: function (res) {
+                // alert("123")
+                // alert(res.data["统计管理"][0].permId)
+                // alert(JSON.stringify(res.data));
+                var dxy = res.data;
+                // alert(dxy);
+
+//       var dxy={
+// //Page地址
+//         menuList : {
+//           menu      :  "loadPage.htm?url=/collect/menu.page",     // 进入菜单页面
+//           guangfaPage   :  "loadPage.htm?url=/collect/menu.page",     // 进入广发信息收集页面
+//           pinganPage   :  "loadPage.htm?url=/collect/menu.page",     // 进入平安信息收集页面
+//           nuonuoPage   :  "loadPage.htm?url=/collect/menu.page",     // 进入诺诺信息收集页面
+//           youbangPage   :  "loadPage.htm?url=/collect/menu.page",     // 进入友邦信息收集页面
+//           inputMobileNo : "loadPage.htm?url=/collect/inputMobileNo.page",  // 进入输入手机号页面
+//           readIdCard   : "loadPage.htm?url=/collect/readIdCard.page",    // 进入读取身份证页面
+//           member     : "loadPage.htm?url=/collect/member.page",      // 进入输入会员卡号页面
+//           bankCard    : "loadPage.htm?url=/collect/bankCard.page",     // 进入插入银行卡页面
+//           url      : "loadPage.htm?url=/collect/url.page"        // 进入跳转url页面
+//         }
+//       }
+
+
+                for (var key in dxy) {
+                    console.log(dxy[key]);
+                    //   (function(){
+                    var html = '<li class="layui-nav-item">';
+                    html += '<a class="" href="javascript:;">' + key + '</a>';
+
+                    html += '<dl class="layui-nav-child">';
+                    // var cmenus = this.res.data.menuList;
+                    // html +=' <dd><a href="'+ this.url+'"></a></dd>';
+                    html += '   </dl>';
+                    html += '   </li>';
+                    var $html = layui.$(html);
+                    $("#menuList").append($html);
+                    var $dl = $html.children('dl');
+                    for (var menu of dxy[key]) {
+                        var url = menu.url;
+                        var dl = '<dd><a href="javascript:;" onclick="changeIframe(\''+url+'\')">' + menu.permName + '</a></dd>';
+                        $dl.append(dl);
+                    }
+
+                    // })
+                }
+                layui.element.render();
+            }
+        })
+
+
+
+    });
+
+    function changeIframe(url) {
+        var $iframe = layui.$('iframe');
+        $iframe.attr('src',url);
+    }
+</script>
+</body>
+</html>

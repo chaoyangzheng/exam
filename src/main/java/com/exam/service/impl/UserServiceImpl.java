@@ -59,10 +59,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User userLogin(User user) {
         User user1 = userDao.userLogin(user);
-        if (user1!=null){
-            return user1;
-        }
-        return null;
+        System.out.println("service"+user1);
+        return user1;
     }
 
     @Override

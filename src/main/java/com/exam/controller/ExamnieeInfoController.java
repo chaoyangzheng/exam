@@ -7,6 +7,7 @@ import com.exam.entity.ExamnieeInfo;
 import com.exam.entity.Subject;
 import com.exam.entity.User;
 import com.exam.service.ExamnieeInfoService;
+import com.exam.service.PermissionService;
 import com.exam.service.SubjectService;
 import com.exam.service.UserService;
 import com.exam.utils.UploadUtil;
@@ -16,11 +17,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/examnieeInfo")
 public class ExamnieeInfoController {
+    @Autowired
+    private PermissionService permissionService;
+
     @Autowired
     private ExamnieeInfoService examnieeInfoService;
 
@@ -185,11 +190,18 @@ public class ExamnieeInfoController {
 
     @RequestMapping("/userLogin.do")
     public JsonResult userLogin(@RequestBody User user) {
-//        System.out.println("登录:"+user);
-        if (user!=null){
-            JsonResult jsonResult = userLogin(user);
-            return jsonResult;
-        }
-        return new JsonResult(0,"登录失败",null,"");
+        System.out.println("登录:"+user);
+        User user1 = userService.userLogin(user);
+        System.out.println("发送"+user1);
+        return new JsonResult(0,"登录成功",null,user1);
+    }
+
+    @RequestMapping("/findPerms.do")
+    public JsonResult findPerms(String idCard) {
+        System.out.println("进来了菜单请求"+idCard);
+        Map<String, Object> menuList = permissionService.findPermsByIdCard(idCard);
+        if (menuList!=null){
+            return new JsonResult(0,"成功",null,menuList);
+        }else return new JsonResult(1,"失败",null,"");
     }
 }
