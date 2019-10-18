@@ -55,7 +55,7 @@
     </insert>
 
     <insert id="addUserAndRole" parameterType="String">
-        INSERT INTO `exam`.`t_user_role` (`user_role_id`, `user_id`, `role_id`) VALUES (REPLACE(UUID(),'-',''), #{userId}, '2');
+        INSERT INTO `exam`.`t_user_role` (`user_role_id`, `user_id`, `role_id`) VALUES (REPLACE(UUID(),'-',''), #{userId}, '1');
     </insert>
 
     <select id="findByName" parameterType="String" resultType="com.exam.entity.User">

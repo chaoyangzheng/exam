@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         JsonResult jsonResult = examnieeInfoService.findExamnieeInfoById(user.getIdCard());
         List<ExamnieeInfo> data = (List<ExamnieeInfo>)jsonResult.getData();
         if (data.isEmpty()){
-                String s = UUID.randomUUID().toString();
+                String s = UUID.randomUUID().toString().replace("-","");
                 user.setUserId(s);
                 int i = userDao.userRegister(user);
                 if (i != 0) {
