@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>成绩</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <!--这里要改成自己的资源路径-->
+    <style>
+        body {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" lay-filter="formScore">
+    <div class="demoTable">
+        <label class="layui-form-label">搜索：</label>
+        <div class="layui-input-inline">
+            <select name="selectScore" id="opt">
+                <option value="">请选择</option>
+                <option value="student_id">考生号</option>
+                <option value="examniee_name">姓名</option>
+                <option value="papers_id">试卷ID</option>
+                <option value="subject_name">科目名</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input" name="msg" id="demoReload" autocomplete="off">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" data-type="reload" lay-filter="submit" lay-submit="">搜索</button>
+        </div>
+    </div>
+</form>
+
+
+<table class="layui-hide" id="scoreTable" lay-filter="test"></table>
+
+</body>
+<script src="layui/layui.js"></script>
+<!--这里要改成自己的资源路径-->
+<script>
+    layui.use(['table', 'form'], function () {
+        var table = layui.table; //表格
+        var form = layui.form;
+
+        //向世界问个好
+        layer.msg('考生成绩查询');
+
+        //执行一个 table 实例
+        table.render({
+            elem: '#scoreTable',
+            height: 600,
+            url: 'scoreInfo/scoreList.do', //数据接口
+            title: '成绩表',
+            page: true, //开启分页
+            cols: [ //表头
+                [
+                    {
+                        field: 'studentId',
+                        title: '考生号',
+                        align: 'center',
+                        sort: true
+                    },
+                    {
+                        field: 'examnieeName',
+                        title: '考生姓名',
+                        align: 'center',
+                        sort: true,
+                        templet: '<div>{{d.examnieeInfo.examnieeName}}</div>'
+                    },
+                    {
+                        field: 'papersId',
+                        title: '试卷ID',
+                        align: 'center',
+                        sort: true
+                    },
+                    {
+                        field: 'subjectId',
+                        title: '科目号',
+                        align: 'center',
+                        sort: true,
+                        templet: '<div>{{d.subject.subjectId}}</div>'
+                    },
+                    {
+                        field: 'subjectName',
+                        title: '科目名',
+                        align: 'center',
+                        sort: true,
+                        templet: '<div>{{d.subject.subjectName}}</div>'
+                    },
+                    {
+                        field: 'score',
+                        title: '成绩',
+                        align: 'center',
+                        sort: true
+                    }
+                ]
+            ]
+        });
+
+        form.on('submit(submit)', function (obj) {
+            alert(obj.field);
+            table.render({
+                elem: '#scoreTable',
+                height: 600,
+                url: 'scoreInfo/scoreList.do', //数据接口
+                title: '成绩表',
+                page: true, //开启分页
+                where: {
+                    // selectScore: $("#opt").val(),
+                    // msg: $("#demoReload").val()
+                    selectScore: obj.field.selectScore,
+                    msg: obj.field.msg
+                },
+                cols: [ //表头
+                    [
+                        {
+                            field: 'studentId',
+                            title: '考生号',
+                            align: 'center',
+                            sort: true
+                        },
+                        {
+                            field: 'examnieeName',
+                            title: '考生姓名',
+                            align: 'center',
+                            sort: true,
+                            templet: '<div>{{d.examnieeInfo.examnieeName}}</div>'
+                        },
+                        {
+                            field: 'papersId',
+                            title: '试卷ID',
+                            align: 'center',
+                            sort: true
+                        },
+                        {
+                            field: 'subjectId',
+                            title: '科目号',
+                            align: 'center',
+                            sort: true,
+                            templet: '<div>{{d.subject.subjectId}}</div>'
+                        },
+                        {
+                            field: 'subjectName',
+                            title: '科目名',
+                            align: 'center',
+                            sort: true,
+                            templet: '<div>{{d.subject.subjectName}}</div>'
+                        },
+                        {
+                            field: 'score',
+                            title: '成绩',
+                            align: 'center',
+                            sort: true
+                        }
+                    ]
+                ]
+            });
+            // layui.$.ajax({
+            //     url: 'scoreInfo/scoreList.do',
+            //     data: obj.field,
+            //     dataType: 'json', //服务器返回json格式数据
+            //     type: 'post', //HTTP请求类型
+            //     success: function (data) {
+            //         alert(data.code);
+            //         if (data.code == 0) {
+            //
+            //         }
+            //     }
+            // });
+            return false;
+        })
+    });
+</script>
+
+</html>

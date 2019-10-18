@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>参加考试</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container"></div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="startExam">开始考试</a>
+</script>
+
+
+<script src="layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            , url: 'examSession/examSessionListOfStudent.do'
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['exports', 'print']
+            , title: '已报名考试场次'
+            , cols: [[
+                {type: 'numbers', fixed: 'left'}
+                , {field: 'id', title: '考试场次ID', fixed: 'left', sort: true, hide: true}
+                , {field: 'studentId', title: '考生ID', fixed: 'left', sort: true, hide: true}
+                , {field: 'subjectName', title: '科目', sort: true, templet: '<div>{{d.subject.subjectName}}</div>'}
+                , {field: 'duringTime', title: '考试时长(分钟)', sort: true}
+                , {field: 'beginTime', title: '开始时间', sort: true}
+                , {field: 'endTime', title: '结束时间', sort: true}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo'}
+            ]]
+            , page: true
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'startExam':
+                    layer.confirm('确定开始考试？', function (index) {
+                        layer.close(index);
+                        layui.$.ajax({
+                            url: 'examSession/checkStudentCanExam.do',
+                            data: {
+                                examSessionId: data.id,
+                                studentId: data.studentId
+                            },
+                            success: function (result) {
+                                if (result.code == 0) {
+                                    open('examing.html?examSessionId=' + data.id + '&studentId=' + data.studentId, '_blank')
+                                    // location.href = 'examing.html?examSessionId=' + data.id + '&studentId=' + data.studentId;
+                                } else {
+                                    layer.msg('不能考试', {time: 1000});
+                                }
+                            }
+                        });
+                    });
+                    break;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

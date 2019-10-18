@@ -1,27 +1,35 @@
 package com.exam.service.impl;
 
+import com.exam.common.JsonResult;
 import com.exam.dao.RoleDao;
 import com.exam.dao.SubjectDao;
 import com.exam.dao.UserDao;
+import com.exam.entity.ExamnieeInfo;
 import com.exam.entity.Role;
 import com.exam.entity.Subject;
 import com.exam.entity.User;
+import com.exam.service.ExamnieeInfoService;
 import com.exam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private String flag = "";
     @Autowired(required = false)
     private UserDao userDao;
     @Autowired(required = false)
     private SubjectDao subjectDao;
     @Autowired(required = false)
     private RoleDao roleDao;
+    @Autowired
+    private ExamnieeInfoService examnieeInfoService;
     @Override
     public List<User> findAllUserByRole (String roleId, Integer subjectId,String name) {
         //使用动态sql，判断role的值，为角色，查看某个角色，为null，查看所有
@@ -50,12 +58,33 @@ public class UserServiceImpl implements UserService {
     /*zxs*/
     @Override
     public User userLogin(User user) {
+        User user1 = userDao.userLogin(user);
+        System.out.println("service"+user1);
+        return user1;
+    }
+
+    @Override
+    @Transactional
+    public User userRegister(User user) {
+        JsonResult jsonResult = examnieeInfoService.findExamnieeInfoById(user.getIdCard());
+        List<ExamnieeInfo> data = (List<ExamnieeInfo>)jsonResult.getData();
+        if (data.isEmpty()){
+                String s = UUID.randomUUID().toString().replace("-","");
+                user.setUserId(s);
+                int i = userDao.userRegister(user);
+                if (i != 0) {
+                    int i1 = userDao.addUserAndRole(s);
+                    if (i1!=0) {
+                        return user;
+                    }else return null;
+                }
+        }
         return null;
     }
 
     @Override
-    public int userRegister(User user) {
-        return 0;
+    public User findUserByName(String username) {
+        return userDao.findByName(username);
     }
     /*end*/
 }

@@ -2,8 +2,10 @@ package com.exam.service.impl;
 
 import com.exam.dao.ExamSessionDao;
 import com.exam.dao.ExamnieeInfoDao;
+import com.exam.dao.PapersDao;
 import com.exam.entity.ExamSession;
 import com.exam.entity.ExamnieeInfo;
+import com.exam.entity.Papers;
 import com.exam.service.ExamSessionService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     private ExamSessionDao examSessionDao;
     @Autowired(required = false)
     private ExamnieeInfoDao examnieeInfoDao;
+    @Autowired
+    private PapersDao papersDao;
 
     /**
      * 分页查询所有考试场次
@@ -115,6 +119,10 @@ public class ExamSessionServiceImpl implements ExamSessionService {
      */
     @Override
     public Boolean checkStudentCanExam(String examSessionId, String studentId) {
+        List<Papers> papersList = papersDao.findPapersByExamSessionIdAndStudentId(examSessionId, studentId);
+        if (papersList != null && papersList.size() != 0) {
+            throw new RuntimeException("已参加过本场考试");
+        }
         ExamSession examSession = examSessionDao.selectById(examSessionId);
         if (null == examSession) {
             throw new RuntimeException("考试场次不存在");
@@ -133,5 +141,22 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             throw new RuntimeException("考试已结束");
         }
         return true;
+    }
+
+    /**
+     * 分页查询当前学生的所有考试场次
+     *
+     * @param pageNum  当前页码
+     * @param pageSize 每页条数
+     * @param userId   用户id
+     * @return 当前页所有考试场次的list
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    @Override
+    public List<ExamSession> selectAllOfStudent(Integer pageNum, Integer pageSize, String userId) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ExamSession> examSessionList = examSessionDao.selectAllOfStudent(userId);
+        return examSessionList;
     }
 }

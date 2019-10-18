@@ -33,8 +33,9 @@
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
-					<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+					<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">注册</button>
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					<a href="userLogin.html" class="layui-btn layui-btn-warm">返回登录吧</a>
 				</div>
 			</div>
 		</form>
@@ -83,16 +84,17 @@
 
 				//监听提交
 				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
+					// layer.alert(JSON.stringify(data.field), {
+					// 	title: '最终的提交信息'
+					// })
 					
 					layui.$.ajax({
 						type:"post",
 						url:"examnieeInfo/userRegister.do",
 						data:JSON.stringify(data.field),
+						contentType:"application/json",
 						success:function (res) {
-							alert("过来了");
+							alert("登录去吧")
 						}
 					})
 					return false;

@@ -69,10 +69,20 @@ public interface ExamSessionDao {
      * 更新session_papers_student表中的papersId
      *
      * @param examSessionId 考试场次id
-     * @param studentId 学生id
-     * @param papersId 试卷id
+     * @param studentId     学生id
+     * @param papersId      试卷id
      * @author SHIGUANGYI
      * @date 2019/10/17
      */
     void updatePapersIdInSessionPapersStudent(@Param("examSessionId") String examSessionId, @Param("studentId") String studentId, @Param("papersId") String papersId);
+
+    /**
+     * 分页查询当前学生的所有考试场次
+     *
+     * @param userId   用户id
+     * @return 当前页所有考试场次的list
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    List<ExamSession> selectAllOfStudent(String userId);
 }

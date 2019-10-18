@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.dao.PermissionDao">
+    <select id="findPermsByIdCard" parameterType="String" resultType="com.exam.entity.Permission">
+            SELECT
+    t_permission.perm_name,
+    t_permission.url,
+    t_permission.perm_id,
+    t_permission.parent_id
+    FROM
+    t_permission
+    INNER JOIN t_role_perm ON t_permission.perm_id = t_role_perm.perm_id
+    INNER JOIN t_user_role ON t_role_perm.role_id = t_user_role.role_id
+    INNER JOIN t_user ON t_user_role.user_id = t_user.user_id
+    WHERE
+    t_user.id_card = #{idCard}
+    </select>
+
+    <select id="findPermsName" parameterType="java.util.List" resultType="com.exam.entity.Permission">
+                SELECT
+        *
+        FROM
+        t_permission
+        WHERE
+        t_permission.perm_id in
+        <foreach item="ids" collection="list" open="(" separator="," close=")" index="index">
+            #{ids}
+        </foreach>
+    </select>
+
+</mapper>

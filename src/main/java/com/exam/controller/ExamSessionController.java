@@ -262,4 +262,20 @@ public class ExamSessionController {
         papersService.submitPaperCache(examSessionId, studentId);
         return new JsonResult(0, "提交成功", null, null);
     }
+
+    /**
+     * 分页查询当前考生的所有考试场次
+     *
+     * @param page   当前页码
+     * @param limit  每页条数
+     * @return code=0,msg="查询成功",count=总考试场次数，data=当前页所有考试场次的list
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    @RequestMapping("/examSessionListOfStudent.do")
+    public JsonResult examSessionListOfStudent(Integer page, Integer limit) {
+        List<ExamSession> examSessionList = examSessionService.selectAllOfStudent(page, limit,"1");
+        Long count = ((Page) examSessionList).getTotal();
+        return new JsonResult(0, "查询成功", count, examSessionList);
+    }
 }
