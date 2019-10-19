@@ -8,6 +8,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -128,6 +129,35 @@ public class ExamnieeInfoServiceImpl implements ExamnieeInfoService {
             return new JsonResult(1,"该学科没有考生或未找到有此学科",null,"查询失败");
         }
         return new JsonResult(0,"查询成功",null,list);
+    }
+
+    @Override
+    @Transactional
+    public JsonResult addKaoShi(ExamnieeInfo e, String id) {
+
+        String eId = UUID.randomUUID().toString().replace("-", "");
+        e.seteId(eId);
+        e.setExamnieeSubjectId("#");
+        e.setExamnieePhoto("#");
+        //添加一条考生记录
+        int i = examnieeInfoDao.addExamnieeInfo(e);
+        //获取到该考生信息
+        if (i>0){
+            List<ExamnieeInfo> list = examnieeInfoDao.findExamnieeInfoById(e.getExamnieeId());
+            ExamnieeInfo examnieeInfo = list.get(0);
+            //获取到考生的eId
+            String s = examnieeInfo.geteId();
+            if (s!=null&&!s.equals("")){
+                String uuid = UUID.randomUUID().toString().replace("-", "");
+                int i1 = examnieeInfoDao.addExamMsg(uuid, id, s);
+                return new JsonResult(0,"报考成功，奖励一本五年模拟，三年高考",null,"");
+            }else {
+                return new JsonResult(1,"服务器异常1，报名失败",null,"");
+            }
+        }else {
+            return new JsonResult(1, "服务器异常2，报名失败", null, "");
+        }
+//        return new JsonResult(1,"服务器异常3,报名失败",null,"");
     }
 
     /**
