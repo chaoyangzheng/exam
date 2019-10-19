@@ -1,7 +1,5 @@
 package com.exam.entity;
 
-import java.util.List;
-
 /**
  * @author chaoyang
  * @date 2019/10/14
@@ -12,19 +10,21 @@ public class Permission {
     private String permDesc;
     private String type;
     private String url;
+    private Integer parentId;
     private String parentId;
     private List<Permission> permissions;
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Permission{" +
-                "permId='" + permId + '\'' +
+                "permId=" + permId +
                 ", permName='" + permName + '\'' +
                 ", permDesc='" + permDesc + '\'' +
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", permissions=" + permissions +
+                ", parentId=" + parentId +
                 '}';
     }
 
@@ -37,22 +37,23 @@ public class Permission {
     }
 
     public String getPermId () {
+    public Integer getPermId() {
         return permId;
     }
 
-    public void setPermId (String permId) {
+    public void setPermId(Integer permId) {
         this.permId = permId;
     }
 
-    public String getPermName () {
+    public String getPermName() {
         return permName;
     }
 
-    public void setPermName (String permName) {
+    public void setPermName(String permName) {
         this.permName = permName;
     }
 
-    public String getPermDesc () {
+    public String getPermDesc() {
         return permDesc;
     }
 
@@ -64,23 +65,23 @@ public class Permission {
         return type;
     }
 
-    public void setType (String type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getUrl () {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl (String url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
-    public String getParentId () {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId (String parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 }

@@ -63,6 +63,10 @@ public interface UserDao {
     /*zxs*/
     User userLogin(User user);
 
+    User findByName(String name);
+
     int userRegister(User user);
+
+    int addUserAndRole(String userId);
     /*end:zxs*/
 }

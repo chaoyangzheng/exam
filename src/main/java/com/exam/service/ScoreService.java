@@ -19,7 +19,7 @@ public interface ScoreService {
      * @author zhangyuanzhe
      * @date 2019/10/15
      */
-    public List<Score> findAllScore(Integer currentPage, Integer pageSize);
+    public List<Score> findAllScore(Integer currentPage, Integer pageSize, String selectScore, String msg);
 
     /**
      * 查询所有考生成绩信息的总记录数
@@ -34,24 +34,21 @@ public interface ScoreService {
     /**
      * 删除某个学生的成绩
      *
-     * @param paperId 试卷 ID
+     * @param papersId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
-    public void deleteScoreByPaperId(String paperId);
-
+    public void deleteScoreByPapersId(String papersId);
 
 
     /**
      * 删除多个学生的成绩
      *
-     * @param paperId 试卷 ID
+     * @param papersId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
-    public void deleteAllScoreByPaperId(List<String> paperId);
-
-
+    public void deleteAllScoreByPapersId(List<String> papersId);
 
 
     /**

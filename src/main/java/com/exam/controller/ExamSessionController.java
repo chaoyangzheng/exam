@@ -3,7 +3,6 @@ package com.exam.controller;
 import com.exam.common.JsonResult;
 import com.exam.entity.ExamSession;
 import com.exam.entity.ExamnieeInfo;
-import com.exam.entity.Papers;
 import com.exam.service.ExamSessionService;
 import com.exam.service.ExamnieeInfoService;
 import com.exam.service.PapersService;
@@ -13,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 考试场次管理
@@ -156,14 +157,24 @@ public class ExamSessionController {
      *
      * @param examSessionId 考试场次id
      * @param studentId     考生id
-     * @return code=0,msg="查询成功",count=null，data=试卷
+     * @return code=0,msg="查询成功",count=null，data={remainingTime:考试剩余时间(s),papersList:试卷}
      * @author SHIGUANGYI
      * @date 2019/10/16
      */
     @RequestMapping("/selectPaper.do")
     public JsonResult selectPaper(String examSessionId, String studentId) {
-        List<Papers> papersList = papersService.selectPaper(examSessionId, studentId);
-        return new JsonResult(0, "查询成功", null, papersList);
+        Map<String, Object> papersMap = papersService.selectPaper(examSessionId, studentId);
+
+        //计算剩余时间
+        Long endTime = (Long) papersMap.get("endTime");
+        Long now = System.currentTimeMillis();
+        Long remainingTime = (endTime - now) / 1000;
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("remainingTime", remainingTime);
+        map.put("papersList", papersMap.get("papersList"));
+
+        return new JsonResult(0, "查询成功", null, map);
     }
 
     /**
@@ -247,5 +258,21 @@ public class ExamSessionController {
         //提交到mysql
         papersService.submitPaperCache(examSessionId, studentId);
         return new JsonResult(0, "提交成功", null, null);
+    }
+
+    /**
+     * 分页查询当前考生的所有考试场次
+     *
+     * @param page   当前页码
+     * @param limit  每页条数
+     * @return code=0,msg="查询成功",count=总考试场次数，data=当前页所有考试场次的list
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    @RequestMapping("/examSessionListOfStudent.do")
+    public JsonResult examSessionListOfStudent(Integer page, Integer limit) {
+        List<ExamSession> examSessionList = examSessionService.selectAllOfStudent(page, limit,"1");
+        Long count = ((Page) examSessionList).getTotal();
+        return new JsonResult(0, "查询成功", count, examSessionList);
     }
 }

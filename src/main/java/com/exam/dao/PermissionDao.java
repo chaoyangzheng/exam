@@ -1,15 +1,16 @@
 package com.exam.dao;
 
 import com.exam.entity.Permission;
-import com.exam.entity.Role;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
+/*zxs*/
+
 public interface PermissionDao {
+    //判断当前用户的菜单栏显示什么
+    List<Permission> findPermsByIdCard(String idCard);
+
+    List<Permission> findPermsName(List<Integer> ids);
 
 
 
@@ -42,7 +43,7 @@ public interface PermissionDao {
     public List<Permission> findParentPerm(@Param("roleId") String roleId);
 
     //角色查询二级菜单
-    
+
     public List<Permission> findChildPerm(@Param("roleId") String roleId,@Param("parentId") String parentId);
 
 

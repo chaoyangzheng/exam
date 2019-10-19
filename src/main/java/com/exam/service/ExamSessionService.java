@@ -77,5 +77,17 @@ public interface ExamSessionService {
      * @author SHIGUANGYI
      * @date 2019/10/16
      */
-     Boolean checkStudentCanExam(String examSessionId, String studentId);
+    Boolean checkStudentCanExam(String examSessionId, String studentId);
+
+    /**
+     * 分页查询当前学生的所有考试场次
+     *
+     * @param pageNum  当前页码
+     * @param pageSize 每页条数
+     * @param userId   用户id
+     * @return 当前页所有考试场次的list
+     * @author SHIGUANGYI
+     * @date 2019/10/17
+     */
+    List<ExamSession> selectAllOfStudent(Integer pageNum, Integer pageSize, String userId);
 }

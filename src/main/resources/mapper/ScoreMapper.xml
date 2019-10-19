@@ -28,6 +28,10 @@
         t_score.student_id = t_examniee_info.examniee_Id
         and
         t_examniee_info.examniee_subject_Id = t_subject.subject_id
+        <if test="selectScore != '' and msg != '' and selectScore != null and msg != null">
+            and
+            ${selectScore} = #{msg}
+        </if>
     </select>
 
 
@@ -40,29 +44,26 @@
     </select>
 
 
-
     <!-- 删除学生成绩 author：zhangyuanzhe 2019/10/16 -->
-    <delete id="deleteScoreByPaperId" parameterType="String">
+    <delete id="deleteScoreByPapersId" parameterType="String">
         DELETE
         FROM
         t_score
         WHERE
-        `papers_id` = #{paperId}
+        `papers_id` = #{papersId}
     </delete>
-
 
 
     <!-- 批量删除学生成绩 author：zhangyuanzhe 2019/10/16 -->
-    <delete id="deleteAllScoreByPaperId" parameterType="list">
+    <delete id="deleteAllScoreByPapersId" parameterType="list">
         DELETE
         FROM
         t_score
         WHERE
-        <foreach collection="list" item="paperId" open="`papers_id` in (" separator="," close=")">
-            #{paperId}
+        <foreach collection="list" item="papersId" open="`papers_id` in (" separator="," close=")">
+            #{papersId}
         </foreach>
     </delete>
-
 
 
     <!-- 查询所有未被批改的简答题（SAQ） author：zhangyuanzhe 2019/10/16 -->
@@ -89,7 +90,6 @@
 	    papers_id = #{papersId}
 	    AND questions_id = #{questionsId}
     </update>
-
 
 
 </mapper>

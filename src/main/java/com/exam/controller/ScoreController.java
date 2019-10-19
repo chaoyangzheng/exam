@@ -29,14 +29,19 @@ public class ScoreController {
      * 查询所有考生成绩信息
      * &&
      * 所有考生成绩信息总记录数
+     * &&
+     * 条件查询成绩信息
      *
      * @author zhangyuanzhe
      * @date 2019/10/15
      */
     @RequestMapping("/scoreList.do")
-    public JsonResult findAllScore(Integer page, Integer limit) {
+    public JsonResult findAllScore(Integer page, Integer limit, String selectScore, String msg) {
 
-        List<Score> allScore = scoreService.findAllScore(page, limit);
+        System.out.println(page);
+        System.out.println(limit);
+
+        List<Score> allScore = scoreService.findAllScore(page, limit, selectScore, msg);
         Long allCount = scoreService.findAllCount();
         if (allScore != null && allCount != null) {
             return new JsonResult(0, "成功", allCount, allScore);
@@ -46,35 +51,32 @@ public class ScoreController {
     }
 
 
-
     /**
      * 删除某个学生的成绩
      *
-     * @param paperId 试卷 ID
+     * @param papersId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
     @RequestMapping("/deleteScore.do")
-    public JsonResult deleteScoreByPaperId(String paperId){
-        scoreService.deleteScoreByPaperId(paperId);
-        return new JsonResult(0,"删除成功",null,null);
+    public JsonResult deleteScoreByPapersId(String papersId) {
+        scoreService.deleteScoreByPapersId(papersId);
+        return new JsonResult(0, "删除成功", null, null);
     }
-
 
 
     /**
      * 删除多个学生的成绩
      *
-     * @param paperId 试卷 ID
+     * @param papersId 试卷 ID
      * @author zhangyuanzhe
      * @date 2019/10/16
      */
     @RequestMapping("/deleteAllScore.do")
-    public JsonResult deleteAllScoreByPaperId(List<String> paperId){
-        scoreService.deleteAllScoreByPaperId(paperId);
-        return new JsonResult(0,"删除成功",null,null);
+    public JsonResult deleteAllScoreByPapersId(List<String> papersId) {
+        scoreService.deleteAllScoreByPapersId(papersId);
+        return new JsonResult(0, "删除成功", null, null);
     }
-
 
 
     /**
@@ -93,9 +95,6 @@ public class ScoreController {
             return new JsonResult(1, "失败", null, null);
         }
     }
-
-
-
 
 
     /**
@@ -117,7 +116,6 @@ public class ScoreController {
         }
         return new JsonResult(0, "成功", null, null);
     }
-
 
 
 }

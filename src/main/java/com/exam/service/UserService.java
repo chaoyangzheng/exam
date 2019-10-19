@@ -43,6 +43,8 @@ public interface UserService {
     /*zxs*/
      public User userLogin(User user);
 
-     public int userRegister(User user);
+     public User userRegister(User user);
+
+     public User findUserByName(String username);
     /*end*/
 }
