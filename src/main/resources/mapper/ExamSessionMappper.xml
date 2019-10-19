@@ -112,4 +112,44 @@
         t_user.user_id = #{userId}
         AND t_exam_session.begin_time > NOW()
     </select>
+
+    <select id="findAllUnExamInfo" resultMap="ExamSessionMap">
+--                 SELECT
+--         t_exam_session.id,
+--         t_exam_session.begin_time,
+--         t_exam_session.end_time,
+--         t_exam_session.during_time,
+--         t_exam_session.room_id,
+--         t_exam_session.student_num,
+--         t_exam_session.teacher_id
+--         FROM
+--         t_exam_session
+--         WHERE
+--         t_exam_session.begin_time > NOW()+interval 8 hour;
+            SELECT
+            t_exam_session.id,
+            t_exam_session.begin_time,
+            t_exam_session.end_time,
+            t_exam_session.during_time,
+            t_exam_session.subject_id,
+            t_exam_session.student_num,
+            t_exam_session.teacher_id,
+            t_subject.subject_name,
+            t_user.username
+            FROM
+            t_exam_session
+            INNER JOIN t_subject ON t_exam_session.subject_id = t_subject.subject_id
+            INNER JOIN t_user ON t_exam_session.teacher_id = t_user.user_id
+            WHERE
+                    t_exam_session.begin_time > NOW()+interval 8 hour;
+    </select>
+
+    <select id="selectExamStuNum" parameterType="String" resultType="Integer">
+        SELECT
+        Count(t_session_papers_student.student_id)
+        FROM
+        t_session_papers_student
+        WHERE
+        t_session_papers_student.exam_session_id = #{id}
+    </select>
 </mapper>

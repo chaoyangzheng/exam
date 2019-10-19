@@ -6,15 +6,14 @@ import com.exam.entity.ExamSession;
 import com.exam.entity.ExamnieeInfo;
 import com.exam.entity.Subject;
 import com.exam.entity.User;
-import com.exam.service.ExamnieeInfoService;
-import com.exam.service.PermissionService;
-import com.exam.service.SubjectService;
-import com.exam.service.UserService;
+import com.exam.service.*;
 import com.exam.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/examnieeInfo")
 public class ExamnieeInfoController {
+
+    @Autowired
+    private ExamSessionService examSessionService;
+
     @Autowired
     private PermissionService permissionService;
 
@@ -203,5 +206,57 @@ public class ExamnieeInfoController {
         if (menuList!=null){
             return new JsonResult(0,"成功",null,menuList);
         }else return new JsonResult(1,"失败",null,"");
+    }
+
+    @RequestMapping("/findAllUnExamInfoList.do")
+    public JsonResult startUnExam(Integer page, Integer limit) {
+        System.out.println("进来了查看可报名的考试");
+        List<ExamSession> list = examSessionService.findAllUnExamInfo(page,limit);
+        if (list!=null){
+            return new JsonResult(0,"成功",null,list);
+        }else return new JsonResult(1,"失败",null,"未查到有此考试");
+    }
+
+    @RequestMapping("/zhunBeiBaoMing.do")
+    public JsonResult zhunBeiBaoMing(@RequestBody ExamSession examSession) {
+        System.out.println("进来了准备报名"+examSession.getId());
+        int i = 0;
+        try {
+            i = examSessionService.kaiShiBaoMing(examSession);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JsonResult(1,"该场次人数已满",null,"");
+        }
+        System.out.println(i);
+        int a = examSession.getStudentNum()-i;
+        if (a <= 0){
+            return new JsonResult(1,"该场次人数已满",null,"");
+        }else if (a!= 0){
+            return new JsonResult(0,"该场次人数未满，剩余可报名人数:"+a+"人",null,i);
+        }else
+        return new JsonResult(1,"数据异常，请重试",null,"");
+    }
+
+//    @RequestMapping("/startBaoMing.do")
+//    public JsonResult startBaoMing(ExamnieeInfo examnieeInfo) {
+//        System.out.println("进来了startBaoMing");
+//        System.out.println(examnieeInfo);
+////        JsonResult jsonResult = examnieeInfoService.addExamnieeInfo(examnieeInfo);
+//        ExamnieeInfo examnieeInfo1 = new ExamnieeInfo();
+//        examnieeInfo1.seteId("1");
+//        return new JsonResult(0,"",null,examnieeInfo1);
+//    }
+
+    @RequestMapping("/startBaoMing.do")
+    public JsonResult startBaoMing(String examnieeId,String examnieeName,String examnieeSex,String id) {
+//        System.out.println("进来了startBaoMing");
+        System.out.println(examnieeId+examnieeName+examnieeSex+id);
+        ExamnieeInfo e= new ExamnieeInfo();
+        e.setExamnieeId(examnieeId);
+        e.setExamnieeName(examnieeName);
+        e.setExamnieeSex(examnieeSex);
+
+        JsonResult jsonResult1 = examnieeInfoService.addKaoShi(e, id);
+        return jsonResult1;
     }
 }

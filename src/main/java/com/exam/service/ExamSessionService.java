@@ -90,4 +90,10 @@ public interface ExamSessionService {
      * @date 2019/10/17
      */
     List<ExamSession> selectAllOfStudent(Integer pageNum, Integer pageSize, String userId);
+
+    /*zxs*/
+    List<ExamSession> findAllUnExamInfo(Integer page, Integer limit);
+
+    Integer kaiShiBaoMing(ExamSession examSession);
+    /*end*/
 }

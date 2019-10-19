@@ -1,6 +1,7 @@
 package com.exam.dao;
 
 import com.exam.entity.ExamnieeInfo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -44,6 +45,12 @@ public interface ExamnieeInfoDao {
 
     //连表查询学科名的考生集合
     public List<ExamnieeInfo> findAllExamnieeInfoAndSubjectName();
+
+    //考生报名考试
+    @Insert("INSERT INTO `exam`.`t_session_papers_student` (`session_papers_student_id`, `exam_session_id`, `student_id`) VALUES (#{UUID}, #{sessionId},#{studentId})")
+    public int addExamMsg(@Param("UUID")String UUID,@Param("sessionId") String sessionId ,@Param("studentId") String studentId);
+
+    //查询可以考试的考试场次
 
     /**
      * 查询报考该考试场次的学生
