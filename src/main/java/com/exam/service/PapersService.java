@@ -8,7 +8,7 @@ public interface PapersService {
      *
      * @param examSessionId 考试场次id
      * @param studentId     考生id
-     * @return startTime:学生开始考试的时间;papersList:试卷
+     * @return endTime:学生结束考试的时间;papersList:试卷
      * @author SHIGUANGYI
      * @date 2019/10/16
      */
