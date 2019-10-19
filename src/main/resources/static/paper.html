@@ -45,7 +45,8 @@
                 [{
                     field: 'papersId',
                     title: '试卷号',
-                    width: 75,
+                    width: 90,
+                    sort: true,
                     align: 'center'
                 },
                     {
@@ -94,7 +95,7 @@
             var data = obj.data;
             var scoreSAQ = data.score;
             if (layEvent === 'submitScour') {
-                if (scoreSAQ == "") {
+                if (scoreSAQ == "" || scoreSAQ == null) {
                     alert("请输入分数");
                     return;
                 } else if (isNaN(scoreSAQ)) {
@@ -127,6 +128,7 @@
                             }
                         }
                     })
+                    location.reload();
                 })
             }
         });
