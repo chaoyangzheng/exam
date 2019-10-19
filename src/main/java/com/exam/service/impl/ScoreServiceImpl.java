@@ -129,4 +129,29 @@ public class ScoreServiceImpl implements ScoreService {
         }
         scoreDao.updateScore(papers);
     }
+
+
+    /**
+     * 获取某张卷子的题目是否还有未被更改
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/19
+     */
+    @Override
+    public List<String> findQuestionsNoScore(String papersId) {
+        return scoreDao.findQuestionsNoScore(papersId);
+    }
+
+
+    /**
+     * 总分上传
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/19
+     */
+    @Override
+    public void updateScoreSUM(String papersId) {
+        Double sum = scoreDao.findQuestionsScore(papersId);
+        scoreDao.updateScoreSUM(papersId, sum);
+    }
 }
