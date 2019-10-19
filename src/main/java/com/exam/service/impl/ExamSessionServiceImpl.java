@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sound.midi.Soundbank;
 import java.util.List;
 
 /**
@@ -21,11 +22,11 @@ import java.util.List;
 @Service
 @Transactional
 public class ExamSessionServiceImpl implements ExamSessionService {
-    @Autowired
+    @Autowired(required = false)
     private ExamSessionDao examSessionDao;
-    @Autowired
+    @Autowired(required = false)
     private ExamnieeInfoDao examnieeInfoDao;
-    @Autowired
+    @Autowired(required = false)
     private PapersDao papersDao;
 
     /**
@@ -160,5 +161,27 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         PageHelper.startPage(pageNum, pageSize);
         List<ExamSession> examSessionList = examSessionDao.selectAllOfStudent(userId);
         return examSessionList;
+    }
+
+    @Override
+    public List<ExamSession> findAllUnExamInfo(Integer page, Integer limit) {
+//        PageHelper.startPage(page,limit);
+        List<ExamSession> examList = examSessionDao.findAllUnExamInfo();
+        if (examList!=null){
+            return examList;
+        }
+        return null;
+    }
+
+    @Override
+    public Integer kaiShiBaoMing(ExamSession examSession) {
+        System.out.println("进来了开始报名service"+examSession.getId());
+        int i = examSessionDao.selectExamStuNum(examSession.getId());
+        System.out.println(i);
+        if (i<examSession.getStudentNum()){
+            System.out.println("进来了判断");
+            return i;
+        }
+        return null;
     }
 }
