@@ -1,5 +1,7 @@
 package com.exam.entity;
 
+import java.util.List;
+
 /**
  * @author chaoyang
  * @date 2019/10/14
@@ -11,7 +13,7 @@ public class Permission {
     private String type;
     private String url;
     private String parentId;
-
+    private List<Permission> permissions;
 
     @Override
     public String toString () {
@@ -22,7 +24,16 @@ public class Permission {
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", permissions=" + permissions +
                 '}';
+    }
+
+    public List<Permission> getPermissions () {
+        return permissions;
+    }
+
+    public void setPermissions (List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public String getPermId () {

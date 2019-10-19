@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.dao.PermissionDao">
+
+    <resultMap id="permissionMenu" type="com.exam.entity.Permission" autoMapping="true">
+        <id property="permId" column="perm_id"/>
+        <collection property="permissions" ofType="com.exam.entity.Permission">
+            <id property="permId" column="perm_id"/>
+            <result property="parentId" column="parent_id"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="rolePermission" type="com.exam.entity.Role" autoMapping="true">
+        <id property="roleId" column="role_id"/>
+        <collection property="permissions" resultMap="permissionMenu">
+        </collection>
+    </resultMap>
+
+    <!--<resultMap id="rolePermission" type="com.exam.entity.Role" autoMapping="true">
+        <id property="roleId" column="role_id"/>
+        <collection property="permissions" ofType="com.exam.entity.Permission">
+            <id property="permId" column="perm_id"/>
+            <collection property="permissions" column="permId" select="com.exam.dao.PermissionDao.findPermsByParentId()">
+                <id property="permId" column="perm_id"/>
+                <result property="parentId" column="parent_id"/>
+            </collection>
+        </collection>
+    </resultMap>-->
+    <select id="findAllPerms" resultMap="permissionMenu">
+        SELECT tp1.perm_id,tp1.perm_name,tp1.perm_desc,tp1.type,tp1.url,
+        tp1.parent_id,tp2.parent_id,tp2.perm_id,tp2.perm_name,tp2.perm_desc,tp2.type,tp2.url
+        FROM t_permission AS tp1
+        INNER JOIN t_permission AS tp2
+        ON tp1.perm_id = tp2.parent_id
+    </select>
+
+    <select id="findAllRolesPerms" resultMap="rolePermission">
+        /*SELECT tr.role_id,tr.role_name,tr.role_desc,tp2.perm_id,tp2.perm_name,
+        tp2.perm_desc,tp2.type,tp2.url,tp2.parent_id,tp3.perm_id,tp3.perm_name,
+        tp3.perm_desc,tp3.type,tp3.url,tp3.parent_id
+        FROM t_role AS tr
+        INNER JOIN t_role_perm AS trp
+        ON tr.role_id = trp.role_id
+        INNER JOIN t_permission AS tp1
+        ON trp.perm_id = tp1.perm_id
+        INNER JOIN t_permission AS tp2
+        ON tp1.parent_id = tp2.perm_id
+        INNER JOIN t_permission AS tp3
+        ON tp3.parent_id = tp2.perm_id*/
+        SELECT
+tr.role_id,
+tr.role_name,
+tr.role_desc,
+tpp.perm_id,
+tpp.perm_name,
+tpp.perm_desc,
+tpp.type,
+tpp.url,
+tpp.parent_id,
+tpc.perm_id,
+tpc.perm_name,
+tpc.perm_desc,
+tpc.type,
+tpc.url,
+tpc.parent_id
+FROM
+t_role AS tr
+INNER JOIN t_role_perm AS trp ON tr.role_id = trp.role_id
+INNER JOIN t_permission AS tp1 ON trp.perm_id = tp1.perm_id AND tp1.parent_id is not null
+INNER JOIN t_permission AS tpp ON tp1.parent_id = tpp.perm_id
+INNER JOIN t_permission AS tpc ON trp.perm_id = tpc.perm_id AND tpc.parent_id = tpp.perm_id  and tpc.parent_id is not null
+    </select>
+
+
+</mapper>

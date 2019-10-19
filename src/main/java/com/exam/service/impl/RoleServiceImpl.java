@@ -4,6 +4,7 @@ import com.exam.dao.RoleDao;
 import com.exam.entity.Role;
 import com.exam.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,9 +13,10 @@ import java.util.UUID;
  * @author chaoyang
  * @date 2019/10/18
  */
+@Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
+    @Autowired(required = false)
     private RoleDao roleDao;
     @Override
     public  List<Role> findAllRoles () {
