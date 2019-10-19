@@ -110,6 +110,7 @@
         INNER JOIN t_user ON t_user.id_card = t_examniee_info.examniee_Id
         WHERE
         t_user.user_id = #{userId}
-        AND t_exam_session.begin_time > NOW()
+        AND t_exam_session.begin_time &lt; NOW() + interval 8 hour
+        AND t_exam_session.end_time > NOW() + interval 8 hour
     </select>
 </mapper>

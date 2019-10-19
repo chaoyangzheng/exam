@@ -166,10 +166,7 @@ public class ExamSessionController {
         Map<String, Object> papersMap = papersService.selectPaper(examSessionId, studentId);
 
         //计算剩余时间
-        ExamSession examSession = examSessionService.selectById(examSessionId);
-        Integer examDuringTime = examSession.getDuringTime();
-        Long startTime = (Long) papersMap.get("startTime");
-        Long endTime = startTime + examDuringTime * 60 * 1000;
+        Long endTime = (Long) papersMap.get("endTime");
         Long now = System.currentTimeMillis();
         Long remainingTime = (endTime - now) / 1000;
 
