@@ -1,30 +1,30 @@
 package com.exam.entity;
 
+import java.util.List;
+
 /**
  * @author chaoyang
  * @date 2019/10/14
  */
 public class Permission {
-    private String permId;
+    private Integer permId;
     private String permName;
     private String permDesc;
     private String type;
     private String url;
     private Integer parentId;
-    private String parentId;
     private List<Permission> permissions;
 
     @Override
-    public String toString() {
+    public String toString () {
         return "Permission{" +
                 "permId=" + permId +
                 ", permName='" + permName + '\'' +
                 ", permDesc='" + permDesc + '\'' +
                 ", type='" + type + '\'' +
                 ", url='" + url + '\'' +
-                ", parentId='" + parentId + '\'' +
-                ", permissions=" + permissions +
                 ", parentId=" + parentId +
+                ", permissions=" + permissions +
                 '}';
     }
 
@@ -36,7 +36,7 @@ public class Permission {
         this.permissions = permissions;
     }
 
-    public String getPermId () {
+
     public Integer getPermId() {
         return permId;
     }
