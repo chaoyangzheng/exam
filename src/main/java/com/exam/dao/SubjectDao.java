@@ -62,4 +62,22 @@ public interface SubjectDao {
       */
      @Select("select subject_id,subject_name from t_subject where parent_id is null")
      public List<Subject> findAllFirst();
+
+    /**
+     * 查询所有科目的平均分
+     *
+     * @return 所有科目的平均分的list
+     * @author SHIGUANGYI
+     * @date 2019/10/19
+     */
+    List<Subject> findAllAverageScore();
+
+    /**
+     * 查询所有科目的最高分
+     *
+     * @return 所有科目的最高分的list
+     * @author SHIGUANGYI
+     * @date 2019/10/19
+     */
+    List<Subject> findAllMaxScore();
 }

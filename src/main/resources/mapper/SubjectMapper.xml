@@ -5,7 +5,7 @@
 <mapper namespace="com.exam.dao.SubjectDao">
 
 
-<!--  查看所有的科目，返回list   作者：RongJing     更改时间：2019/10/15 -->
+    <!--  查看所有的科目，返回list   作者：RongJing     更改时间：2019/10/15 -->
 
     <select id="findAllSubject" resultType="subject">
         SELECT
@@ -15,7 +15,6 @@
         FROM
                 t_subject
     </select>
-
 
 
     <!--  添加科目   作者：RongJing     更改时间：2019/10/15 -->
@@ -30,10 +29,9 @@
     </insert>
 
 
-<delete id="deleteSubject" parameterType="string">
+    <delete id="deleteSubject" parameterType="string">
     delete from t_subject where subject_id = #{subjectId}
-</delete>
-
+    </delete>
 
 
     <!--  查看一二级科目   作者：RongJing     更改时间：2019/10/15 -->
@@ -48,12 +46,40 @@
                 t_subject.parent_id = #{parentId}
     </select>
 
-   <select id="findAll" resultType="com.exam.entity.Subject">
+    <select id="findAll" resultType="com.exam.entity.Subject">
        select * from t_subject
    </select>
 
 
     <select id="findById" parameterType="Integer" resultType="com.exam.entity.Subject">
         select * from t_subject where subject_id=#{subjectId}
+    </select>
+
+    <select id="findAllAverageScore" resultType="Subject">
+        SELECT
+        t_subject.subject_id,
+        t_subject.subject_name,
+        Avg(t_score.score) AS score
+        FROM
+        t_subject
+        INNER JOIN t_exam_session ON t_exam_session.subject_id = t_subject.subject_id
+        INNER JOIN t_session_papers_student ON t_session_papers_student.exam_session_id = t_exam_session.id
+        INNER JOIN t_score ON t_score.papers_id = t_session_papers_student.papers_id
+        GROUP BY
+        t_subject.subject_id
+    </select>
+
+    <select id="findAllMaxScore" resultType="Subject">
+        SELECT
+        t_subject.subject_id,
+        t_subject.subject_name,
+        Max(t_score.score) AS score
+        FROM
+        t_subject
+        INNER JOIN t_exam_session ON t_exam_session.subject_id = t_subject.subject_id
+        INNER JOIN t_session_papers_student ON t_session_papers_student.exam_session_id = t_exam_session.id
+        INNER JOIN t_score ON t_score.papers_id = t_session_papers_student.papers_id
+        GROUP BY
+        t_subject.subject_id
     </select>
 </mapper>
