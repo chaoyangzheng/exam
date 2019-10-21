@@ -22,13 +22,13 @@
 	<div class="layui-form-item"  style="display:none;" id="parentId">
 		<label class="layui-form-label">试题科目</label>
 		<div class="layui-input-block">
-			<select name="subject" lay-verify="required" id="2">
+			<select name="subject" id="2">
 				<option value=""></option>
 			</select>
 		</div>
 	</div>
 
-	<div class="layui-form-item" id="selected" required lay-verify="required"  style="display:none;">
+	<div class="layui-form-item" id="selected"   style="display:none;">
 		<label class="layui-form-label">试题类型</label>
 		<div class="layui-input-block">
 			<select lay-filter="choice" id="1">
@@ -42,7 +42,7 @@
 	<div class="layui-form-item"  style="display:none;" id="questionsInfo">
 		<label class="layui-form-label">试题题目</label>
 		<div class="layui-input-block">
-			<input type="text" name="title" required lay-verify="required" placeholder="请输入上传的试题题目" autocomplete="off" class="layui-input">
+			<input type="text" name="title"  placeholder="请输入上传的试题题目" autocomplete="off" class="layui-input">
 		</div>
 	</div>
 
@@ -50,19 +50,19 @@
 	<div class="layui-form-item" style="display:none;" id="ChoiceInfo">
 		<label class="layui-form-label">选项内容</label>
 		<div class="layui-input-block">
-			<input type="text" name="titleA" required lay-verify="required" placeholder="请输入A选项内容" autocomplete="off" class="layui-input">
+			<input type="text" name="titleA"  placeholder="请输入A选项内容" autocomplete="off" class="layui-input">
 			<hr />
 		</div>
 		<div class="layui-input-block">
-			<input type="text" name="titleB" required lay-verify="required" placeholder="请输入B选项内容" autocomplete="off" class="layui-input">
+			<input type="text" name="titleB"  placeholder="请输入B选项内容" autocomplete="off" class="layui-input">
 			<hr />
 		</div>
 		<div class="layui-input-block">
-			<input type="text" name="titleC" required lay-verify="required" placeholder="请输入C选项内容" autocomplete="off" class="layui-input">
+			<input type="text" name="titleC" placeholder="请输入C选项内容" autocomplete="off" class="layui-input">
 			<hr />
 		</div>
 		<div class="layui-input-block">
-			<input type="text" name="titleD" required lay-verify="required" placeholder="请输入D选项内容" autocomplete="off" class="layui-input">
+			<input type="text" name="titleD"  placeholder="请输入D选项内容" autocomplete="off" class="layui-input">
 			<hr />
 		</div>
 	</div>
@@ -204,6 +204,7 @@
 
 		//监听提交
 		form.on('submit(formDemo)', function(data) {
+			layer.msg("成功");
 			layer.msg(JSON.stringify(data.field));
 			layer.$.ajax({
 				url:"questions/insertOne.do",
@@ -211,11 +212,10 @@
 				data:JSON.stringify(data.field),
 				dataType:'json',//服务器返回json格式数据
 				type:'post',//HTTP请求类型
-				success:function(data){
-					if(data.code == 0 ){
-						alert(data.msg);
 
-					}
+
+				success:function(data){
+						alert("成功提交");
 				},
 
 			});
