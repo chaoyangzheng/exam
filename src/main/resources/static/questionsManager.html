@@ -80,20 +80,15 @@
                 },
                     {
                         field: 'subjectName',
-                        title: '试题科目',
-                        align: 'center'
-                    },
-                    {
-                        field: 'parentName',
                         title: '课程',
                         align: 'center',
-                        templet:'<div>{{d.subject.subjectName}}</div>'
+                        // templet:'<div>{{d.subject.subjectName}}</div>'
                     },
                     {
                         field: 'questionsTypeName',
                         title: '试题类型',
                         align: 'center',
-                        templet:'<div>{{d.questionType.questionsTypeName}}</div>'
+                        // templet:'<div>{{d.questionType.questionsTypeName}}</div>'
                     },
                     {
                         field: 'questionsInfo',
@@ -269,21 +264,15 @@
                     },
                         {
                             field: 'subjectName',
-                            title: '试题科目',
-                            align: 'center'
-
-                        },
-                        {
-                            field: 'parentName',
                             title: '课程',
                             align: 'center',
-                            templet:'<div>{{d.subject.subjectName}}</div>'
+                            // templet:'<div>{{d.subject.subjectName}}</div>'
                         },
                         {
-                            field: 'questionsTypeName',
+                            field: 'questionsTypeId',
                             title: '试题类型',
                             align: 'center',
-                            templet:'<div>{{d.questionType.questionsTypeName}}</div>'
+                            templet: '<div>{{d.questionType.questionsTypeName}}</div>'
                         },
                         {
                             field: 'questionsInfo',
@@ -326,18 +315,8 @@
                     ]
                 ]
             });
-            // layui.$.ajax({
-            //     url: 'scoreInfo/scoreList.do',
-            //     data: obj.field,
-            //     dataType: 'json', //服务器返回json格式数据
-            //     type: 'post', //HTTP请求类型
-            //     success: function (data) {
-            //         alert(data.code);
-            //         if (data.code == 0) {
-            //
-            //         }
-            //     }
-            // });
+
+
             return false;
         })
 

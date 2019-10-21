@@ -1,7 +1,6 @@
 package com.exam.entity;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
-import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
+
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +11,7 @@ import java.util.Date;
  * @author rongjing
  * @date 2019/10/14
  */
-@ExcelTarget("Layer")
+
 public class Questions implements Serializable {
 
 
@@ -28,7 +27,7 @@ public class Questions implements Serializable {
     private Integer questionsTypeId;
 
     //试题题干
-    @Excel(name = "题目",isImportField = "true_st")
+
     private String questionsInfo;
 
     //试题答案

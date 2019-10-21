@@ -179,8 +179,10 @@
         $.ajax({
             url: "subject/findSon.do",
             dataType: 'json', //服务器返回json格式数据
-            contentType: "application/json",
-            data: '{"subjectId":"1"}',
+            // contentType: "application/json",
+            data: {
+            	"subjectId": 1
+			},
             type: 'post', //HTTP请求类型
             success: function(data) {
                 for (var i = 0; i < data.data.length; i++) {
@@ -201,7 +203,7 @@
 
 
 		//监听提交
-		/*form.on('submit(formDemo)', function(data) {
+		form.on('submit(formDemo)', function(data) {
 			layer.msg(JSON.stringify(data.field));
 			layer.$.ajax({
 				url:"questions/insertOne.do",
@@ -212,12 +214,13 @@
 				success:function(data){
 					if(data.code == 0 ){
 						alert(data.msg);
+
 					}
 				},
 
 			});
 			return false;
-		});*/
+		});
 
 
 		form.on('select(choice)', function(data) {

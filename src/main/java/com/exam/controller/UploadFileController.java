@@ -36,20 +36,14 @@ public class UploadFileController {
     @Autowired
     QuestionsService questionsService;
 
-    @Autowired
 
-
-    public JsonResult importSelectQuestions(MultipartFile file) {
+    @RequestMapping("/file")
+    public JsonResult importSelectQuestions(MultipartFile file) throws Exception {
         if (file.isEmpty()) {
             new JsonResult(1,"",null,null);
         }
-        try {
             InputStream inputStream = file.getInputStream();
             questionsService.insertQuestions(inputStream);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
         return new JsonResult(0, "success",null,null);
     }
 

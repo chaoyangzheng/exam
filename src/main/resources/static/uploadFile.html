@@ -22,6 +22,8 @@
 			      <thead>
 			        <tr><th>文件名</th>
 			        <th>大小</th>
+						<th>状态</th>
+						<th>操作</th>
 			      </tr></thead>
 			      <tbody id="demoList"></tbody>
 			    </table>
@@ -41,7 +43,7 @@
 				  var demoListView = $('#demoList')
 				  ,uploadListIns = upload.render({
 				    elem: '#testList'
-				    ,url: '/upload/'
+				    ,url: 'upload/file'
 				    ,accept: 'file'
 					,exts: 'xls|xlsx' //只允许上传Excel文件
 				    ,multiple: true
