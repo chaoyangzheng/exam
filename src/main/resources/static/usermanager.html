@@ -72,14 +72,14 @@
 						page: true //开启分页
 							,
 						cols: [
-							[{
-									field: 'count',
-									title: 'ID',
-									width: 80,
-									sort: true,
-									fixed: 'left'
-								},
-								{
+                                [{
+                                    field: 'userId',
+                                    title: 'ID',
+                                    width: 80,
+                                    sort: true,
+                                    fixed: 'left'
+                                },
+                                {
 									field: 'username',
 									title: '用户名',
 									width: 80,
@@ -98,11 +98,12 @@
 									templet: '<div>{{d.role.roleName}}</div>',
 									sort: true
 								},
-								{
-									field: 'subject',
-									title: '学科',
-									width: 80
-								},
+                                {
+                                    field: 'subjectName',
+                                    title: '学科',
+                                    width: 80,
+                                    templet: '<div>{{d.subject.subjectName}}</div>'
+                                },
 								{
 									fixed: 'right',
 									width: 278,
@@ -157,11 +158,11 @@
 								templet: '<div>{{d.role.roleId}}</div>',
 								sort: true
 							}, {
-								field: 'subject',
-								title: '学科',
-								width: 80
-							},
-							{
+                            field: 'subjectName',
+                            title: '学科',
+                            width: 80,
+                            templet: '<div>{{d.subject.subjectName}}</div>'
+                            }, {
 								fixed: 'right',
 								width: 278,
 								align: 'center',
@@ -207,7 +208,7 @@
 							area: ['700px', '450px'], //宽高-->
 							fixed: false, //不固定
 							maxmin: true,
-							content: 'iframe用户角色更改.html?userId=' + data.userId + "&type=" + "add"
+							content: 'iframeuserrole.html?userId=' + data.userId + "&type=" + "add"
 						});
 					} else if(obj.event === 'del') {
 						layer.confirm('真的删除行么', function(index) {
@@ -255,9 +256,10 @@
 														templet: '<div>{{d.role.roleId}}</div>',
 														sort: true
 													}, {
-														field: 'subject',
+														field: 'subjectName',
 														title: '学科',
-														width: 80
+														width: 80,
+                                                        templet: '<div>{{d.subject.subjectName}}</div>'
 													},
 													{
 														fixed: 'right',

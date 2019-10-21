@@ -1,10 +1,8 @@
 package com.exam.dao;
 
+import com.exam.entity.Subject;
 import com.exam.entity.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -69,4 +67,15 @@ public interface UserDao {
 
     int addUserAndRole(String userId);
     /*end:zxs*/
+    /**
+     * 查询老师科目
+     * @author chaoyang
+     * @date 2019/10/18
+     */
+    @Select("SELECT ts.subject_id,ts.subject_name FROM t_user_subject AS tus JOIN t_subject " +
+            "AS ts ON tus.subject_id = ts.subject_id WHERE tus.user_id = #{userId}")
+    public List<Subject> findUserSubject(String userId);
+
+
+    public int findUsersByRoleLikeNameTotal(@Param("name") String name,@Param("roleId") String roleId, @Param("subjectId") Integer subjectId);
 }

@@ -47,4 +47,5 @@ public interface UserService {
 
      public User findUserByName(String username);
     /*end*/
+    public Long size(String roleId, Integer subjectId,String name);
 }
