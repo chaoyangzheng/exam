@@ -105,4 +105,20 @@ public class ExamSession implements Serializable {
     public void setTeacher(User teacher) {
         this.teacher = teacher;
     }
+
+    @Override
+    public String toString() {
+        return "ExamSession{" +
+                "id='" + id + '\'' +
+                ", subjectId=" + subjectId +
+                ", teacherId='" + teacherId + '\'' +
+                ", studentNum=" + studentNum +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", duringTime=" + duringTime +
+                ", studentId='" + studentId + '\'' +
+                ", subject=" + subject +
+                ", teacher=" + teacher +
+                '}';
+    }
 }

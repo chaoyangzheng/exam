@@ -28,7 +28,7 @@ public interface ScoreService {
      * @author zhangyuanzhe
      * @date 2019/10/15
      */
-    public Long findAllCount();
+    public Long findAllCount(String selectScore, String msg);
 
 
     /**
@@ -68,5 +68,24 @@ public interface ScoreService {
      * @date 2019/10/16
      */
     public void updateScore(Papers papers);
+
+
+    /**
+     * 获取某张卷子的题目是否还有未被更改
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/19
+     */
+    public List<String> findQuestionsNoScore(String papersId);
+
+
+
+    /**
+     * 总分计算
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/19
+     */
+    public void updateScoreSUM(String papersId);
 
 }

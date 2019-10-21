@@ -59,8 +59,8 @@ public class ScoreServiceImpl implements ScoreService {
      * @date 2019/10/15
      */
     @Override
-    public Long findAllCount() {
-        Long allCount = scoreDao.findAllCount();
+    public Long findAllCount(String selectScore, String msg) {
+        Long allCount = scoreDao.findAllCount(selectScore, msg);
         if (allCount == null) {
             throw new RuntimeException("没有考生分数记录");
         }
@@ -128,5 +128,30 @@ public class ScoreServiceImpl implements ScoreService {
             throw new RuntimeException("分数未提交成功");
         }
         scoreDao.updateScore(papers);
+    }
+
+
+    /**
+     * 获取某张卷子的题目是否还有未被更改
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/19
+     */
+    @Override
+    public List<String> findQuestionsNoScore(String papersId) {
+        return scoreDao.findQuestionsNoScore(papersId);
+    }
+
+
+    /**
+     * 总分上传
+     *
+     * @author zhangyuanzhe
+     * @date 2019/10/19
+     */
+    @Override
+    public void updateScoreSUM(String papersId) {
+        Double sum = scoreDao.findQuestionsScore(papersId);
+        scoreDao.updateScoreSUM(papersId, sum);
     }
 }

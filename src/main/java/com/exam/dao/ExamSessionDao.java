@@ -2,6 +2,7 @@ package com.exam.dao;
 
 import com.exam.entity.ExamSession;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -85,4 +86,14 @@ public interface ExamSessionDao {
      * @date 2019/10/17
      */
     List<ExamSession> selectAllOfStudent(String userId);
+
+    /*zxs*/
+    //查询还未开始的考试
+    List<ExamSession> findAllUnExamInfo();
+
+   int selectExamStuNum(String id);
+
+//   int addExam
+
+    /*end*/
 }

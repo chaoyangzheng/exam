@@ -28,6 +28,8 @@ public interface ExamnieeInfoService {
 
     public JsonResult findExamnieeInfoBySubjectName(String subjectName);
 
+    public JsonResult addKaoShi(ExamnieeInfo examnieeInfo,String id);
+
     /**
      * 查询报考该考试场次的学生
      *
