@@ -21,7 +21,11 @@ public class RoleManagerController {
 
     //角色的增删改查，增加，删除，修改，显示所有
     @RequestMapping("/findAllRoles.do")
-    public JsonResult findAllRoles(){
+    public JsonResult findAllRoles(Integer page,Integer limit){
+        /*if (page==null||limit==null){
+            page=1;
+            limit=10;
+        }*/
         List<Role> roles = roleService.findAllRoles();
         return new JsonResult(0,"",Long.valueOf(roles.size()),roles);
     }
