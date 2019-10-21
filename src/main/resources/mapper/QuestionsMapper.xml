@@ -3,7 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.dao.QuestionsDao">
-    <select id="findRandomQuestionsByExamSessionIdAndQuestionsTypeId" resultType="Questions">
+    <resultMap id="questionsInfo" type="com.exam.entity.Questions" autoMapping="true">
+        <association property="questionType" javaType="com.exam.entity.QuestionType" autoMapping="true">
+        </association>
+        <association property="subject" javaType="com.exam.entity.Subject" autoMapping="true">
+            <association property="subjectPar" javaType="com.exam.entity.Subject" autoMapping="true">
+            </association>
+        </association>
+    </resultMap>
+
+
+    <select id="findRandomQuestionsByExamSessionIdAndQuestionsTypeId" resultType="com.exam.entity.Questions">
         SELECT
             t_questions.*
         FROM
@@ -17,7 +27,7 @@
             LIMIT #{questionsNum}
     </select>
 
-    <select id="findQuestionsByQuestionsId" parameterType="String" resultType="Questions">
+    <select id="findQuestionsByQuestionsId" parameterType="String" resultType="com.exam.entity.Questions">
         SELECT
             *
         FROM
@@ -25,4 +35,168 @@
         WHERE
             questions_id = #{questionsId}
     </select>
+
+<!--  添加，修改，删除题库中的试题    author:RongJing     date:2019/10/15 -->
+ <insert id="insertQuestions" parameterType="com.exam.entity.Questions">
+            INSERT INTO t_questions(questions_id, questions_subject_id,questions_type_id,questions_info,questions_answer,upload_time,upload_teacher_id)
+            <foreach collection="list" item="item" index="index">
+                VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},now(),#{uploadTeacherId})
+            </foreach>
+ </insert>
+
+    <insert id="insertQuestion" parameterType="com.exam.entity.Questions">
+        INSERT INTO t_questions(questions_id, questions_subject_id,questions_type_id,questions_info,questions_answer,upload_time,upload_teacher_id)
+            VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},now(),#{uploadTeacherId})
+    </insert>
+
+
+
+
+<update id="updateQuestions" parameterType="com.exam.entity.Questions">
+           UPDATE
+                t_questions ,
+                t_questions_type
+           SET
+                questions_subject_id = #{questionsSubjectId},
+                questions_type_id = #{questionsTypeId},
+                t_questions_type.questions_type_name = #{questionsTypeName},
+                questions_info = #{questionsInfo},
+                questions_answer = #{questionsAnswer},
+                upload_time = #{uploadTime},
+                upload_teacher_id = #{uploadTeacherId}
+            WHERE
+                questions_id = #{questionsId}
+</update>
+
+    <delete id="deleteQuestions" parameterType="String">
+          delete from t_questions where questionsId = #{questionsId}
+    </delete>
+
+<!--查看题库，所有题    author:RongJing     date:2019/10/15-->
+    <select id="findAllQuestions" resultMap="questionsInfo" >
+        SELECT
+        t_questions.questions_id,
+        t_questions.questions_info,
+        t_questions.questions_answer,
+        t_questions.upload_time,
+        t_questions.upload_teacher_id,
+        t_questions_type.questions_type_name,
+        t_subject.subject_name,
+        t_subject.subject_id,
+        t_subject.parent_id,
+        t_questions_type.questions_type_id,
+        t_questions_type.questions_type_name
+        FROM
+        t_questions ,
+        t_questions_type ,
+        t_subject
+        WHERE
+        t_questions.questions_subject_id = t_subject.subject_id AND
+        t_questions.questions_type_id = t_questions_type.questions_type_id
+        <if test="subjectId != null">
+                and questions_subject_id = #{subjectId}
+            </if>
+            <if test="questionsTypeId != null">
+                and questions_type_id = #{questionsTypeId}
+            </if>
+            <if test="uploadTime != null">
+                and upload_time = #{uploadTime}
+            </if>
+    </select>
+
+<!--  按照科目，上传老师，上传事件，题的类型查看题库       author:RongJing     date:2019/10/15  -->
+<select id="findBySubjectId" parameterType="integer">
+    SELECT
+                t_questions.questions_id,
+                t_subject.subject_name,
+                t_questions_type.questions_type_name,
+                t_questions.questions_info,
+                t_questions.questions_answer,
+                t_questions.upload_time,
+                t_questions.upload_teacher_id
+    FROM
+                t_questions ,
+                t_questions_type ,
+                t_subject
+    WHERE
+                t_questions.questions_subject_id = t_subject.subject_id
+        AND
+                t_questions.questions_type_id = t_questions_type.questions_type_id
+        AND
+                t_questions.questions_subject_id = #{questionsSubjectId}
+</select>
+
+    <select id="findByUploadTeacherId" parameterType="string">
+    SELECT
+                t_questions.questions_id,
+                t_subject.subject_name,
+                t_questions_type.questions_type_name,
+                t_questions.questions_info,
+                t_questions.questions_answer,
+                t_questions.upload_time,
+                t_questions.upload_teacher_id
+    FROM
+                t_questions ,
+                t_questions_type ,
+                t_subject
+    WHERE
+                t_questions.questions_subject_id = t_subject.subject_id
+        AND
+                t_questions.questions_type_id = t_questions_type.questions_type_id
+        AND
+            t_questions.upload_teacher_id = #{uploadTeacherId}
+</select>
+
+    <select id="findByUploadTime" parameterType="string">
+    SELECT
+                t_questions.questions_id,
+                t_subject.subject_name,
+                t_questions_type.questions_type_name,
+                t_questions.questions_info,
+                t_questions.questions_answer,
+                t_questions.upload_time,
+                t_questions.upload_teacher_id
+    FROM
+                t_questions ,
+                t_questions_type ,
+                t_subject
+    WHERE
+                t_questions.questions_subject_id = t_subject.subject_id
+        AND
+                t_questions.questions_type_id = t_questions_type.questions_type_id
+        AND
+            t_questions.upload_time = #{uploadTime}
+</select>
+
+    <select id="findByQuestionsTypeId" parameterType="integer">
+    SELECT
+                t_questions.questions_id,
+                t_subject.subject_name,
+                t_questions_type.questions_type_name,
+                t_questions.questions_info,
+                t_questions.questions_answer,
+                t_questions.upload_time,
+                t_questions.upload_teacher_id
+    FROM
+                t_questions ,
+                t_questions_type ,
+                t_subject
+    WHERE
+                t_questions.questions_subject_id = t_subject.subject_id
+        AND
+                t_questions.questions_type_id = t_questions_type.questions_type_id
+        AND
+            t_questions.questions_type_id = #{questionsTypeId}
+</select>
+
+
+
+    <select id="findAllQuestionsType" resultType="com.exam.entity.QuestionType">
+        select * from t_questions_type
+    </select>
+
+
+
+
+
 </mapper>

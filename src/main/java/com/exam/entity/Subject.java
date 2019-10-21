@@ -16,6 +16,8 @@ public class Subject {
     //根据此判断一二级科目，一级：语数英，二级四六级。为空时是一级
     private Integer parentId;
 
+    private Subject subjectPar;
+
 
     /**
      * 统计分数用，平均成绩或最高分
@@ -32,6 +34,7 @@ public class Subject {
                 "subjectId=" + subjectId +
                 ", subjectName='" + subjectName + '\'' +
                 ", parentId=" + parentId +
+                ", subjectPar=" + subjectPar +
                 ", score=" + score +
                 '}';
     }
@@ -39,34 +42,35 @@ public class Subject {
     public Subject() {
     }
 
-    public Subject(Integer subjectId, String subjectName, Integer parentId, Double score) {
-        this.subjectId = subjectId;
-        this.subjectName = subjectName;
-        this.parentId = parentId;
-        this.score = score;
+    public Subject getSubjectPar() {
+        return subjectPar;
     }
 
-    public Integer getSubjectId() {
+    public void setSubjectPar(Subject subjectPar) {
+        this.subjectPar = subjectPar;
+    }
+
+    public Integer getSubjectId () {
         return subjectId;
     }
 
-    public void setSubjectId(Integer subjectId) {
+    public void setSubjectId (Integer subjectId) {
         this.subjectId = subjectId;
     }
 
-    public String getSubjectName() {
+    public String getSubjectName () {
         return subjectName;
     }
 
-    public void setSubjectName(String subjectName) {
+    public void setSubjectName (String subjectName) {
         this.subjectName = subjectName;
     }
 
-    public Integer getParentId() {
+    public Integer getParentId () {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId (Integer parentId) {
         this.parentId = parentId;
     }
 
@@ -75,6 +79,14 @@ public class Subject {
     }
 
     public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public Subject(Integer subjectId, String subjectName, Integer parentId, Subject subjectPar, Double score) {
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+        this.parentId = parentId;
+        this.subjectPar = subjectPar;
         this.score = score;
     }
 }

@@ -2,6 +2,8 @@ package com.exam.service;
 
 
 import com.exam.entity.Subject;
+import com.exam.entity.User;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -48,10 +50,25 @@ public interface SubjectService {
      * @author RongJing
      * @date 2019/10/15
      */
-    public Subject findByParentId(String parentId);
+    public Subject findByParentId(Integer parentId);
 
     /*zxs*/
     public List<Subject> findAll();
+
+
+    public Subject findBySubjectId(Integer subjectId);
+
+
+    public List<Subject> findAllFirst();
+
+
+
+    public List<Subject> findAllSecond(Integer subjectId);
+
+
+
+public List<Subject> findByUser(User user);
+
 
     /**
      * 查询所有科目的平均分

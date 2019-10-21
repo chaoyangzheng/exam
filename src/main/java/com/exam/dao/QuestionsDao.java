@@ -1,8 +1,12 @@
 package com.exam.dao;
 
+import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 import org.apache.ibatis.annotations.Param;
 
+import com.exam.entity.Questions;
+
+import java.util.Date;
 import java.util.List;
 
 public interface QuestionsDao {
@@ -27,4 +31,45 @@ public interface QuestionsDao {
      * @date 2019/10/16
      */
     Questions findQuestionsByQuestionsId(String questionsId);
+
+    /**
+     * 添加，修改，删除试题
+     *
+     * @author RongJing
+     * @date 2019/10/15
+     */
+    public void insertQuestions(@Param(value = "list") List questions);
+
+    public void insertQuestion(Questions questions);
+
+    public void updateQuestions(Questions questions);
+
+    public void deleteQuestions(String questionsId);
+
+    /**
+     * 查看题库（全部）
+     *
+     * @author RongJing
+     * @date 2019/10/15
+     */
+    public List<Questions> findAllQuestions(@Param("subjectId") Integer subjectId, @Param("questionsTypeId") Integer questionsTypeId, @Param("uploadTime") Date uploadTime);
+
+    /**
+     * 按照科目，上传老师，上传时间，题的类型查看题库
+     *
+     * @author RongJing
+     * @date 2019/10/15
+     */
+    public List<Questions> findBySubjectId(Integer questionsSubjectId);
+
+    public List<Questions> findByUploadTeacherId(String uploadTeacherId);
+
+    public List<Questions> findByUploadTime(String uploadTime);
+
+    public List<Questions> findByQuestionsTypeId(Integer questionsTypeId);
+
+
+    public List<QuestionType> findAllQuestionsType();
+
+
 }
