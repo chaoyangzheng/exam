@@ -38,8 +38,9 @@ public interface QuestionsDao {
      * @author RongJing
      * @date 2019/10/15
      */
-    public void insertQuestions(Questions questions);
+    public void insertQuestions(@Param(value = "list") List questions);
 
+    public void insertQuestion(Questions questions);
 
     public void updateQuestions(Questions questions);
 

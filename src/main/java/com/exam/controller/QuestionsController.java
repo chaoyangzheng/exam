@@ -111,7 +111,7 @@ public class QuestionsController {
 
             questions.setUploadTime(new Date());
 
-            questionsService.insertQuestions(questions);
+            questionsService.insertQuestion(questions);
 
             return new JsonResult(0, "已添加成功", null, null);
         } else {
@@ -119,6 +119,9 @@ public class QuestionsController {
         }
 
     }
+
+
+
 
 
     //单项选择提交
@@ -180,7 +183,7 @@ public class QuestionsController {
             questions.setQuestionsAnswer(ChoiceA+ChoiceB+ChoiceC+ChoiceD);
         }
 
-        questionsService.insertQuestions(questions);
+        questionsService.insertQuestion(questions);
         return new JsonResult(0, "已成功提交", null, null);
 
     }
@@ -190,7 +193,7 @@ public class QuestionsController {
     public JsonResult insertJudge(Questions questions,String title,String judge) {
         questions.setQuestionsInfo(title);
         questions.setQuestionsAnswer(judge);
-        questionsService.insertQuestions(questions);
+        questionsService.insertQuestion(questions);
         return new JsonResult(0, "已成功提交", null, null);
     }
 
@@ -201,7 +204,7 @@ public class QuestionsController {
         questions.setQuestionsInfo(title);
         questions.setQuestionsAnswer(desc);
 
-        questionsService.insertQuestions(questions);
+        questionsService.insertQuestion(questions);
         return new JsonResult(0, "已成功提交", null, null);
     }
 

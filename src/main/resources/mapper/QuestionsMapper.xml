@@ -39,8 +39,18 @@
 <!--  添加，修改，删除题库中的试题    author:RongJing     date:2019/10/15 -->
  <insert id="insertQuestions" parameterType="com.exam.entity.Questions">
             INSERT INTO t_questions(questions_id, questions_subject_id,questions_type_id,questions_info,questions_answer,upload_time,upload_teacher_id)
-            VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},#{uploadTime},#{uploadTeacherId})
+            <foreach collection="list" item="item" index="index">
+                VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},now(),#{uploadTeacherId})
+            </foreach>
  </insert>
+
+    <insert id="insertQuestion" parameterType="com.exam.entity.Questions">
+        INSERT INTO t_questions(questions_id, questions_subject_id,questions_type_id,questions_info,questions_answer,upload_time,upload_teacher_id)
+            VALUES(REPLACE(UUID,'-',''), #{questionsSubjectId},#{questionsTypeId},#{questionsInfo},#{questionsAnswer},now(),#{uploadTeacherId})
+    </insert>
+
+
+
 
 <update id="updateQuestions" parameterType="com.exam.entity.Questions">
            UPDATE

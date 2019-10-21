@@ -4,10 +4,14 @@ import com.exam.dao.QuestionsDao;
 import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 import com.exam.service.QuestionsService;
+import com.exam.utils.ImportExcelUtil;
+import com.exam.utils.ImportExecl;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -22,9 +26,19 @@ public class QuestionsServiceImpl implements QuestionsService {
 
 
     @Override
-    public void insertQuestions(Questions questions) {
-        questions.setUploadTime(new Date());
-        questionsDao.insertQuestions(questions);
+    public void insertQuestions(InputStream questions) {
+        try {
+            List<Questions> questions1 = ImportExcelUtil.importExcel(questions, Questions.class);
+            questionsDao.insertQuestions(questions1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void insertQuestion(Questions questions) {
+        questionsDao.insertQuestion(questions);
+
     }
 
     @Override

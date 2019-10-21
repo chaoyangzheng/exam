@@ -3,6 +3,7 @@ package com.exam.service;
 import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,10 @@ public interface QuestionsService {
      * @author RongJing
      * @date 2019/10/15
      */
-    public void insertQuestions(Questions questions);
+    public void insertQuestions(InputStream questions);
+
+
+    public void insertQuestion(Questions questions);
 
     public  void updateQuestions(Questions questions);
 
