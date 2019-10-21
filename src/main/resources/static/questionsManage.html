@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>成绩</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <!--这里要改成自己的资源路径-->
+    <style>
+        body {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<form class="layui-form" lay-filter="formScore">
+    <div class="demoTable">
+        <label class="layui-form-label">搜索：</label>
+        <div class="layui-input-inline">
+            <select name="subjectName" id="subjectName" lay-filter="choice">
+                <option value="">科目</option>
+
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="parentName" id="parentName">
+                <option value="">课程</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="questionsTypeName" id="questionsTypeName">
+                <option value="">类型</option>
+
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name="uploadTime" id="uploadTime" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off"
+                   class="layui-input"/>
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" data-type="reload" lay-filter="submit" lay-submit="">搜索</button>
+        </div>
+    </div>
+</form>
+
+<table class="layui-hide" id="selectQuestion" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </div>
+</script>
+</body>
+<script src="layui/layui.js"></script>
+<!--这里要改成自己的资源路径-->
+<script>
+    layui.use(['table', 'form', 'laydate'], function () {
+        var table = layui.table,
+            form = layui.form,
+            laydate = layui.laydate;
+        var $ = layui.jquery,
+            layer = layui.layer;
+
+
+        //向世界问个好
+        layer.msg('试题查询');
+        //执行一个 table 实例
+        table.render({
+            elem: '#selectQuestion',
+            height: 700,
+            url: 'questions/questionsAll.do', //数据接口
+            title: '试题表',
+            page: true, //开启分页
+            cols: [ //表头
+                [{
+                    field: 'questionsId',
+                    title: '试题ID',
+                    align: 'center'
+                },
+                    {
+                        field: 'subjectName',
+                        title: '试题科目',
+                        align: 'center'
+                    },
+                    {
+                        field: 'parentName',
+                        title: '课程',
+                        align: 'center',
+                        templet:'<div>{{d.subject.subjectName}}</div>'
+                    },
+                    {
+                        field: 'questionsTypeName',
+                        title: '试题类型',
+                        align: 'center',
+                        templet:'<div>{{d.questionType.questionsTypeName}}</div>'
+                    },
+                    {
+                        field: 'questionsInfo',
+                        title: '题目',
+                        align: 'center'
+                    },
+                    {
+                        field: 'answerA',
+                        title: '选项A内容',
+                        align: 'center'
+                    },
+                    {
+                        field: 'answerB',
+                        title: '选项B内容',
+                        align: 'center'
+                    },
+                    {
+                        field: 'answerC',
+                        title: '选项C内容',
+                        align: 'center'
+                    },
+                    {
+                        field: 'answerD',
+                        title: '选项D内容',
+                        align: 'center'
+                    },
+                    {
+                        field: 'questionsAnswer',
+                        title: '正确答案',
+                        align: 'center'
+                    },
+                    {
+                        fixed: 'right',
+                        title: '操作',
+                        align: 'center',
+                        width: 70,
+                        scrollbar: false,
+                        toolbar: '#barDemo'
+                    }
+                ]
+            ]
+        });
+
+        // 制订日期格式
+        laydate.render({
+            elem: '#uploadTime',
+            type: 'datetime'
+        });
+
+
+        //查找所有一级科目
+        $.ajax({
+            url: "subject/findAllSubject.do",
+            dataType: 'json', //服务器返回json格式数据
+            type: 'post', //HTTP请求类型
+            success: function (data) {
+
+                for (var i = 0; i < data.data.length; i++) {
+                    var id = data.data[i].subjectId;
+                    var name = data.data[i].subjectName;
+                    var str = "<option value=" + id + ">" + name + "</option>";
+                    layui.$("#subjectName").append("<option value='" + id + "'>" + name + "</option>");
+                    form.render();
+                }
+            },
+        });
+
+
+        //根据一级标题选择二级标题
+        form.on('select(choice)', function (data) {
+            console.log(data);
+            console.log(data.elem);
+            console.log(data.value);
+            console.log(data.othis);
+
+            var value = data.value;
+            if (value == null) {
+                $("#parentName").empty();
+            }
+            $("#parentName").empty();
+
+            layui.$.ajax({
+                url: "subject/findSon.do",
+                dataType: 'json', //服务器返回json格式数据
+                contextType: 'json',
+                data: {"subjectId": value},
+                type: 'post', //HTTP请求类型
+                success: function (data) {
+
+                    for (var i = 0; i < data.data.length; i++) {
+                        var id = data.data[i].subjectId;
+                        var name = data.data[i].subjectName;
+                        var str = "<option value=" + id + ">" + name + "</option>";
+                        layui.$("#parentName").append("<option value='" + id + "'>" + name + "</option>");
+                        form.render();
+                    }
+                }
+            });
+        })
+
+
+        //查找试题类型
+        $.ajax({
+            url: "questions/findAllType.do",
+            dataType: 'json', //服务器返回json格式数据
+            type: 'post', //HTTP请求类型
+            success: function (data) {
+                for (var i = 0; i < data.data.length; i++) {
+                    var id = data.data[i].questionsTypeId;
+                    var name = data.data[i].questionsTypeName;
+                    var str = "<option value=" + id + ">" + name + "</option>";
+                    layui.$("#questionsTypeName").append("<option value='" + id + "'>" + name + "</option>");
+                    form.render();
+                }
+            },
+        });
+
+
+        //监听 行 工具栏事件
+        table.on('tool(test)', function (obj) {
+            var layEvent = obj.event;
+            var data = obj.data;
+            if (layEvent === 'del') {
+                layer.confirm("是否删除本行数据", function (index) {
+                    layer.close(index);
+                    layui.$.ajax({
+                        type: 'post',
+                        url: 'questions/deleteOne.do',
+                        data: {
+                            questionId: data.questionId
+                        },
+                        dataType: 'json',
+                        async: false,
+                        success: function (data) {
+                            // alert(msg);
+                            if (data.code == 0) {
+                                alert(data.msg);
+                                location.reload();
+                            }
+                        }
+                    })
+                })
+            }
+        });
+
+
+        form.on('submit(submit)', function (obj) {
+            alert(obj.field);
+            var subjectIdNow = null;
+            if ($("#subjectName").val() != null) {
+                subjectIdNow = $("#subjectName").val();
+                if ($("#parentName").val() != null) {
+                    subjectIdNow = $("#parentName").val();
+                }
+            }
+
+            table.render({
+                elem: '#selectQuestion',
+                height: 700,
+                url: 'questions/questionsAll.do', //数据接口
+                title: '试题表',
+                where: {
+                    subjectId: subjectIdNow,
+                    questionsTypeId: obj.field.questionsTypeId,
+                    uploadTime: obj.field.uploadTime
+                },
+                page: true, //开启分页
+                cols: [ //表头
+                    [{
+                        field: 'questionsId',
+                        title: '试题ID',
+                        align: 'center'
+                    },
+                        {
+                            field: 'subjectName',
+                            title: '试题科目',
+                            align: 'center'
+
+                        },
+                        {
+                            field: 'parentName',
+                            title: '课程',
+                            align: 'center',
+                            templet:'<div>{{d.subject.subjectName}}</div>'
+                        },
+                        {
+                            field: 'questionsTypeName',
+                            title: '试题类型',
+                            align: 'center',
+                            templet:'<div>{{d.questionType.questionsTypeName}}</div>'
+                        },
+                        {
+                            field: 'questionsInfo',
+                            title: '题目',
+                            align: 'center'
+                        },
+                        {
+                            field: 'answerA',
+                            title: '选项A内容',
+                            align: 'center'
+                        },
+                        {
+                            field: 'answerB',
+                            title: '选项B内容',
+                            align: 'center'
+                        },
+                        {
+                            field: 'answerC',
+                            title: '选项C内容',
+                            align: 'center'
+                        },
+                        {
+                            field: 'answerD',
+                            title: '选项D内容',
+                            align: 'center'
+                        },
+                        {
+                            field: 'questionsAnswer',
+                            title: '正确答案',
+                            align: 'center'
+                        },
+                        {
+                            fixed: 'right',
+                            title: '操作',
+                            align: 'center',
+                            width: 70,
+                            scrollbar: false,
+                            toolbar: '#barDemo'
+                        }
+                    ]
+                ]
+            });
+            // layui.$.ajax({
+            //     url: 'scoreInfo/scoreList.do',
+            //     data: obj.field,
+            //     dataType: 'json', //服务器返回json格式数据
+            //     type: 'post', //HTTP请求类型
+            //     success: function (data) {
+            //         alert(data.code);
+            //         if (data.code == 0) {
+            //
+            //         }
+            //     }
+            // });
+            return false;
+        })
+
+
+    });
+</script>
+</html>

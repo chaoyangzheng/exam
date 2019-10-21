@@ -5,7 +5,7 @@
 <mapper namespace="com.exam.dao.SubjectDao">
 
 
-<!--  查看所有的科目，返回list   作者：RongJing     更改时间：2019/10/15 -->
+<!--  查看所有的一级科目，返回list   作者：RongJing     更改时间：2019/10/15 -->
 
     <select id="findAllSubject" resultType="com.exam.entity.Subject">
         SELECT
@@ -14,6 +14,7 @@
                 t_subject.parent_id
         FROM
                 t_subject
+            where  parent_id is null
     </select>
 
 
@@ -48,19 +49,18 @@
                 t_subject.subject_id = #{parentId}
     </select>
 
+
+
+<!--    查找所有的subject对象-->
    <select id="findAll" resultType="com.exam.entity.Subject">
        select * from t_subject
    </select>
 
-
+<!--根据subjectId 找到相应的subject对象    -->
     <select id="findById" parameterType="Integer" resultType="com.exam.entity.Subject">
         select * from t_subject where subject_id=#{subjectId}
     </select>
-
-
-
-    
-    
+<!--    根据用户id找到相应的subjectId，从而找到相应的subject对象-->
     <select id="findByUser" parameterType="com.exam.entity.User" resultType="com.exam.entity.Subject">
         SELECT
                 t_user_subject.subject_id,

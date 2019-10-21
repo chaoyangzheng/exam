@@ -120,6 +120,7 @@
 		var $ = layui.jquery,
 				layer = layui.layer,
 				form = layui.form;
+
 		layer.msg('已进入在线导入试题操作');
 
 
@@ -143,7 +144,7 @@
 			url: "subject/judgeSubject.do",
 			dataType: 'json', //服务器返回json格式数据
 			contentType:"application/json",
-			data:{"userId":userId},
+			data:'{"userId":"1"}',
 			type: 'post', //HTTP请求类型
 			success: function(data) {
 
@@ -179,7 +180,7 @@
             url: "subject/findSon.do",
             dataType: 'json', //服务器返回json格式数据
             contentType: "application/json",
-            data: {"subjectId":subjectId},
+            data: '{"subjectId":"1"}',
             type: 'post', //HTTP请求类型
             success: function(data) {
                 for (var i = 0; i < data.data.length; i++) {
@@ -189,7 +190,6 @@
                     layui.$("#2").append("<option value='" + id + "'>" + name + "</option>");
                     form.render();
                 }
-
 
             },
             error: function() {
@@ -201,7 +201,7 @@
 
 
 		//监听提交
-		form.on('submit(formDemo)', function(data) {
+		/*form.on('submit(formDemo)', function(data) {
 			layer.msg(JSON.stringify(data.field));
 			layer.$.ajax({
 				url:"questions/insertOne.do",
@@ -217,7 +217,7 @@
 
 			});
 			return false;
-		});
+		});*/
 
 
 		form.on('select(choice)', function(data) {
@@ -263,6 +263,8 @@
 
 		});
 	});
+
+
 </script>
 
 

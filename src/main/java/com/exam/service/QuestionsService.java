@@ -3,6 +3,7 @@ package com.exam.service;
 import com.exam.entity.QuestionType;
 import com.exam.entity.Questions;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public interface QuestionsService {
      * @author RongJing
      * @date 2019/10/15
      */
-    public List<Questions> findAllQuestions(Integer pageNum,Integer pageSize);
+    public List<Questions> findAllQuestions(Integer pageNum,Integer pageSize,Integer subjectId, Integer questionsTypeId, Date uploadTime);
 
     /**
      * 按照科目，上传老师，上传时间，题的类型查看题库

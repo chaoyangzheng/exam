@@ -1,6 +1,7 @@
 package com.exam;
 
 import com.exam.entity.QuestionType;
+import com.exam.entity.Questions;
 import com.exam.entity.Subject;
 import com.exam.service.QuestionsService;
 import com.exam.service.SubjectService;
@@ -17,15 +18,17 @@ import java.util.List;
 public class ExamApplicationTests {
 
     @Autowired
-    private SubjectService subjectService;
+    private QuestionsService questionsService;
+
 
     @Test
     public void contextLoads () {
-     /*   List<Subject> allQuestionsType = subjectService.findByUser("1");
+        List<Questions> allQuestions = questionsService.findAllQuestions(1, 10, null, null, null);
 
-        for (Subject subject : allQuestionsType){
-            System.out.println(subject);
-        */
+        for (Questions questions : allQuestions){
+            System.out.println(questions);
+        }
+
     }
 
 }

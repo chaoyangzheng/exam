@@ -23,7 +23,12 @@ public class SubjectController {
     @Autowired
     private SubjectService subjectService;
 
-
+    /**
+     * 查询所有一级标题
+     * 使用方法findAllsubject
+     * @author RongJing
+     * @date 2019/10/16
+     */
     @PostMapping("/findAllSubject.do")
     public JsonResult findAllSubject(){
 
@@ -38,20 +43,32 @@ public class SubjectController {
     }
 
 
-
+    /**
+     * 根据一级标题subjectid查询对应的所有二级标题
+     * 使用方法findAllSecond
+     * @author RongJing
+     * @date 2019/10/16
+     */
     @PostMapping("/findSon.do")
-    public JsonResult findSon(@RequestBody Subject subject){
-
-
-        List<Subject> allSecond = subjectService.findAllSecond(subject.getSubjectId());
-
-
-        /*List<Subject> allSecond = subjectService.findAllSecond(subjectId);
-            return  new JsonResult(0,"查询成功",null,allSecond);*/
+    public JsonResult findSon(Integer subjectId){
+        System.out.println(subjectId);
+        List<Subject> allSecond = subjectService.findAllSecond(subjectId);
+        for(Subject subject1 : allSecond){
+            System.out.println(subject1);
+        }
         return new JsonResult(0,"",null,allSecond);
     }
 
 
+
+    /**
+     * 判断用户的subjectId（相当于权限，英语老师只能上传英语试题）
+     * 不管是英语四级老师，还是英语六级老师，都返回为英语老师
+     * 使用方法，findBySubjectId(parentId作为subjectId进行查找)
+     * @return subjectName(一级标题)
+     * @author RongJing
+     * @date 2019/10/16
+     */
     @PostMapping("/judgeSubject.do")
     public JsonResult findByUser(@RequestBody User user){
 

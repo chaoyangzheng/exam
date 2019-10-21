@@ -144,4 +144,21 @@ public class Questions implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+
+    @Override
+    public String toString() {
+        return "Questions{" +
+                "questionsId='" + questionsId + '\'' +
+                ", questionsSubjectId=" + questionsSubjectId +
+                ", questionsTypeId=" + questionsTypeId +
+                ", questionsInfo='" + questionsInfo + '\'' +
+                ", questionsAnswer='" + questionsAnswer + '\'' +
+                ", uploadTime=" + uploadTime +
+                ", uploadTeacherId='" + uploadTeacherId + '\'' +
+                ", subject=" + subject +
+                ", questionType=" + questionType +
+                ", user=" + user +
+                '}';
+    }
 }
