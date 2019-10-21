@@ -115,7 +115,7 @@ public class ScoreController {
             if (questionsNoScore == null || questionsNoScore.size() == 0) {
                 scoreService.updateScoreSUM(papersId);
             } else {
-                throw new RuntimeException("还有题目未被改完，不能提交总成绩");
+                return new JsonResult(1,"本试卷还有题目未被改完，无法计算总成绩",null,null);
             }
         } else {
             throw new RuntimeException("分数传递失败");
