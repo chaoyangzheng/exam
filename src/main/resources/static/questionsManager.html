@@ -235,26 +235,27 @@
         });
 
 
-        form.on('submit(submit)', function (obj) {
+        form.on('submit(formScore)', function (obj) {
             alert(obj.field);
             var subjectIdNow = null;
             if ($("#subjectName").val() != null) {
                 subjectIdNow = $("#subjectName").val();
+                alert(subjectIdNow);
                 if ($("#parentName").val() != null) {
                     subjectIdNow = $("#parentName").val();
                 }
             }
 
             table.render({
-                elem: '#selectQuestion',
-                height: 700,
-                url: 'questions/questionsAll.do', //数据接口
-                title: '试题表',
-                where: {
-                    subjectId: subjectIdNow,
-                    questionsTypeId: obj.field.questionsTypeId,
-                    uploadTime: obj.field.uploadTime
-                },
+                    elem: '#selectQuestion',
+                    height: 700,
+                    url: 'questions/questionsAll.do', //数据接口
+                    title: '试题表',
+                    where: {
+                        subjectId: subjectIdNow,
+                        questionsTypeId: obj.field.questionsTypeId,
+                        uploadTime: obj.field.uploadTime
+                    },
                 page: true, //开启分页
                 cols: [ //表头
                     [{
@@ -315,12 +316,8 @@
                     ]
                 ]
             });
-
-
             return false;
         })
-
-
     });
 </script>
 </html>

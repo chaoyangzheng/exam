@@ -47,7 +47,13 @@ public class QuestionsController {
      */
     @RequestMapping("/questionsAll.do")
     public JsonResult questionsList(Integer page, Integer limit, Integer subjectId, Integer questionsTypeId, Date uploadTime) {
-        List<Questions> questionsList = questionsService.findAllQuestions(page, limit, subjectId, questionsTypeId, uploadTime);
+        System.out.println("subjectId = " + subjectId);
+        System.out.println("questionsTypeId = " + questionsTypeId);
+        System.out.println("uploadTime = " + uploadTime);
+
+
+        List<Questions> questionsList;
+        questionsList = questionsService.findAllQuestions(page, limit, subjectId, questionsTypeId, uploadTime);
         Long count = ((Page) questionsList).getTotal();
 
         List<Map<String, String>> list = new ArrayList<>();
