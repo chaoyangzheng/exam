@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>更新权限</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+	</head>
+
+	<body>
+
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+			<legend id="update"></legend>
+		</fieldset>
+
+		<form class="layui-form layui-form-pane" action="" lay-filter="example">
+			<div class="layui-form-item" style="display: none">
+				<label class="layui-form-label">原有的roleId</label>
+				<div class="layui-input-inline">
+					<input type="text" name="oldRoleId" id="oldRoleId" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item" style="display: none">
+				<label class="layui-form-label">原有的subjectId</label>
+				<div class="layui-input-inline">
+					<input type="text" name="oldSubjectId" id="oldSubjectId" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item" style="display: none">
+				<label class="layui-form-label">类型</label>
+				<div class="layui-input-inline">
+					<input type="text" name="type" id="type" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item" style="display: none">
+				<label class="layui-form-label">userId</label>
+				<div class="layui-input-inline">
+					<input type="text" name="userId" id="userId" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">用户</label>
+				<div class="layui-input-inline">
+					<input type="text" name="username" id="username" placeholder="请输入" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">角色</label>
+				<div class="layui-input-block">
+					<select name="roleId" lay-filter="roleId" id="roleId">
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">科目</label>
+				<div class="layui-input-block">
+					<select name="subjectId" lay-filter="subjectId" id="subjectId">
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<button class="layui-btn" lay-submit="" lay-filter="yes" id="yes">确定</button>
+
+				<button class="layui-btn" lay-submit="" lay-filter="no" id="no">取消</button>
+			</div>
+		</form>
+
+		<script src="layui/layui.js"></script>
+		<script>
+			var data_u = null;
+			var role_id = null;
+			var old_role_id = null;
+			var subject_id = null;
+			var old_subject_id = null;
+			layui.use(['form', 'layedit', 'laydate'], function() {
+				var form = layui.form,
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate,
+					$ = layui.jquery;
+
+				var index = parent.layer.getFrameIndex(window.name);
+				//截取url参数
+				function getUrlParam(name) {
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+					var r = window.location.search.substr(1).match(reg); //匹配目标参数
+					if(r != null) return unescape(r[2]);
+					return null; //返回参数值
+				}
+				var userId = getUrlParam("userId");
+				var type = getUrlParam("type");
+
+				//创建一个编辑器
+				var editIndex = layedit.build('LAY_demo_editor');
+				/* 查询所有的角色和科目*/
+
+				/* $(function(){
+					  	$.ajax({
+					        url: "http://localhost:8080/exam/system/userManagement/findAllRolesSubjects.do",
+					        type: "post",
+					        success: function(data) {
+					        	var data_rs = data.data;
+					        	var roles = data_rs.roles;
+					        	var subjects = data_rs.subjects;
+					        	var select_role_html = layui.$('#roleId').html()
+					        	var select_subject_html = layui.$('#subjectId').html()
+					        	
+								for(var i =0;i<roles.length;i++){
+									select_role_html+="<option value="+roles[i].roleId+">"+roles[i].roleName+"</option>";
+								}
+								layui.$('#roleId').html(select_role_html)
+								
+								for(var i =0;i<subjects.length;i++){
+									select_subject_html+="<option value="+subjects[i].subjectId+">"+subjects[i].subjectName+"</option>"
+								}
+								layui.$('#subjectId').html(select_subject_html)
+								$(function(){ 
+											    form.val('example', { 
+											      'subjectId': 2 
+											      ,'roleId': role_id 
+											  });
+				 	 			});
+					        	form.render();
+					        }
+					    });
+					});*/
+
+				$(function() {
+					$.ajax({
+						url: "http://localhost:8080/exam/system/userManagement/findUserByUserId.do",
+						data: 'userId=' + userId,
+						type: "post",
+						success: function(data) {
+							data_u = data.data;
+							layui.$('#userId').val(data_u.userId)
+							layui.$('#username').val(data_u.username)
+							role_id = data_u.role.roleId;
+							old_role_id = role_id;
+							subject_id = role_id;
+							$(function() {
+								form.val('example', {
+									'oldSubjectId': 1,
+									'oldRoleId': role_id,
+									'type': type
+								});
+							});
+							//$('#oldroleId').val(22)
+							//alert($('#subjectId').val())
+							//alert($('#oldRoleId').val())
+							$(function() {
+								$.ajax({
+									url: "http://localhost:8080/exam/system/userManagement/findAllRolesSubjects.do",
+									type: "post",
+									success: function(data) {
+										var data_rs = data.data;
+										var roles = data_rs.roles;
+										var subjects = data_rs.subjects;
+										var select_role_html = layui.$('#roleId').html()
+										var select_subject_html = layui.$('#subjectId').html()
+
+										for(var i = 0; i < roles.length; i++) {
+											select_role_html += "<option value=" + roles[i].roleId + ">" + roles[i].roleName + "</option>";
+										}
+										layui.$('#roleId').html(select_role_html)
+
+										for(var i = 0; i < subjects.length; i++) {
+											select_subject_html += "<option value=" + subjects[i].subjectId + ">" + subjects[i].subjectName + "</option>"
+										}
+										layui.$('#subjectId').html(select_subject_html)
+										$(function() {
+											form.val('example', {
+												'subjectId': 2,
+												'roleId': role_id
+											});
+										});
+										form.render();
+									}
+								});
+							});
+						}
+					});
+				});
+
+				//监听提交
+				form.on('submit(demo1)', function(data) {
+					/*layer.alert(JSON.stringify(data.field), {
+					  title: '最终的提交信息'
+					})*/
+					var data = form.val('example');
+					$.ajax({
+						url: "http://localhost:8080/exam/system/userManagement/updateUserPerm.do",
+						data: data,
+						type: "post",
+						success: function(msg) {
+							//alert(msg.code)
+							if(msg.code == 0) {
+								if(type == "add") {
+									parent.layer.msg('用户添加成功');
+								}
+								if(type == "update") {
+									parent.layer.msg('用户修改成功');
+								}
+								parent.layer.close(index);
+							} else {
+								parent.layer.msg('未知信息');
+								parent.layer.close(index);
+							}
+						},
+						error: function(msg) {
+							//alert(JSON.stringify(msg))
+							parent.layer.msg('异常信息11');
+							parent.layer.close(index);
+						}
+					});
+					return false;
+				});
+
+				/*	$(function(){ 
+											    form.val('example', { 
+											      'subjectId': 2 
+											      ,'oldSubjectId':2
+											      ,'oldRoleId': role_id
+											      ,'roleId': role_id 
+											      ,'type':type
+											  });
+				 	 						});*/
+
+				//表单赋值
+				/*  layui.$('#LAY-component-form-setval').on('click', function(){
+				    form.val('example', {
+				      "interest_subject": 1 // da
+				      ,"interest_role": role_id
+				    });
+				  });*/
+
+				//表单取值
+				$('#yes').click(function() {
+					var data = form.val('example');
+					$.ajax({
+						url: "http://localhost:8080/exam/system/userManagement/updateUserPerm.do",
+						data: data,
+						type: "post",
+						success: function(msg) {
+							//alert(msg.code)
+							if(msg.code == 0) {
+								if(type == "add") {
+									parent.layer.msg('用户添加成功');
+								}
+								if(type == "update") {
+									parent.layer.msg('用户修改成功');
+								}
+								parent.layer.close(index);
+							} else {
+								parent.layer.msg('未知信息');
+								parent.layer.close(index);
+							}
+						},
+						error: function(msg) {
+							//alert(JSON.stringify(msg))
+							parent.layer.msg('异常信息11');
+							parent.layer.close(index);
+							parent.layer.table.render({
+								elem: '#demo',
+								height: 312,
+								url: 'http://localhost:8080/exam/system/userManagement/findUsersByRoleSubjectLikeName.do' //数据接口
+									,
+								page: true //开启分页
+									,
+								cols: [
+									[ //表头
+										{
+											field: 'userId',
+											title: 'ID',
+											width: 80,
+											sort: true,
+											fixed: 'left'
+										}, {
+											field: 'username',
+											title: '用户名',
+											width: 80,
+											sort: true
+										}, {
+											field: 'password',
+											title: '密码',
+											width: 80,
+											sort: true
+										}, {
+											field: 'roleName',
+											title: '职业',
+											width: 80,
+											templet: '<div>{{d.role.roleName}}</div>',
+											sort: true
+										}, {
+											field: 'roleId',
+											title: '职业id',
+											width: 80,
+											templet: '<div>{{d.role.roleId}}</div>',
+											sort: true
+										}, {
+											field: 'subject',
+											title: '学科',
+											width: 80
+										},
+										{
+											fixed: 'right',
+											width: 278,
+											align: 'center',
+											toolbar: '#barDemo'
+										}
+									]
+								]
+							});
+						}
+					});
+				});
+				layui.$('#no').on('click', function() {
+					if(type == "add") {
+						parent.layer.msg('用户取消添加');
+					}
+					if(type == "update") {
+						parent.layer.msg('用户取消修改');
+					}
+					parent.layer.close(index);
+				});
+
+				/*  //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+				//让层自适应iframe
+				$('#add').on('click', function(){
+				    $('body').append('插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。');
+				    parent.layer.iframeAuto(index);
+				});
+				//在父层弹出一个层
+				$('#new').on('click', function(){
+				    parent.layer.msg('Hi, man', {shade: 0.3})
+				});
+				//给父页面传值
+				$('#transmit').on('click', function(){
+				    parent.$('#parentIframe').text('我被改变了');
+				    parent.layer.tips('Look here', '#parentIframe', {time: 5000});
+				    parent.layer.close(index);
+				});
+				//关闭iframe
+				$('#closeIframe').click(function(){
+				    var val = $('#name').val();
+				    if(val === ''){
+				        parent.layer.msg('请填写标记');
+				        return;
+				    }
+				    parent.layer.msg('您将标记 [ ' +val + ' ] 成功传送给了父窗口');
+				    parent.layer.close(index);
+				});
+				*/
+
+			});
+		</script>
+
+	</body>
+
+</html>
+
+<!--//注意：parent 是 JS 自带的全局对象，可用于操作父页面
+var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+//让层自适应iframe
+$('#add').on('click', function(){
+    $('body').append('插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。插入很多酱油。');
+    parent.layer.iframeAuto(index);
+});
+//在父层弹出一个层
+$('#new').on('click', function(){
+    parent.layer.msg('Hi, man', {shade: 0.3})
+});
+//给父页面传值
+$('#transmit').on('click', function(){
+    parent.$('#parentIframe').text('我被改变了');
+    parent.layer.tips('Look here', '#parentIframe', {time: 5000});
+    parent.layer.close(index);
+});
+//关闭iframe
+$('#closeIframe').click(function(){
+    var val = $('#name').val();
+    if(val === ''){
+        parent.layer.msg('请填写标记');
+        return;
+    }
+    parent.layer.msg('您将标记 [ ' +val + ' ] 成功传送给了父窗口');
+    parent.layer.close(index);
+});
+-->

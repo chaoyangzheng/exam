@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>角色管理</title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	</head>
+
+	<body>
+		<form class="layui-form batchinput-form" action="#" id="box-form">
+			<div style="text-align: center;">
+				<div> 
+					<!--  搜索框-->
+					<!--<div class="layui-form-item layui-inline">
+						<div class="layui-input-inline">
+							<label class="layui-form-label">姓名搜索</label>
+						</div>
+						<div class="layui-input-inline" style="width: 100px;">
+							<input id="username" name="username" autocomplete="off" class="layui-input">
+						</div>
+						<div id="roles_div" class="layui-input-block layui-input-inline" style="width: 100px;">
+							<select name="roles" id="roles" lay-filter="role_choice">
+								<option value="">所有职业</option>
+							</select>
+						</div>-->
+						<div id="subject_div" class="layui-input-block layui-input-inline" style="width: 100px;">
+							<select name="quiz" id="subjects" lay-filter="subject_choice">
+								<option value="">所有角色</option>
+							</select>
+						</div>
+						<!--//<button  id="submit_btn" class="layui-btn" lay-submit lay-filter="*">搜索</button>-->
+						<input type="button" class="layui-btn" lay-filter="*" value="搜索" id="submit_btn" />
+					</div>
+
+				</div>
+				<!-- 表格 -->
+				<div class="layui-inline">
+					<table id="demo" lay-filter="test"></table>
+				</div>
+			</div>
+		</form>
+
+		<script src="layui/layui.js"></script>
+		<script src="layui/layui.all.js"></script>
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改</a>
+			<!--<a class="layui-btn layui-btn-xs" lay-event="edit">修改角色</a>-->
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</script>
+		<script>
+			layui.use(['table', 'form', 'layedit', 'laydate', 'element', 'jquery'], function() {
+				var table = layui.table,
+					form = layui.form,
+					layer = layui.layer,
+					element = layui.element,
+					$ = layui.jquery;
+
+				/*var name = layui.$('#username').val()
+				var roleId = layui.$('#roles').val()
+				var subjectId = layui.$('#subjects').val()*/
+
+				var data_rs = null;
+
+				/*给搜索按钮添加单击事件，获取条件后进行加载*/
+				$(document).on('click', '#submit_btn', function() {
+					table.render({
+						elem: '#demo',
+						height: 312,
+						url: 'http://localhost:8080/exam/system/roleManagement/findAllRoles.do', //数据接口
+						page: false ,//开启分页,
+						/*"data": [
+        {
+            "roleId": "1",
+            "roleName": "考生",
+            "roleDesc": "考试",
+            "permissions": ""
+        },
+        {
+            "roleId": "2",
+            "roleName": "教师",
+            "roleDesc": "教师",
+            "permissions": ""
+        },
+        {
+            "roleId": "3",
+            "roleName": "管理员",
+            "roleDesc": "管理员",
+            "permissions": ""
+        }
+    ]*/
+						cols: [
+							[{
+									field: 'roleId',
+									title: 'ID',
+									width: 80,
+									sort: true,
+									fixed: 'left'
+								},
+								{
+									field: 'roleName',
+									title: '角色名称',
+									width: 80,
+									sort: true
+								},
+								{
+									field: 'roleDesc',
+									title: '角色描述',
+									width: 80,
+									sort: true
+								},
+													{
+														fixed: 'right',
+														width: 278,
+														align: 'center',
+														toolbar: '#barDemo'
+													}/*,
+								{
+									field: 'roleName',
+									title: '职业',
+									width: 80,
+									templet: '<div>{{d.role.roleName}}</div>',
+									sort: true
+								},
+								{
+									field: 'subject',
+									title: '学科',
+									width: 80
+								},
+								{
+									fixed: 'right',
+									width: 278,
+									align: 'center',
+									toolbar: '#barDemo'
+								}*/
+							] 
+						]/*,
+						where: {
+							roleId: layui.$('#roles').val(),
+							name: layui.$('#username').val(),
+							subjectId: layui.$('#subjects').val()
+						}*/
+					});
+				});
+				/*  表格的默认加载*/
+				table.render({
+					elem: '#demo',
+					height: 312,
+					url: 'http://localhost:8080/exam/system/roleManagement/findAllRoles.do' ,//数据接口,
+						page: false ,//开启分页,
+						cols: [
+							[{
+									field: 'roleId',
+									title: 'ID',
+									width: 80,
+									sort: true,
+									fixed: 'left'
+								},
+								{
+									field: 'roleName',
+									title: '角色名称',
+									width: 80,
+									sort: true
+								},
+								{
+									field: 'roleDesc',
+									title: '角色描述',
+									width: 80,
+									sort: true
+								},
+													{
+														fixed: 'right',
+														width: 278,
+														align: 'center',
+														toolbar: '#barDemo'
+													}
+						]
+					]
+				});
+				/* 在页面加载完成之后获取角色和学科*/
+				$(function() {
+					$.ajax({
+						url: "http://localhost:8080/exam/system/roleManagement/findAllRoles.do",
+						type: "post",
+						success: function(data) {
+							data_rs = data.data;
+							//var roles = data_rs.roles;
+							var subjects = data_rs;
+							//var select_role_html = layui.$('#roles').html()
+							var select_subject_html = layui.$('#subjects').html()
+
+							/*for(var i = 0; i < roles.length; i++) {
+								select_role_html += "<option value=" + roles[i].roleId + ">" + roles[i].roleName + "</option>";
+							}
+							layui.$('#roles').html(select_role_html)*/
+
+							for(var i = 0; i < subjects.length; i++) {
+								select_subject_html += "<option value=" + subjects[i].roleId + ">" + subjects[i].roleName + "</option>"
+							}
+							layui.$('#subjects').html(select_subject_html)
+							form.render();
+						}
+					});
+				});
+
+				//监听工具条
+				table.on('tool(test)', function(obj) {
+					var data = obj.data;
+					// alert(data.userId)
+					if(obj.event === 'detail') {
+						layer.open({
+							type: 2,
+							title: '编辑',
+							area: ['700px', '450px'], //宽高-->
+							fixed: false, //不固定
+							maxmin: true,
+							content: 'iframe用户角色更改.html?userId=' + data.userId + "&type=" + "add"
+						});
+					} /*else if(obj.event === 'del') {
+						alert("删除")
+						layer.confirm('真的删除行么', function(index) {
+							$.ajax({
+								url: "http://localhost:8080/exam/system/userManagement/deleteUserRoleSubject.do",
+								data: "userId=" + data.userId + "&roleId=" + data.role.roleId,
+								type: "post",
+								success: function(data) {
+									if(data.code == 0) {
+										table.render({
+											elem: '#demo',
+											height: 312,
+											url: 'http://localhost:8080/exam/system/userManagement/findUsersByRoleSubjectLikeName.do' //数据接口
+												,
+											page: true //开启分页
+												,
+											cols: [
+												[ //表头
+													{
+														field: 'userId',
+														title: 'ID',
+														width: 80,
+														sort: true,
+														fixed: 'left'
+													}, {
+														field: 'username',
+														title: '用户名',
+														width: 80,
+														sort: true
+													}, {
+														field: 'password',
+														title: '密码',
+														width: 80,
+														sort: true
+													}, {
+														field: 'roleName',
+														title: '职业',
+														width: 80,
+														templet: '<div>{{d.role.roleName}}</div>',
+														sort: true
+													}, {
+														field: 'roleId',
+														title: '职业id',
+														width: 80,
+														templet: '<div>{{d.role.roleId}}</div>',
+														sort: true
+													}, {
+														field: 'subject',
+														title: '学科',
+														width: 80
+													},
+													{
+														fixed: 'right',
+														width: 278,
+														align: 'center',
+														toolbar: '#barDemo'
+													}
+												]
+											]
+										});
+									}
+								}
+							});
+							obj.del();
+							layer.close(index);
+						});
+					} */else if(obj.event === 'edit') {
+						alert("删除")
+						/*layer.open({
+							type: 2,
+							title: '编辑',
+							area: ['700px', '450px'], //宽高-->
+							fixed: false, //不固定
+							maxmin: true,
+							content: 'iframe用户角色更改.html?userId=' + data.userId + "&type=" + "edit"
+						});*/
+					}
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

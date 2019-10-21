@@ -18,7 +18,7 @@
     <div class="demoTable">
         <label class="layui-form-label">搜索：</label>
         <div class="layui-input-inline">
-            <select name="selectScore" id="opt">
+            <select name="selectScore" id="opt" lay-filter="cleanText">
                 <option value="">请选择</option>
                 <option value="student_id">考生号</option>
                 <option value="examniee_name">姓名</option>
@@ -48,6 +48,7 @@
 
         //向世界问个好
         layer.msg('考生成绩查询');
+
 
         //执行一个 table 实例
         table.render({
@@ -101,8 +102,17 @@
             ]
         });
 
+
+        form.on('select(cleanText)',function (obj) {
+            // alert("123");
+            var text = "";
+            document.getElementById('demoReload').value = text;
+        })
+
+
+
         form.on('submit(submit)', function (obj) {
-            alert(obj.field);
+            // alert(obj.field);
             table.render({
                 elem: '#scoreTable',
                 height: 600,

@@ -36,9 +36,9 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
 
+
     /**
      * 添加科目
-     *
      * @author RongJing
      * @date 2019/10/15
      */
@@ -48,6 +48,7 @@ public class SubjectServiceImpl implements SubjectService {
         subjectDao.insertSubject(subject);
 
     }
+
 
 
     /**
@@ -62,8 +63,8 @@ public class SubjectServiceImpl implements SubjectService {
         subjectDao.deleteSubject(subjectId);
     }
 
-
     /**
+     * 查找一，二级标题
      * 查找二级标题，根据parentId找到相应的subject对象
      *
      * @author RongJing

@@ -29,7 +29,7 @@ public interface ScoreDao {
      * @author zhangyuanzhe
      * @date 2019/10/15
      */
-    public Long findAllCount();
+    public Long findAllCount(String selectScore, String msg);
 
 
     /**
