@@ -60,4 +60,23 @@
     <select id="findByName" parameterType="String" resultType="com.exam.entity.User">
         select * from t_user where username = #{username}
     </select>
+
+
+    <select id="findUsersByRoleLikeNameTotal" resultType="int">
+        select count(*) from t_user tu
+        <if test="roleId==null">
+            left JOIN t_user_role tur
+            on tu.user_id = tur.user_id
+            left JOIN  t_role tr
+            on tur.role_id = tr.role_id
+        </if>
+        <if test="roleId!=null">
+            JOIN t_user_role tur
+            on tu.user_id = tur.user_id
+            JOIN  t_role tr
+            on tur.role_id = tr.role_id
+            and tur.role_id = #{roleId}
+        </if>
+        where tu.username like #{name}
+    </select>
 </mapper>

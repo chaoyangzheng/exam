@@ -303,11 +303,11 @@
 											templet: '<div>{{d.role.roleId}}</div>',
 											sort: true
 										}, {
-											field: 'subject',
-											title: '学科',
-											width: 80
-										},
-										{
+                                        field: 'subjectName',
+                                        title: '学科',
+                                        width: 80,
+                                        templet: '<div>{{d.subject.subjectName}}</div>'
+                                        }, {
 											fixed: 'right',
 											width: 278,
 											align: 'center',

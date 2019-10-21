@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,6 +43,26 @@ public class UserServiceImpl implements UserService {
         //分页工具，传的参数为当前页，每页显示个数
         PageHelper.startPage(page,limit);
         List<User> users = userDao.findUsersByRoleLikeName(name,roleId, subjectId);
+
+        List<User> users1 = new ArrayList<>();
+        for (int i=0;i<users.size();i++) {
+            if (users.get(i).getRole()!=null&&"2".equals(users.get(i).getRole().getRoleId())) {
+                List<Subject> subjects = userDao.findUserSubject(users.get(i).getUserId());
+                users.get(i).setSubject(subjects.get(0));
+                if (subjects.size() > 1) {
+                    for (int j = 1; j < subjects.size(); j++) {
+                        User user = new User();
+                        user = users.get(i);
+                        user.setSubject(subjects.get(j));
+                        users1.add(user);
+                    }
+
+
+                }
+
+            }
+        }
+        users.addAll(users1);
         return users;
     }
 
@@ -156,4 +173,21 @@ public class UserServiceImpl implements UserService {
         return userDao.findByName(username);
     }
     /*end*/
+
+    /*
+     * 查看总记录数
+     */
+    @Override
+    public Long size(String roleId, Integer subjectId,String name){
+        if (name == null) {
+            name = "";
+        }
+        name = "%"+name+"%";
+        Integer total = userDao.findUsersByRoleLikeNameTotal(name, roleId, subjectId);
+        System.out.println("total = " + total);
+        if (total==null){
+            return 0L;
+        }
+        return Long.valueOf(total);
+    }
 }

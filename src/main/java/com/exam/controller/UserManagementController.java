@@ -2,6 +2,7 @@ package com.exam.controller;
 
 import com.exam.common.JsonResult;
 import com.exam.entity.Role;
+import com.exam.entity.Subject;
 import com.exam.entity.User;
 import com.exam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +55,26 @@ public class UserManagementController {
         }
 
         List<User> users = userService.findAllUserByRole(roleId, subject_id,name,page,limit);
+        Long size = userService.size(roleId, subject_id, name);
         for (int i = 0;i<users.size();i++){
             if (users.get(i).getRole()==null){
                 users.get(i).setRole(new Role());
             }
-            /*if (users.get(i).getSubject()==null){
+            if (users.get(i).getSubject()==null){
                 users.get(i).setSubject(new Subject());
-            }*/
+            }
         }
 
-        return new JsonResult(0,"success",Long.valueOf(users.size()),users);
+        if (limit-users.size()<0){
+            size+=(users.size()-limit);
+        }
+        if (size<users.size()){
+            size=users.size()+0L;
+        }
+       /* System.out.println("limit = " + limit);
+        System.out.println("(limit-users.size()) = " + (limit - users.size()));
+        System.out.println("size = " + size);*/
+        return new JsonResult(0,"success",size,users);
     }
     /**
      *
