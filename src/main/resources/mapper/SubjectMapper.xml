@@ -77,5 +77,33 @@
             and
                 t_user_subject.user_subject_id = t_subject.subject_id
     </select>
-    
+
+
+    <select id="findAllAverageScore" resultType="Subject">
+        SELECT
+        t_subject.subject_id,
+        t_subject.subject_name,
+        Avg(t_score.score) AS score
+        FROM
+        t_subject
+        INNER JOIN t_exam_session ON t_exam_session.subject_id = t_subject.subject_id
+        INNER JOIN t_session_papers_student ON t_session_papers_student.exam_session_id = t_exam_session.id
+        INNER JOIN t_score ON t_score.papers_id = t_session_papers_student.papers_id
+        GROUP BY
+        t_subject.subject_id
+    </select>
+
+    <select id="findAllMaxScore" resultType="Subject">
+        SELECT
+        t_subject.subject_id,
+        t_subject.subject_name,
+        Max(t_score.score) AS score
+        FROM
+        t_subject
+        INNER JOIN t_exam_session ON t_exam_session.subject_id = t_subject.subject_id
+        INNER JOIN t_session_papers_student ON t_session_papers_student.exam_session_id = t_exam_session.id
+        INNER JOIN t_score ON t_score.papers_id = t_session_papers_student.papers_id
+        GROUP BY
+        t_subject.subject_id
+    </select>
 </mapper>

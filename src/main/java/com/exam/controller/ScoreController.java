@@ -111,6 +111,12 @@ public class ScoreController {
             papers.setQuestionsId(questionsId);
             papers.setQuestionScore(questionScore);
             scoreService.updateScore(papers);
+            List<String> questionsNoScore = scoreService.findQuestionsNoScore(papersId);
+            if (questionsNoScore == null || questionsNoScore.size() == 0) {
+                scoreService.updateScoreSUM(papersId);
+            } else {
+                throw new RuntimeException("还有题目未被改完，不能提交总成绩");
+            }
         } else {
             throw new RuntimeException("分数传递失败");
         }

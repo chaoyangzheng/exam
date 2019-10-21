@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional
 public class PapersServiceImpl implements PapersService {
     @Autowired
     @Qualifier("redisTemplate")
@@ -26,19 +28,35 @@ public class PapersServiceImpl implements PapersService {
     @Autowired
     private ExamSessionDao examSessionDao;
 
+    //存储试卷的redisKey，用于监控各试卷的倒计时
+    private static final List<String> papersRedisKeyList = new LinkedList<>();
+
+    /**
+     * 生成试卷在redis中的key
+     *
+     * @param examSessionId 考试场次id
+     * @param studentId     考生id
+     * @return 试卷在redis中的key
+     * @author SHIGUANGYI
+     * @date 2019/10/19
+     */
+    private String createPapersRedisKey(String examSessionId, String studentId) {
+        return "papers:examSessionId=" + examSessionId + "&&studentId=" + studentId;
+    }
+
     /**
      * 根据考试场次和考生查询试卷
      *
      * @param examSessionId 考试场次id
      * @param studentId     考生id
-     * @return startTime:学生开始考试的时间;papersList:试卷
+     * @return endTime:学生结束考试的时间;papersList:试卷
      * @author SHIGUANGYI
      * @date 2019/10/16
      */
     @Override
     public Map<String, Object> selectPaper(String examSessionId, String studentId) {
         //生成试卷在redis中的key
-        String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
+        String redisKey = createPapersRedisKey(examSessionId, studentId);
 
         //从redis中查询试卷
         List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
@@ -73,29 +91,51 @@ public class PapersServiceImpl implements PapersService {
                     papersList.add(papers);
                 }
 
-                //获取当前系统时间，作为考试开始时间，作为倒计时自动交卷依据
+                //计算考试结束时间，作为倒计时自动交卷依据
                 Long startTime = System.currentTimeMillis();
+                ExamSession examSession = examSessionDao.selectById(examSessionId);
+                Integer examDuringTime = examSession.getDuringTime();
+                Long endTime = startTime + examDuringTime * 60 * 1000;
 
                 //新试卷存入redis
-                redisTemplate.opsForHash().put(redisKey, "startTime", startTime);
+                redisTemplate.opsForHash().put(redisKey, "endTime", endTime);
                 redisTemplate.opsForHash().put(redisKey, "papersList", papersList);
 
                 //后台倒计时自动交卷
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        ExamSession examSession = examSessionDao.selectById(examSessionId);
-                        Long duringTime = (long) examSession.getDuringTime() * 60 * 1000;
-                        try {
-                            Thread.sleep(duringTime);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        autoScore(examSessionId, studentId);
-                        submitPaperCache(examSessionId, studentId);
+                synchronized (papersRedisKeyList) {
+                    papersRedisKeyList.add(redisKey);
+                    if (papersRedisKeyList.size() == 1) {
+                        //当papersRedisKeyList大小为1时，说明redis中刚添加第一张待提交试卷，此时开启倒计时监控线程
+                        new Thread(() -> {
+                            //只要list大小大于0，说明redis中还有未提交需要监控的试卷
+                            while (papersRedisKeyList.size() > 0) {
+                                //每隔一秒监控一次
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                                synchronized (papersRedisKeyList) {
+                                    for (int i = 0; i < papersRedisKeyList.size(); i++) {
+                                        String redisKeyTemp = papersRedisKeyList.get(i);
+                                        Long endTimeTemp = (Long) redisTemplate.opsForHash().get(redisKeyTemp, "endTime");
+                                        if (endTimeTemp <= System.currentTimeMillis()) {
+                                            String[] ids = redisKeyTemp.split("&&");
+                                            for (int j = 0; j < ids.length; j++) {
+                                                ids[j] = ids[j].substring(ids[j].indexOf('=') + 1);
+                                            }
+                                            autoScore(ids[0], ids[1]);
+                                            submitPaperCache(ids[0], ids[1]);
+                                            i--;
+                                        }
+                                    }
+                                }
+                            }
+                            System.out.println("监控结束");
+                        }).start();
                     }
-                };
-                new Thread(runnable).start();
+                }
             } else {
                 //如果mysql中有对应试卷说明已交卷
                 throw new RuntimeException("已交卷，不能重复考试");
@@ -111,9 +151,9 @@ public class PapersServiceImpl implements PapersService {
             papersList.set(i, papers);
         }
 
-        Long startTime = (Long) redisTemplate.opsForHash().get(redisKey, "startTime");
+        Long endTime = (Long) redisTemplate.opsForHash().get(redisKey, "endTime");
         HashMap<String, Object> papersMap = new HashMap<>();
-        papersMap.put("startTime", startTime);
+        papersMap.put("endTime", endTime);
         papersMap.put("papersList", papersList);
 
         return papersMap;
@@ -133,7 +173,7 @@ public class PapersServiceImpl implements PapersService {
     @Override
     public Boolean updatePaperCache(String examSessionId, String studentId, Integer papersIndex, String answer) {
         //生成试卷在redis中的key
-        String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
+        String redisKey = createPapersRedisKey(examSessionId, studentId);
 
         //从redis中查询试卷
         List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
@@ -165,7 +205,7 @@ public class PapersServiceImpl implements PapersService {
     @Override
     public Boolean submitPaperCache(String examSessionId, String studentId) {
         //生成试卷在redis中的key
-        String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
+        String redisKey = createPapersRedisKey(examSessionId, studentId);
 
         //从redis中查询试卷
         List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");
@@ -182,6 +222,7 @@ public class PapersServiceImpl implements PapersService {
         String papersId = papers.getPapersId();
         examSessionDao.updatePapersIdInSessionPapersStudent(examSessionId, studentId, papersId);
         //清除缓存
+        papersRedisKeyList.remove(redisKey);
         redisTemplate.delete(redisKey);
 
         return true;
@@ -199,7 +240,7 @@ public class PapersServiceImpl implements PapersService {
     @Override
     public Boolean autoScore(String examSessionId, String studentId) {
         //生成试卷在redis中的key
-        String redisKey = "papers:examSessionId=" + examSessionId + "studentId=" + studentId;
+        String redisKey = createPapersRedisKey(examSessionId, studentId);
 
         //从redis中查询试卷
         List<Papers> papersList = (List<Papers>) redisTemplate.opsForHash().get(redisKey, "papersList");

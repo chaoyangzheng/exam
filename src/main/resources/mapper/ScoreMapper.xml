@@ -92,4 +92,40 @@
     </update>
 
 
+    <!-- 获取某张卷子已经有的分数 author：zhangyuanzhe 2019/10/1 -->
+    <select id="findQuestionsScore" resultType="double">
+        SELECT
+        SUM(t_papers.question_score)
+        FROM
+        t_papers
+        WHERE
+        t_papers.papers_id = #{papersId}
+    </select>
+
+
+    <!-- 保存总分 author：zhangyuanzhe 2019/10/19 -->
+    <update id="updateScoreSUM">
+        UPDATE
+        t_score
+        SET
+        t_score.score = #{sum}
+        WHERE
+        t_score.papers_id = #{papersId}
+    </update>
+
+
+
+    <!-- 查询是否有题目未改 author：zhangyuanzhe 2019/10/19 -->
+    <select id="findQuestionsNoScore" resultType="string">
+        SELECT
+        t_papers.questions_id
+        FROM
+        t_papers
+        WHERE
+        t_papers.papers_id = #{papersId}
+        and
+        t_papers.question_score is null
+    </select>
+
+
 </mapper>
