@@ -59,8 +59,8 @@ public class ScoreServiceImpl implements ScoreService {
      * @date 2019/10/15
      */
     @Override
-    public Long findAllCount() {
-        Long allCount = scoreDao.findAllCount();
+    public Long findAllCount(String selectScore, String msg) {
+        Long allCount = scoreDao.findAllCount(selectScore, msg);
         if (allCount == null) {
             throw new RuntimeException("没有考生分数记录");
         }

@@ -42,7 +42,7 @@ public class ScoreController {
         System.out.println(limit);
 
         List<Score> allScore = scoreService.findAllScore(page, limit, selectScore, msg);
-        Long allCount = scoreService.findAllCount();
+        Long allCount = scoreService.findAllCount(selectScore, msg);
         if (allScore != null && allCount != null) {
             return new JsonResult(0, "成功", allCount, allScore);
         } else {

@@ -40,7 +40,17 @@
         SELECT
         count( score_id )
         FROM
-        t_score
+        t_score,
+        t_examniee_info,
+        t_subject
+        WHERE
+        t_score.student_id = t_examniee_info.examniee_Id
+        and
+        t_examniee_info.examniee_subject_Id = t_subject.subject_id
+        <if test="selectScore != '' and msg != '' and selectScore != null and msg != null">
+            and
+            ${selectScore} = #{msg}
+        </if>
     </select>
 
 
