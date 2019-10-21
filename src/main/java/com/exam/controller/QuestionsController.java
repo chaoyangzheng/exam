@@ -8,15 +8,13 @@ import com.exam.service.PapersService;
 import com.exam.service.QuestionsService;
 import com.exam.utils.UploadUtil;
 import com.github.pagehelper.Page;
-import com.sun.javafx.collections.MappingChange;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import sun.plugin.javascript.navig4.Layer;
+
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.*;
 
 /**
